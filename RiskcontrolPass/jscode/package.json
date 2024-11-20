@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@babel/core": "^7.24.9",
+    "@babel/parser": "^7.24.8",
+    "crypto-js": "^4.2.0"
+  }
+}

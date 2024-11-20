@@ -1,0 +1,1 @@
+09/06/2024 06:19:28 AM 不能获取到图片得url,在get_image函数处:[Errno 13] Permission denied: 'C:\\Users\\Administrator\\Desktop\\passVerify\\gap.jpg'

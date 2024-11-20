@@ -1,0 +1,4 @@
+2024-08-31 18:23:25.148 test.py[15] <module> -> Find Control Timeout(10s): {Name: '微信', ControlType: WindowControl}
+2024-08-31 18:44:32.703 test.py[13] <module> -> Find Control Timeout(10s): {Name: '微信', ControlType: WindowControl}
+2024-08-31 20:23:12.029 test.py[15] <module> -> Find Control Timeout(10s): {Name: '微信', ControlType: WindowControl}
+2024-11-08 19:47:31.556 test.py[15] <module> -> Find Control Timeout(10s): {Name: '微信', ControlType: WindowControl}
