@@ -8,6 +8,7 @@
 @Copyright：©2019-2024 职业
 :return:
 """
+import random
 import re
 import sys
 import os
@@ -31,7 +32,7 @@ sys.path.append(PROJECT_ROOT)
 #     print("Looking for MQitems in:", [os.path.join(path, 'MQitems') for path in sys.path])
 
 
-from MQitems.PikaUse import mongoToMQ
+from MQitems.PikaUse import SendMQ
 from ParseFile.parsehtml import parasHTML
 # 其他导入
 from concurrent.futures import ThreadPoolExecutor
@@ -54,6 +55,7 @@ import requests
 
 class DetailSpider:
 
+    mq = SendMQ()
 
     def __init__(self):
         self.session=requests.session()
@@ -80,27 +82,15 @@ class DetailSpider:
 
 
     def proxy_list(self):
-        proxyAddr = "tun-yowmaw.qg.net:17228"
-        authKey = "17C8C7A6"
-        password = "F825824D03DC"
-        proxyUrl = "http://%(user)s:%(password)s@%(server)s" % {
-            "user": authKey,
-            "password": password,
-            "server": proxyAddr,
-        }
+        tunnel = "d152.kdltps.com:15818"
+        # 用户名密码方式
+        username = "t13206952228334"
+        password = "wtx4i2in:%d"%random.randint(1,5)
         proxies = {
-            "http": proxyUrl,
-            "https": proxyUrl,
+            "http": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel},
+            "https": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel}
         }
-        # resp = requests.get("https://myip.top", proxies=proxies)
-        # if resp.status_code == 200:
-        #     print(resp.text)
-        # return proxies
-        return None
-        # else:
-        #     raise Exception("请求代理")
-
-
+        return proxies
 
     @retry(wait_fixed=1)
     def get_data(self, info):
@@ -167,13 +157,13 @@ class DetailSpider:
                         #     'keys': data2})
                         self.conn.sadd("filter:company", info["company"])
                         if len(self.data2_item) >= 20:
-                            mongoToMQ(2, self.data2_item)
+                            self.mq.mongoToMQ(2, self.data2_item)
                             self.data2_item.clear()
                         if len(self.data1_item) >= 20:
-                            mongoToMQ(1, self.data1_item)
+                            self.mq.mongoToMQ(1, self.data1_item)
                             self.data1_item.clear()
                         if len(self.data_item) >= 20:
-                            mongoToMQ(0, self.data_item)
+                            self.mq.mongoToMQ(0, self.data_item)
                             self.data_item.clear()
                         with open("html/info_%s.html"%str(info["id"]), "w", encoding="utf-8") as f:
                             f.write(response.text)
@@ -397,17 +387,17 @@ class DetailSpider:
                     # self.coll_1.insert_one({'keys': data1})
                     # self.coll.insert_one({'keys': data2})
                     self.conn.sadd("filter:company", item_info["company_name"])
-                    # if len(self.data2_item) >= 20:
-                    #     mongoToMQ(2, self.data2_item)
-                    #     self.data2_item.clear()
-                    # if len(self.data1_item) >= 20:
-                    #     logger.info(len(self.data1_item))
-                    #     mongoToMQ(1, self.data1_item)
-                    #     self.data1_item.clear()
-                    # if len(self.data_item) >= 20:
-                    #     logger.info(len(self.data_item))
-                    #     mongoToMQ(0, self.data_item)
-                    #     self.data_item.clear()
+                    if len(self.data2_item) >= 20:
+                        self.mq.mongoToMQ(2, self.data2_item)
+                        self.data2_item.clear()
+                    if len(self.data1_item) >= 20:
+                        logger.info(len(self.data1_item))
+                        self.mq.mongoToMQ(1, self.data1_item)
+                        self.data1_item.clear()
+                    if len(self.data_item) >= 20:
+                        logger.info(len(self.data_item))
+                        self.mq.mongoToMQ(0, self.data_item)
+                        self.data_item.clear()
                     logger.success(data1)
                     logger.success(data2)
             elif response.status_code == 429 or 433 or "请进行身份验证以继续使用" in response.text:

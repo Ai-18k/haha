@@ -12,7 +12,6 @@ import os
 import time
 import uuid
 from datetime import datetime
-
 import ddddocr
 import execjs
 import redis
@@ -37,7 +36,7 @@ class CC:
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
         }
-        url = "http://192.168.5.181:10121/geetest4_word/gradio_api/queue/"
+        url = "http://192.168.5.167:10121/geetest4_word/gradio_api/queue/"
         params = {"": ""}
         data = {"data": pic_list,"fn_index": 1,"session_hash": tmp}
         data = json.dumps(data, separators=(',', ':'))
@@ -59,6 +58,7 @@ class CC:
                             x1, y1, x2, y2 = crop
                             xy.append([(x1 + x2) / 2, (y1 + y2) / 2])
                         return xy
+
 
 ocr = ddddocr.DdddOcr(det=False, ocr=False)
 
@@ -147,6 +147,42 @@ def get_jy_gcaptcha4Code():
                                 params_list["type"] = "slide"
                         return params_list
 
+        def re_jscodeV1(params_list):
+            headers = {
+                "Host": "static.geetest.com",
+                "pragma": "no-cache",
+                "cache-control": "no-cache",
+                "sec-ch-ua": "\"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google "
+                             "Chrome\";v=\"114\"",
+                "origin": "https://www.tianyancha.com",
+                "dnt": "1",
+                "sec-ch-ua-mobile": "?0",
+                "User-Agent": ua,
+                "sec-ch-ua-platform": "\"Windows\"",
+                "accept": "*/*",
+                "sec-fetch-site": "cross-site",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-dest": "script",
+                "referer": "https://www.tianyancha.com/",
+                "accept-language": "zh-CN,zh;q=0.9"
+            }
+            url = "https://static.geetest.com" + params_list["static_path"] + "/js/gcaptcha4.js"
+            response = session.get(url, headers=headers)
+            str_code = ""
+            match = re.search(r'(.*?)\.', response.text, re.S)
+            head = match.group().strip(".")
+            matche_01 = re.findall(rf"{head}\..*?\}}\(\);", response.text, re.S)
+            str_code += matche_01[0] + matche_01[1]
+            matche_02 = re.findall(rf'{head}\..*?}};', response.text, re.S)
+            str_code += matche_02[2] + matche_02[3] + f"function {head}() {{}};"
+            matche_03 = re.findall(r"!function\(\)\s*\{[\s\S]*?\}\(\),", response.text, re.S)[0]
+            pattern = r"!function\(\)\s*\{\s*!(.*?)\}\(\),"  # 匹配 function() 的块
+            matche_04 = re.findall(pattern,matche_03, re.S)[0]  # 启用多行模式
+            str_code+="var code=" + matche_04 + ";return [this._lib,this.lib._abo]}"
+            res=execjs.compile(str_code).call("code")
+            print(res)
+            return {"head": head, "par_param": res[0], "keys": res[1],"content":response.text}
+
         def re_js_code(params_list):
             headers = {
                 "Host": "static.geetest.com",
@@ -180,11 +216,12 @@ def get_jy_gcaptcha4Code():
             text = matche_03.group()
             matche_04 = re.search(r"var.*?.shift\(\);", text, re.S)
             str_code += "function get_param(){" + matche_04.group()
-            pattern = r'\{\s*"(\\u[0-9a-fA-F]+)+":\s*[_\w]+\([0-9]+\)\s*\}'
+            # pattern = r'\{\s*"(\\u[0-9a-fA-F]+)+":\s*[_\w]+\([0-9]+\)\s*\}'
+            pattern = r'=\{.*?\}'
             # 查找匹配项
-            match = re.search(pattern, text)
+            match = re.search(pattern,text,re.S)
             if match:
-                matche_05 = match.group(0)
+                matche_05 = match.group(0).replace("=","")
             else:
                 matche_05 = re.search(r'\{"(.*?)}', text, re.S)
             try:
@@ -199,9 +236,9 @@ def get_jy_gcaptcha4Code():
             return {"head":head,"par_param": res,"content":response.text}
 
         data=get_1()
-        par=re_js_code(data)
+        par=re_jscodeV1(data)
         codehash=hashlib.md5(par["content"].encode("utf-8")).hexdigest()
-        return {"head":par["head"],"md5":codehash,"params":par["par_param"]}
+        return {"head":par["head"],"md5":codehash,"params":par["par_param"],"keys":par["keys"]}
 
 
 if __name__ == "__main__":

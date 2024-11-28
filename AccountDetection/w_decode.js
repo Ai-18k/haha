@@ -6419,34 +6419,7 @@ NXVNj.$_Dj = function () {
   return typeof NXVNj.$_BJ.$_HCBAX === 'function' ? NXVNj.$_BJ.$_HCBAX.apply(NXVNj.$_BJ, arguments) : NXVNj.$_BJ.$_HCBAX;
 };
 function NXVNj() {}
-// var p = function () {
-//         var $_EBHS = NXVNj.$_Ci,
-//           $_EBGu = ['$_ECA_'].concat($_EBHS),
-//           $_EBIh = $_EBGu[1];
-//         $_EBGu.shift();
-//         var $_EBJG = $_EBGu[0];
-//         function e() {
-//           var $_GJGII = NXVNj.$_Dj()[3][10];
-//           for (; $_GJGII !== NXVNj.$_Dj()[0][9];) {
-//             switch ($_GJGII) {
-//               case NXVNj.$_Dj()[3][10]:
-//                 return (65536 * (1 + Math[$_EBHS(170)]()) | 0)[$_EBHS(101)](16)[$_EBIh(90)](1);
-//                 break;
-//             }
-//           }
-//         }
-//         return function () {
-//           var $_ECCh = NXVNj.$_Ci,
-//             $_ECBD = ['$_ECFw'].concat($_ECCh),
-//             $_ECDb = $_ECBD[1];
-//           $_ECBD.shift();
-//           var $_ECEz = $_ECBD[0];
-//           return e() + e() + e() + e();
-//         };
-//       }();
-// var deskey =p()
-
-function _fff(aa,par) {
+function _fff(aa,par,cc) {
             var $_CAGHi = NXVNj.$_Ci,
             $_CAGGR = ['$_CAHAO'].concat($_CAGHi),
             $_CAGIm = $_CAGGR[1];
@@ -6514,78 +6487,32 @@ function _fff(aa,par) {
             new_text={}
             i=0
             for (var key in text) {
-                if (i==0){
+                if (i===0){
                     for (var key1 in par) {
-                            if (aa["type"]=="slide"){
+                            if (aa["type"]==="slide"){
                                 new_text.setLeft=aa.dis
                                 }
                             new_text.passtime = 1160
-                            if (aa["type"]=="word") {
+                            if (aa["type"]==="word") {
                                 new_text.userresponse = aa.smark
                             }else{
                                 new_text.userresponse = aa.dis/1.0059466666666665 + 2
                             }
                     }
                 }
-                if (i==9){
+                if (i===9){
                     for (var key1 in par) {
                         new_text[key1]=par[key1]
                         }
                     }
                 i+=1
+                for (var key2 in cc) {
+                        new_text[key2]=cc[key2]
+                        }
                 new_text[key]=text[key]
             }
             _n={options:{"pt": "1"}}
-            // console.log(new_text);
             res=yl(2).default(JSON.stringify(new_text),_n);
             return {"res":res,"pow_sign":sid.pow_sign,"new_text":new_text}
         }
-
-// aa={'captcha_id': '517df78b31ff1b8f841cd86fc0db9f3e', 'lot_number': '7ca709819ebc4dbfabb16095f7269c89', 'process_token': '68f3b22126ac8ad56265f981d89d959f607b59962a67752220f81076ec64f252', 'pow_detail': ['1', 0, '2024-09-21T13:26:32.089587+08:00', 'md5'], 'payload': '_b-sD20eax9oEJvmoMxvFP9R_jce9R3w6rwhw3q_y0QfiD_5Mvq4KGBESrmaBq2DUQ8dserwRy7UtUzMW99OJK0f5ThbI1ZmADguUlgW6F1jBKXeUzHkvatztEC4AYrX9QLquyMFE0jOjUc5tAmgEtsRJROqA1PLizgzekMWAWrqAj_VWf-XgBKuSaQtE8XR_1I4MhEa6FFvTg2Riu94A3gctdr9cve4QfFCScFnKdxRHts7CSANSsSQE5vhswwt_-8P-bKh3xJCc17enyZcAmW1KZ4gWvl--lEAksHXlNXsrylu7uJNgAv7DqjMG4UnWhfd6BjhMxOw-7jNeDO3VarP5lIvP-XzUx42C3clWAvpB9nQDJPy-RWiUprSAPPtxWfT7iU9TC8c_agvGcbICwK5oL35wi90n2Gn72JTov9uxU7ZHO34EPhB2r4YqhmkmQjoSQNARcpXCiQeU0rS5RDV6MIqQ7MogpVwo3hswokwvZURatttRZd0Z_1s7igQSRH_NW1MV0vjDDZ0EWqpReQb-TxCthTizkwN2CXCPa2mNkRZTC8CyYGEUxs83ystM8WR5NDrNaYYW1-4uq4jnJ30LGoCHQEjNkbMkwjIpWHzmGmXSwYS4FwGpdmSGwGxXfbihytIoUZ-88Ea7nzpSpvb_dVEHB45Nx-HEnl2ah452a6Xp1bcGIMkR-Jk28HRJVDreEYRXCB-a4kuv7No4n-pa4pbdoKtP8PWaBYdY_FwpZZRPyP1Ng7fSKGgCfxgAKFC7U1wz4BN43lFHVrxIbXiI6A4mFBc0CXP95BlxK3w_sQugi8uIL3Jl19pnADKwHjBeHqNsTQuaS2A2bv5nA8CfHaChNua_2OPZO6Ljps=', 'cookies': null, 'static_path': '/v4/static/v1.8.1-9b486c',
-//     'dis': 215, 'type': 'slide'
-//     // 'smark': [[1533,5106],[7365,2771],[3157,8732]],'type': 'word'
-// }
-// bb={'jAA8': 'hJ6Q'}
-// console.log(_fff(aa,bb));
-
-
-/*
-{
-    "setLeft": 130,
-    "passtime": 560,
-    "userresponse": 131.23150332688283,
-    "device_id": "",
-    "lot_number": "85d68478f52047b5ba19946ed228fc7b",
-    "pow_msg": "1|0|md5|2024-09-20T11:05:31.797531+08:00|517df78b31ff1b8f841cd86fc0db9f3e|85d68478f52047b5ba19946ed228fc7b||31f953117487e8d8",
-    "pow_sign": "ca193a5b58c8a353eefe6987750b4e61",
-    "geetest": "captcha",
-    "lang": "zh",
-    "ep": "123",
-    "biht": "1426265548",
-    "gee_guard": {
-        "roe": {
-            "aup": "3",
-            "sep": "3",
-            "egp": "3",
-            "auh": "3",
-            "rew": "3",
-            "snh": "3",
-            "res": "3",
-            "cdc": "3"
-        }
-    },
-    "jAA8": "hJ6Q",
-    "em": {
-        "ph": 0,
-        "cp": 0,
-        "ek": "11",
-        "wd": 1,
-        "nt": 0,
-        "si": 0,
-        "sc": 0
-    }
-}
-* */
-
-
 

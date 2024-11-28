@@ -169,21 +169,21 @@ class LoginModule:
             params = {
                 # "callback": "geetest_1726673346207",
                 "captcha_id": "517df78b31ff1b8f841cd86fc0db9f3e",
-                "challenge": uuid1,
+                "challenge":uuid1,
                 "client_type": "web",
                 "lang": "zho"
             }
-            response = self.session.get(url, headers=headers, params=params, proxies=self.Request["proxy"])
+            response = self.session.get(url, headers=headers, params=params,proxies=self.Request["proxy"] )
             if response.status_code == 200:
                 cookies = response.cookies.get("captcha_v4_user")
                 resp = json.loads(response.text.strip("(").strip(")"))
                 type = resp["data"]['captcha_type']
                 lot_number = resp["data"]["lot_number"]
-                process_token = resp["data"]["process_token"]
+                process_token =resp["data"]["process_token"]
                 pow_detail = resp["data"]["pow_detail"]
                 pow_detail = [pow_detail[i] for i in pow_detail if isinstance(pow_detail, dict)]
                 payload = resp["data"]["payload"]
-                static_path = resp["data"]["static_path"]
+                static_path =resp["data"]["static_path"]
                 params_list = {
                     "lot_number": lot_number,
                     "process_token": process_token,
@@ -202,7 +202,7 @@ class LoginModule:
                         base_list.append(word_pic)
                     imgs_url = "https://static.geetest.com/" + resp["data"]['imgs']
                     slide_bytes = requests.get(imgs_url).content
-                    new_pic = [base64.b64encode(slide_bytes).decode("utf-8")] + base_list
+                    new_pic=[base64.b64encode(slide_bytes).decode("utf-8")]+base_list
                     click_list = CC().PostPic(new_pic)
                     click_smark = []
                     for _word in click_list:
@@ -225,6 +225,7 @@ class LoginModule:
                 return params_list
         except Exception as e:
             logger.error(e)
+
 
     def re_js_code(self):
         params_list = self.get_1()
@@ -275,9 +276,10 @@ class LoginModule:
                 str_code2 = str_code + "return " + matche_05.strip() + "}"
                 res = execjs.compile(str_code2.encode().decode("utf-8")).call("get_param")
             except:
-                str_code3 = str_code + "return " + matche_05.strip() + "};"
+                str_code3 = str_code + "return " + matche_05.strip()+ "};"
                 res = execjs.compile(str_code3).call("get_param")
         return {"par_param": res, "par_data": params_list}
+
 
     def Composite_parameter(self, lotNumber):
         lot = {
@@ -394,7 +396,7 @@ class LoginModule:
         url = "https://gcaptcha4.geetest.com/verify"
         # par = self.re_js_code()
         par = self.get_1()
-        par["par_param"] = {'pMVM': 'AwII'}
+        par["par_param"] = {'Wovl': 'M3MD'}
         param = self.Composite_parameter(par["lot_number"])
         jscode = open("w_decode.js", encoding="utf-8").read()
         data = execjs.compile(jscode).call("_fff", par, par["par_param"], param)
@@ -408,7 +410,7 @@ class LoginModule:
             "pt": "1",
             "w": data["res"]
         }
-        response = self.session.get(url, headers=headers, params=params, proxies=self.Request["proxy"])
+        response = self.session.get(url,headers=headers,params=params,proxies=self.Request["proxy"])
         if response.status_code == 200:
             resp = json.loads(str(response.text).strip("(").strip(")"))
             gen_time = resp["data"]["seccode"]["gen_time"]
@@ -455,7 +457,7 @@ class LoginModule:
                 "mobile": self.Request["mobil"]["mobil"],
                 "cdpassword": hashlib.md5(self.Request["mobil"]["pwd"].encode("utf-8")).hexdigest(),  # md5算法
                 "loginway": "PL",
-                "captcha_id": "517df78b31ff1b8f841cd86fc0db9f3e",
+                "captcha_id":"517df78b31ff1b8f841cd86fc0db9f3e",
                 "lot_number": data["lot_number"],
                 "pass_token": data["pass_token"],
                 "gen_time": data["gen_time"],
@@ -463,25 +465,25 @@ class LoginModule:
                 "captcha_type": "pcLogin"
             }
             response = self.session.get(url,
-                                        headers=headers,
-                                        params=params,
-                                        proxies=self.Request["proxy"])
+                                            headers=headers,
+                                            params=params,
+                                            proxies=self.Request["proxy"])
             if response.status_code == 200:
                 res = json.loads(str(response.text).strip("(").strip(")"))
                 print(res)
-                if res["message"] == "":
+                if res["message"]=="":
                     token = res["data"]['token']
-                    id = str(res["data"]['userId'])
-                    self.Request["userid"] = id
-                    self.create_cookie(self.Request["mobil"]["mobil"], id)
+                    id=str(res["data"]['userId'])
+                    self.Request["userid"]=id
+                    self.create_cookie(self.Request["mobil"]["mobil"],id)
                     logger.success("登录成功，同学开始愉快的玩耍吧！！")
                     logger.info("【R】{}用户登录已成功！获取的sign：{}".format(id, token))
                     self.session.cookies.set("auth_token", token)
                     self.Request["token"] = token
                     self.get_cookie_csrf()
                     return True
-                elif res["message"] == "账号存在风险，暂不能操作" or "输入的手机号码与密码不匹配，推荐使用短信登录":
-                    self.local_conn.sadd("406Mobil", json.dumps(self.Request["mobil"]))
+                elif res["message"]=="账号存在风险，暂不能操作" or "输入的手机号码与密码不匹配，推荐使用短信登录":
+                    self.local_conn.sadd("ErrorMobil", json.dumps(self.Request["mobil"]))
                     self.local_conn.lrem("searchMobil", 1, json.dumps(self.Request["mobil"]))
                     mobil = self.local_conn.lpop("searchMobil")
                     self.local_conn.rpush("searchMobil", mobil)
@@ -521,17 +523,17 @@ class LoginModule:
         }
         url = "https://www.tianyancha.com/"
         self.session.get(url, headers=headers, proxies=self.Request["proxy"])
-        self.Request["X-TYCID"] = self.session.cookies.get("TYCID")
+        self.Request["X-TYCID"]=self.session.cookies.get("TYCID")
         headers = {
             'Referer': 'https://www.tianyancha.com/',
         }
         self.session.get('https://hm.baidu.com/hm.js?e92c8d65d92d534b0fc290df538b4758', headers=headers)
 
-    def create_cookie(self, m, id):
+    def create_cookie(self,m,id):
         js_code = open("signCook.js", encoding="utf-8").read()
-        res = execjs.compile(js_code).call("get_ssion", id)
+        res = execjs.compile(js_code).call("get_ssion",id)
         sensorsdata = quote(json.dumps({
-            "distinct_id": id,
+            "distinct_id":id,
             "first_id": res["device_id"],
             "props": {},
             "identities": res["identities"],
@@ -545,7 +547,7 @@ class LoginModule:
             "state": "4",
             "vipManager": "0",
             "mobile": m,
-            "userId": id,
+            "userId":id,
             "isExpired": "0"
         }))
         self.session.cookies.set("sensorsdata2015jssdkcross", sensorsdata)
@@ -553,28 +555,17 @@ class LoginModule:
         self.session.cookies.set("tyc-user-info-save-time", str(int(time.time() * 1000)))
         self.session.cookies.set("tyc-user-phone", "%255B%252218587162714%2522%255D")
 
-    @retry(wait_fixed=2)
     def proxy_list(self):
-        proxyAddr = "tun-yowmaw.qg.net:17228"
-        authKey = "17C8C7A6"
-        password = "F825824D03DC"
-        proxyUrl = "http://%(user)s:%(password)s@%(server)s" % {
-            "user": authKey,
-            "password": password,
-            "server": proxyAddr,
-        }
+        # 隧道域名:端口号
+        tunnel = "d152.kdltps.com:15818"
+        # 用户名密码方式
+        username = "t13206952228334"
+        password = "wtx4i2in:%d"%random.randint(1,5)
         proxies = {
-            "http": proxyUrl,
-            "https": proxyUrl,
+            "http": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel},
+            "https": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel}
         }
-        # resp = requests.get("https://myip.top", proxies=proxies)
-        # if resp.status_code == 200:
-        #     print(resp.text)
-        # return proxies
-        return None
-        # else:
-        #     raise Exception("请求代理")
-
+        return proxies
 
     def main(self,mobil):
         self.Request["proxy"] =self.proxy_list()
@@ -610,6 +601,6 @@ class LoginModule:
 
 
 if __name__ == '__main__':
-    mobil = {"mobil": "18688587512", "pwd": "lan6688231"}
+    mobil = {"mobil": "13116253102", "pwd": "cc123456"}
     # Add code here to set up a local proxy on port 57580
     LoginModule().main(mobil)

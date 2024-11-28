@@ -9,7 +9,7 @@
 @Copyright：©2019-2024 职业
 :return:
 """
-
+import random
 import sys
 import os
 
@@ -255,43 +255,90 @@ class Demo:
             return params_list
 
     def Composite_parameter(self,lotNumber):
-        lot = {
-            "$_JP": [
+        """
+         {
+            "$_BAv": [
                 {
-                    "$_JP": [
+                    "$_BAv": [
                         {
-                            "$_JP": [
-                                25
+                            "$_BAv": [
+                                15,
+                                17
                             ]
                         },
                         {
-                            "$_JP": [
-                                28
-                            ]
-                        },
-                        {
-                            "$_JP": [
-                                22
-                            ]
-                        },
-                        {
-                            "$_JP": [
-                                18
+                            "$_BAv": [
+                                12,
+                                14
                             ]
                         }
                     ]
                 },
                 {
-                    "$_JP": [
+                    "$_BAv": [
                         {
-                            "$_JP": [
-                                1,
-                                4
+                            "$_BAv": [
+                                13,
+                                14
                             ]
                         },
                         {
-                            "$_JP": [
-                                4,
+                            "$_BAv": [
+                                6,
+                                7
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+
+        {
+            "$_BAv": [
+                {
+                    "$_BAv": [
+                        {
+                            "$_BAv": [
+                                7,
+                                14
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+
+
+        """
+        lot =  {
+            "$_BAv": [
+                {
+                    "$_BAv": [
+                        {
+                            "$_BAv": [
+                                15,
+                                17
+                            ]
+                        },
+                        {
+                            "$_BAv": [
+                                12,
+                                14
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "$_BAv": [
+                        {
+                            "$_BAv": [
+                                13,
+                                14
+                            ]
+                        },
+                        {
+                            "$_BAv": [
+                                6,
                                 7
                             ]
                         }
@@ -300,13 +347,13 @@ class Demo:
             ]
         }
         lotRes = {
-            "$_JP": [
+            "$_BAv": [
                 {
-                    "$_JP": [
+                    "$_BAv": [
                         {
-                            "$_JP": [
-                                0,
-                                5
+                            "$_BAv": [
+                                7,
+                                14
                             ]
                         }
                     ]
@@ -316,13 +363,13 @@ class Demo:
         def split_lot_number(lot, lotNumber):
             result = []
             split_numbers = []
-            for sublist in lot["$_JP"]:
+            for sublist in lot["$_BAv"]:
                 temp = []
-                for num in sublist["$_JP"]:
+                for num in sublist["$_BAv"]:
                     if isinstance(num, list):
                         temp.append([x + 1 for x in num])
                     else:
-                        temp.append(num["$_JP"])
+                        temp.append(num["$_BAv"])
                 result.append(temp)
             for sublist in result:
                 temp = ""
@@ -394,20 +441,16 @@ class Demo:
 
 
     def proxy_list(self):
-        proxyAddr = "tun-yowmaw.qg.net:17228"
-        authKey = "17C8C7A6"
-        password = "F825824D03DC"
-        proxyUrl = "http://%(user)s:%(password)s@%(server)s" % {
-            "user": authKey,
-            "password": password,
-            "server": proxyAddr,
-        }
+        # 隧道域名:端口号
+        tunnel = "d152.kdltps.com:15818"
+        # 用户名密码方式
+        username = "t13206952228334"
+        password = "wtx4i2in:%d" % random.randint(1, 5)
         proxies = {
-            "http": proxyUrl,
-            "https": proxyUrl,
+            "http": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel},
+            "https": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel}
         }
         return proxies
-        # return None
 
 
     def get_2(self):
@@ -431,7 +474,7 @@ class Demo:
         url = "https://gcaptcha4.geetest.com/verify"
         # par = self.re_js_code()
         par = self.get_1()
-        par["par_param"] = {'fOL0': 'PAVJ'}
+        par["par_param"] ={'Wovl': 'M3MD'}
         param = self.Composite_parameter(par["lot_number"])
         print(param)
         jscode = open("w_decode.js", encoding="utf-8").read()

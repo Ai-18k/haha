@@ -12,6 +12,7 @@
 :return:
 """
 import json
+import random
 import time
 from feapder.network.user_agent import get
 from simpleLogin import Login_module
@@ -25,8 +26,7 @@ import redis
 local_VQ_conn = redis.Redis(host='192.168.5.181', port=7933, db=0, password="fer@nhaweif576KUG",socket_connect_timeout=70)
 
 
-@retry(wait_fixed=1)
-def proxy_list():
+def qingguo_proxy():
     proxyAddr = "tun-yowmaw.qg.net:17228"
     authKey = "17C8C7A6"
     password = "F825824D03DC"
@@ -45,6 +45,19 @@ def proxy_list():
     return None
     # else:
     #     raise Exception("请求代理")
+
+def proxy_list():
+    # 隧道域名:端口号
+    tunnel = "d152.kdltps.com:15818"
+    # 用户名密码方式
+    username = "t13206952228334"
+    password = "wtx4i2in:%d"%random.randint(1,5)
+    proxies = {
+        "http": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel},
+        "https": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel}
+    }
+    return proxies
+
 
 class UserScreen():
 
@@ -187,11 +200,11 @@ class UserScreen():
                 # result = open("待筛选的用户名密码.txt", encoding="utf-8").readlines()
                 result = open("入库.txt", encoding="utf-8").readlines()
                 # result =local_VQ_conn.lrange("test",0,-1)
-                with ThreadPoolExecutor(4) as f:
+                with ThreadPoolExecutor(2) as f:
                     _ = 0
                     m_list=[]
-                    for line in result[::-1]:
-                    # for line in result:
+                    # for line in result[::-1]:
+                    for line in result:
                         if line:
                             if isinstance(line, str):
                                 user = line.strip().split("密码")

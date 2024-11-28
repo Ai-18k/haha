@@ -45,6 +45,8 @@ def read_mongoDate():
             break
 
 
+
+
 #100w数据以下
 from pymongo import MongoClient
 # client = MongoClient(host='139.9.70.234', port=12700, username="root", password="QuyHlxXhW2PSHTwT",
@@ -86,7 +88,6 @@ def cp_mongoDate():
             print(e)
             future.result()
     client.close()
-
 
 def save(data):
     try:
@@ -143,7 +144,7 @@ def mongoToRedis():
             #     break
             # break
 
-mongoToRedis()
+# mongoToRedis()
 
 def cityarealist():
     import requests

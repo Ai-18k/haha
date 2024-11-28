@@ -30,6 +30,7 @@ def getAreaID():
         # if json.loads(item.decode("utf-8"))["name"] == "上海市":
         # if json.loads(item.decode("utf-8"))["name"] == "浙江省":
             citys = json.loads(item.decode("utf-8"))['city']
+            print(citys)
             cityList=list()
             for city in citys:
                 for item in city["district"]:
