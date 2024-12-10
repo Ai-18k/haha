@@ -5,21 +5,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cd0e7a52-cc8a-44f1-88b6-d25722e0babb" name="变更" comment="变更">
-      <change afterPath="$PROJECT_DIR$/FunComponent/M.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FunComponent/M1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reviewBUG/可优化项/1.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reviewBUG/可优化项/2.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reviewBUG/可优化项/3.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FunComponent/mongoToMQ/M1.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FunComponent/mongoToMQ/PikaUse.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FunComponent/mongoToMQ/Vqinghai.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FunComponent/mongoToMQ/detailparam.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FunComponent/mongoToMQ/test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/geetest4_word/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/geetest4_word/models/geetest4_word_siamese_v3.onnx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/geetest4_word/predict.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/passVerify/geetest4_icon/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/passVerify/geetest4_icon/demo/1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/passVerify/geetest4_icon/demo/1_1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/passVerify/geetest4_icon/demo/1_2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/passVerify/geetest4_icon/demo/1_3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/passVerify/geetest4_icon/demo/2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/passVerify/geetest4_icon/demo/2_1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/passVerify/geetest4_icon/demo/2_2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/passVerify/geetest4_icon/demo/2_3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/passVerify/geetest4_icon/models/geetest4_icon_det_v1.onnx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/passVerify/geetest4_icon/models/geetest4_icon_siamese_s1_v1_fp16.onnx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/passVerify/geetest4_icon/models/geetest4_icon_siamese_s1_v2_fp16.onnx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/passVerify/geetest4_icon/models/geetest4_icon_siamese_v3_fp16.onnx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/passVerify/geetest4_icon/predict.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reviewBUG/passCapTest/mapToDict.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reviewBUG/可优化项/mapToDict.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AccountDetection/simpleLogin.py" beforeDir="false" afterPath="$PROJECT_DIR$/AccountDetection/simpleLogin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AccountDetection/user_manage.py" beforeDir="false" afterPath="$PROJECT_DIR$/AccountDetection/user_manage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AccountDetection/w_decode.js" beforeDir="false" afterPath="$PROJECT_DIR$/AccountDetection/w_decode.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AccountDetection/入库.txt" beforeDir="false" afterPath="$PROJECT_DIR$/AccountDetection/入库.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FunComponent/MongoControls.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/FunComponent/TransMongo.py" beforeDir="false" afterPath="$PROJECT_DIR$/FunComponent/TransMongo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JudModule/JudModuleV1.py" beforeDir="false" afterPath="$PROJECT_DIR$/JudModule/JudModuleV1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MQitems/PikaUse.py" beforeDir="false" afterPath="$PROJECT_DIR$/MQitems/PikaUse.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ParseFile/detailparam.py" beforeDir="false" afterPath="$PROJECT_DIR$/ParseFile/detailparam.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/params/dataParams.py" beforeDir="false" afterPath="$PROJECT_DIR$/params/dataParams.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Text_select_captcha-master.zip" beforeDir="false" afterPath="$PROJECT_DIR$/geetest4_word/models/geetest4_word_det_v1.onnx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviewBUG/passCap/w_decode.js" beforeDir="false" afterPath="$PROJECT_DIR$/reviewBUG/passCap/w_decode.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reviewBUG/passCapTest/mainSpiderV1.py" beforeDir="false" afterPath="$PROJECT_DIR$/reviewBUG/passCapTest/mainSpiderV1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reviewBUG/passCapTest/passVerity.py" beforeDir="false" afterPath="$PROJECT_DIR$/reviewBUG/passCapTest/passVerity.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reviewBUG/passCapTest/simpleLogin.py" beforeDir="false" afterPath="$PROJECT_DIR$/reviewBUG/passCapTest/simpleLogin.py" afterDir="false" />
@@ -79,143 +98,140 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Node.js.1.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.11.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.1212.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.2.js (1).executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.2.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.3.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.4.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.ast.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.ast_decode.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.de.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.jy_ast.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.jy_decode01.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.test.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.w_decode.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.w_decode_1.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.wordlist.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.还原ast.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.风控.js.executor&quot;: &quot;Run&quot;,
-    &quot;Python.1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.1111.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Cookie_monitor.executor&quot;: &quot;Run&quot;,
-    &quot;Python.JudModule.executor&quot;: &quot;Run&quot;,
-    &quot;Python.LoginMonitor.executor&quot;: &quot;Run&quot;,
-    &quot;Python.M.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.M1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.MongoControls.executor&quot;: &quot;Run&quot;,
-    &quot;Python.MongoMonitor.executor&quot;: &quot;Run&quot;,
-    &quot;Python.PikaUse.executor&quot;: &quot;Run&quot;,
-    &quot;Python.R.executor&quot;: &quot;Run&quot;,
-    &quot;Python.R1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.SearchByDateArea.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Tokeys.executor&quot;: &quot;Run&quot;,
-    &quot;Python.TransMongo.executor&quot;: &quot;Run&quot;,
-    &quot;Python.asyncio_demo.executor&quot;: &quot;Run&quot;,
-    &quot;Python.autoPass.executor&quot;: &quot;Run&quot;,
-    &quot;Python.bilbil.executor&quot;: &quot;Run&quot;,
-    &quot;Python.bilbil_pp.executor&quot;: &quot;Run&quot;,
-    &quot;Python.captcha.executor&quot;: &quot;Run&quot;,
-    &quot;Python.config.executor&quot;: &quot;Run&quot;,
-    &quot;Python.dataArea.executor&quot;: &quot;Run&quot;,
-    &quot;Python.dataAreaV1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.dataParams.executor&quot;: &quot;Run&quot;,
-    &quot;Python.demo (1).executor&quot;: &quot;Run&quot;,
-    &quot;Python.demo.executor&quot;: &quot;Run&quot;,
-    &quot;Python.demo1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.detailparam.executor&quot;: &quot;Run&quot;,
-    &quot;Python.download_iimg.executor&quot;: &quot;Run&quot;,
-    &quot;Python.download_img (1).executor&quot;: &quot;Run&quot;,
-    &quot;Python.judicial_Business_spider.executor&quot;: &quot;Run&quot;,
-    &quot;Python.jyCoding.executor&quot;: &quot;Run&quot;,
-    &quot;Python.jy_click.executor&quot;: &quot;Run&quot;,
-    &quot;Python.login.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.loginBUG.executor&quot;: &quot;Run&quot;,
-    &quot;Python.loginModule.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.mainSpider (1).executor&quot;: &quot;Run&quot;,
-    &quot;Python.mainSpider.executor&quot;: &quot;Run&quot;,
-    &quot;Python.mainSpiderV1 (1).executor&quot;: &quot;Run&quot;,
-    &quot;Python.mainSpiderV1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.nextPage.executor&quot;: &quot;Run&quot;,
-    &quot;Python.noMemeryData.executor&quot;: &quot;Run&quot;,
-    &quot;Python.no_proxy_login.executor&quot;: &quot;Run&quot;,
-    &quot;Python.one_passVerify.executor&quot;: &quot;Run&quot;,
-    &quot;Python.passSpan.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.passVerity.executor&quot;: &quot;Run&quot;,
-    &quot;Python.read_png.executor&quot;: &quot;Run&quot;,
-    &quot;Python.rejs.executor&quot;: &quot;Run&quot;,
-    &quot;Python.run.executor&quot;: &quot;Run&quot;,
-    &quot;Python.searchUser.executor&quot;: &quot;Run&quot;,
-    &quot;Python.searchView.executor&quot;: &quot;Run&quot;,
-    &quot;Python.searchView1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.sifa.executor&quot;: &quot;Run&quot;,
-    &quot;Python.simpleLogin (1).executor&quot;: &quot;Run&quot;,
-    &quot;Python.simpleLogin (2).executor&quot;: &quot;Run&quot;,
-    &quot;Python.simpleLogin.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test (1).executor&quot;: &quot;Run&quot;,
-    &quot;Python.test (2).executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.user_manage.executor&quot;: &quot;Run&quot;,
-    &quot;Python.v3_dataAreaV1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.v4_dataArea.executor&quot;: &quot;Run&quot;,
-    &quot;Python.v4_dataAreaV1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.v4_dataArea_test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.w.executor&quot;: &quot;Run&quot;,
-    &quot;Python.wifiCrack.executor&quot;: &quot;Run&quot;,
-    &quot;Python.多线程断点续爬.executor&quot;: &quot;Run&quot;,
-    &quot;Python.失信.executor&quot;: &quot;Run&quot;,
-    &quot;Python.打码.executor&quot;: &quot;Run&quot;,
-    &quot;Python.新版风控.executor&quot;: &quot;Run&quot;,
-    &quot;Python.解析.executor&quot;: &quot;Run&quot;,
-    &quot;Python.识别接口.executor&quot;: &quot;Run&quot;,
-    &quot;Python.识别测试 (1).executor&quot;: &quot;Run&quot;,
-    &quot;Python.识别测试.executor&quot;: &quot;Run&quot;,
-    &quot;Python.详情页数据提取.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;20.13.1&quot;,
-    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;20.13.0&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/AndroidProject/appProject&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
-    &quot;settings.editor.splitter.proportion&quot;: &quot;0.25484198&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Node.js.1.js.executor": "Run",
+    "Node.js.11.js.executor": "Run",
+    "Node.js.1212.js.executor": "Run",
+    "Node.js.2.js (1).executor": "Run",
+    "Node.js.2.js.executor": "Run",
+    "Node.js.3.js.executor": "Run",
+    "Node.js.4.js.executor": "Run",
+    "Node.js.ast.js.executor": "Run",
+    "Node.js.ast_decode.js.executor": "Run",
+    "Node.js.de.js.executor": "Run",
+    "Node.js.jy_ast.js.executor": "Run",
+    "Node.js.jy_decode01.js.executor": "Run",
+    "Node.js.test.js.executor": "Run",
+    "Node.js.w_decode.js.executor": "Run",
+    "Node.js.w_decode_1.js.executor": "Run",
+    "Node.js.wordlist.js.executor": "Run",
+    "Node.js.还原ast.js.executor": "Run",
+    "Node.js.风控.js.executor": "Run",
+    "Python.1.executor": "Run",
+    "Python.1111.executor": "Run",
+    "Python.Cookie_monitor.executor": "Run",
+    "Python.JudModule.executor": "Run",
+    "Python.LoginMonitor.executor": "Run",
+    "Python.M.executor": "Debug",
+    "Python.M1.executor": "Run",
+    "Python.MongoControls.executor": "Run",
+    "Python.MongoMonitor.executor": "Run",
+    "Python.PikaUse.executor": "Run",
+    "Python.R.executor": "Run",
+    "Python.R1.executor": "Run",
+    "Python.SearchByDateArea.executor": "Run",
+    "Python.Tokeys.executor": "Run",
+    "Python.TransMongo.executor": "Run",
+    "Python.asyncio_demo.executor": "Run",
+    "Python.autoPass.executor": "Run",
+    "Python.bilbil.executor": "Run",
+    "Python.bilbil_pp.executor": "Run",
+    "Python.captcha.executor": "Run",
+    "Python.config.executor": "Run",
+    "Python.dataArea.executor": "Run",
+    "Python.dataAreaV1.executor": "Run",
+    "Python.dataParams.executor": "Run",
+    "Python.demo (1).executor": "Run",
+    "Python.demo.executor": "Run",
+    "Python.demo1.executor": "Run",
+    "Python.detailparam.executor": "Run",
+    "Python.download_iimg.executor": "Run",
+    "Python.download_img (1).executor": "Run",
+    "Python.judicial_Business_spider.executor": "Run",
+    "Python.jyCoding.executor": "Run",
+    "Python.jy_click.executor": "Run",
+    "Python.login.executor": "Debug",
+    "Python.loginBUG.executor": "Run",
+    "Python.loginModule.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.mainSpider (1).executor": "Run",
+    "Python.mainSpider.executor": "Run",
+    "Python.mainSpiderV1 (1).executor": "Run",
+    "Python.mainSpiderV1.executor": "Debug",
+    "Python.nextPage.executor": "Run",
+    "Python.noMemeryData.executor": "Run",
+    "Python.no_proxy_login.executor": "Run",
+    "Python.one_passVerify.executor": "Run",
+    "Python.passSpan.executor": "Debug",
+    "Python.passVerity.executor": "Run",
+    "Python.read_png.executor": "Run",
+    "Python.rejs.executor": "Run",
+    "Python.run.executor": "Run",
+    "Python.searchUser.executor": "Run",
+    "Python.searchView.executor": "Run",
+    "Python.searchView1.executor": "Run",
+    "Python.sifa.executor": "Run",
+    "Python.simpleLogin (1).executor": "Run",
+    "Python.simpleLogin (2).executor": "Run",
+    "Python.simpleLogin.executor": "Run",
+    "Python.test (1).executor": "Run",
+    "Python.test (2).executor": "Run",
+    "Python.test.executor": "Run",
+    "Python.user_manage.executor": "Run",
+    "Python.v3_dataAreaV1.executor": "Run",
+    "Python.v4_dataArea.executor": "Run",
+    "Python.v4_dataAreaV1.executor": "Run",
+    "Python.v4_dataArea_test.executor": "Run",
+    "Python.w.executor": "Run",
+    "Python.wifiCrack.executor": "Run",
+    "Python.多线程断点续爬.executor": "Run",
+    "Python.失信.executor": "Run",
+    "Python.打码.executor": "Run",
+    "Python.新版风控.executor": "Run",
+    "Python.解析.executor": "Run",
+    "Python.识别接口.executor": "Run",
+    "Python.识别测试 (1).executor": "Run",
+    "Python.识别测试.executor": "Run",
+    "Python.详情页数据提取.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "javascript.nodejs.core.library.configured.version": "20.13.1",
+    "javascript.nodejs.core.library.typings.version": "20.13.0",
+    "last_opened_file_path": "E:/AIProject/All_verification_passed",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "settings.editor.splitter.proportion": "0.25484198",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\pythonProject\gsxt.gov.cn\qichacha\V4\passVerify" />
+      <recent name="E:\pythonProject\gsxt.gov.cn\qichacha\V4\FunComponent\mongoToMQ" />
+      <recent name="E:\pythonProject\gsxt.gov.cn\qichacha\V4" />
       <recent name="E:\pythonProject\gsxt.gov.cn\qichacha\V4\JudModuleV1" />
       <recent name="E:\pythonProject\gsxt.gov.cn\qichacha\V4\AccountDetection" />
-      <recent name="E:\pythonProject\gsxt.gov.cn\qichacha\V4\reviewBUG\passCapTest" />
-      <recent name="E:\pythonProject\gsxt.gov.cn\qichacha\V4\reviewBUG\passCap" />
-      <recent name="E:\pythonProject\gsxt.gov.cn\qichacha\V4\RiskcontrolPass\jscode" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\pythonProject\gsxt.gov.cn\qichacha\V4\FunComponent\mongoToMQ" />
       <recent name="E:\pythonProject\gsxt.gov.cn\qichacha\V4\JudModule" />
       <recent name="E:\pythonProject\gsxt.gov.cn\qichacha\V4\reviewBUG" />
       <recent name="E:\pythonProject\gsxt.gov.cn\qichacha\V4\reviewBUG\风控源代码" />
       <recent name="E:\pythonProject\gsxt.gov.cn\qichacha\V4\reviewBUG\passCap - 副本" />
-      <recent name="E:\pythonProject\gsxt.gov.cn\qichacha\V4\reviewBUG\passCap" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.demo1">
-    <configuration name="2.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/reviewBUG/可优化项/2.js" working-dir="$PROJECT_DIR$/reviewBUG/可优化项">
-      <method v="2" />
-    </configuration>
-    <configuration name="demo1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.mainSpiderV1">
+    <configuration name="TransMongo" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="V4" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -224,12 +240,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reviewBUG/可优化项" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/FunComponent" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reviewBUG/可优化项/demo1.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/FunComponent/TransMongo.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -253,6 +269,29 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reviewBUG/passCapTest/mainSpiderV1.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="passVerity" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="V4" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reviewBUG/passCapTest" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reviewBUG/passCapTest/passVerity.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -309,11 +348,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.demo1" />
-        <item itemvalue="Python.simpleLogin" />
         <item itemvalue="Python.mainSpiderV1" />
+        <item itemvalue="Python.simpleLogin" />
         <item itemvalue="Python.user_manage" />
-        <item itemvalue="Node.js.2.js" />
+        <item itemvalue="Python.passVerity" />
+        <item itemvalue="Python.TransMongo" />
       </list>
     </recent_temporary>
   </component>
@@ -523,7 +562,20 @@
       <workItem from="1732614708782" duration="13541000" />
       <workItem from="1732673661645" duration="14378000" />
       <workItem from="1732717115547" duration="1376000" />
-      <workItem from="1732757211350" duration="1663000" />
+      <workItem from="1732757211350" duration="11150000" />
+      <workItem from="1732774220885" duration="5229000" />
+      <workItem from="1732806162675" duration="538000" />
+      <workItem from="1732907275733" duration="3666000" />
+      <workItem from="1733059176116" duration="6420000" />
+      <workItem from="1733121178902" duration="1878000" />
+      <workItem from="1733136084621" duration="562000" />
+      <workItem from="1733216138130" duration="986000" />
+      <workItem from="1733307153938" duration="5284000" />
+      <workItem from="1733368954127" duration="7818000" />
+      <workItem from="1733385716412" duration="593000" />
+      <workItem from="1733446135004" duration="5746000" />
+      <workItem from="1733715463116" duration="15129000" />
+      <workItem from="1733742822992" duration="9335000" />
     </task>
     <servers />
   </component>
@@ -646,6 +698,11 @@
           <line>597</line>
           <option name="timeStamp" value="267" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/reviewBUG/passCapTest/mainSpiderV1.py</url>
+          <line>119</line>
+          <option name="timeStamp" value="268" />
+        </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/reviewBUG/2.js</url>
           <line>39499</line>
@@ -667,19 +724,19 @@
     <SUITE FILE_PATH="coverage/V4$__1_.coverage" NAME="识别测试 (1) Coverage Results" MODIFIED="1727104585920" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Text_select_captcha" />
     <SUITE FILE_PATH="coverage/V4$JudModule.coverage" NAME="JudModule Coverage Results" MODIFIED="1725290906877" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/JudModule" />
     <SUITE FILE_PATH="coverage/V4$simpleLogin__2_.coverage" NAME="simpleLogin (2) Coverage Results" MODIFIED="1730713045618" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AccountDetection" />
-    <SUITE FILE_PATH="coverage/V4$demo1.coverage" NAME="demo1 Coverage Results" MODIFIED="1732757625096" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/reviewBUG/可优化项" />
+    <SUITE FILE_PATH="coverage/V4$demo1.coverage" NAME="demo1 Coverage Results" MODIFIED="1733136557816" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/reviewBUG/可优化项" />
     <SUITE FILE_PATH="coverage/V4$mainSpiderV1__1_.coverage" NAME="mainSpiderV1 (1) Coverage Results" MODIFIED="1731604094784" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/reviewBUG/passCap" />
     <SUITE FILE_PATH="coverage/V4$main.coverage" NAME="main Coverage Results" MODIFIED="1723109569024" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/V4$1.coverage" NAME="1 Coverage Results" MODIFIED="1728892719185" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AccountDetection" />
+    <SUITE FILE_PATH="coverage/V4$1.coverage" NAME="1 Coverage Results" MODIFIED="1732769029723" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/reviewBUG/可优化项" />
     <SUITE FILE_PATH="coverage/V4$v4_dataArea.coverage" NAME="v4_dataArea Coverage Results" MODIFIED="1730728193118" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/reviewBUG/passCapTest" />
-    <SUITE FILE_PATH="coverage/V4$passVerity.coverage" NAME="passVerity Coverage Results" MODIFIED="1731604089248" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/reviewBUG/passCap" />
+    <SUITE FILE_PATH="coverage/V4$passVerity.coverage" NAME="passVerity Coverage Results" MODIFIED="1733738741182" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/reviewBUG/passCapTest" />
     <SUITE FILE_PATH="coverage/V4$bilbil.coverage" NAME="bilbil Coverage Results" MODIFIED="1729007171929" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Text_select_captcha" />
     <SUITE FILE_PATH="coverage/V4$1111.coverage" NAME="1111 Coverage Results" MODIFIED="1730274909112" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/reviewBUG/passCap - 副本" />
     <SUITE FILE_PATH="coverage/V4$M1.coverage" NAME="M1 Coverage Results" MODIFIED="1732510509792" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/FunComponent" />
     <SUITE FILE_PATH="coverage/V4$asyncio_demo.coverage" NAME="asyncio_demo Coverage Results" MODIFIED="1726105152377" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Login" />
     <SUITE FILE_PATH="coverage/V4$bilbil_pp.coverage" NAME="bilbil_pp Coverage Results" MODIFIED="1728651020521" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Text_select_captcha" />
     <SUITE FILE_PATH="coverage/V4$login.coverage" NAME="login Coverage Results" MODIFIED="1721982157974" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Login" />
-    <SUITE FILE_PATH="coverage/V4$TransMongo.coverage" NAME="TransMongo Coverage Results" MODIFIED="1732112521286" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/FunComponent" />
+    <SUITE FILE_PATH="coverage/V4$TransMongo.coverage" NAME="TransMongo Coverage Results" MODIFIED="1733721829297" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/FunComponent" />
     <SUITE FILE_PATH="coverage/V4$searchUser.coverage" NAME="searchUser Coverage Results" MODIFIED="1726475445648" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/FunComponent" />
     <SUITE FILE_PATH="coverage/V4$dataParams.coverage" NAME="dataParams Coverage Results" MODIFIED="1732168987062" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/params" />
     <SUITE FILE_PATH="coverage/V4$v4_dataArea_test.coverage" NAME="v4_dataArea_test Coverage Results" MODIFIED="1728453672221" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dataSpider/DataAreaSpider" />
@@ -694,7 +751,7 @@
     <SUITE FILE_PATH="coverage/V4$download_img__1_.coverage" NAME="download_img (1) Coverage Results" MODIFIED="1726901697101" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/reviewBUG" />
     <SUITE FILE_PATH="coverage/V4$searchView.coverage" NAME="searchView Coverage Results" MODIFIED="1727597675651" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dataSpider/SearchIDApi" />
     <SUITE FILE_PATH="coverage/V4$demo__1_.coverage" NAME="demo (1) Coverage Results" MODIFIED="1727632704487" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Text_select_captcha/Traincaptch" />
-    <SUITE FILE_PATH="coverage/V4$test.coverage" NAME="test Coverage Results" MODIFIED="1731344585200" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/reviewBUG" />
+    <SUITE FILE_PATH="coverage/V4$test.coverage" NAME="test Coverage Results" MODIFIED="1733369773993" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/FunComponent/mongoToMQ" />
     <SUITE FILE_PATH="coverage/V4$dataAreaV1.coverage" NAME="dataAreaV1 Coverage Results" MODIFIED="1723599739252" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dataSpider/DataAreaSpider" />
     <SUITE FILE_PATH="coverage/V4$loginBUG.coverage" NAME="loginBUG Coverage Results" MODIFIED="1731591133014" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/reviewBUG" />
     <SUITE FILE_PATH="coverage/V4$Tokeys.coverage" NAME="Tokeys Coverage Results" MODIFIED="1730093912187" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AccountDetection" />
@@ -709,7 +766,7 @@
     <SUITE FILE_PATH="coverage/V4$PikaUse.coverage" NAME="PikaUse Coverage Results" MODIFIED="1732176743750" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MQitems" />
     <SUITE FILE_PATH="coverage/V4$SearchByDateArea.coverage" NAME="SearchByDateArea Coverage Results" MODIFIED="1723431465068" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dataAreaPar" />
     <SUITE FILE_PATH="coverage/V4$read_png.coverage" NAME="read_png Coverage Results" MODIFIED="1727570080739" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Text_select_captcha/Traincaptch" />
-    <SUITE FILE_PATH="coverage/V4$simpleLogin.coverage" NAME="simpleLogin Coverage Results" MODIFIED="1732689618666" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/reviewBUG/passCapTest" />
+    <SUITE FILE_PATH="coverage/V4$simpleLogin.coverage" NAME="simpleLogin Coverage Results" MODIFIED="1733751702412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/reviewBUG/passCapTest" />
     <SUITE FILE_PATH="coverage/V4$detailparam.coverage" NAME="detailparam Coverage Results" MODIFIED="1732178169512" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ParseFile" />
     <SUITE FILE_PATH="coverage/V4$config.coverage" NAME="config Coverage Results" MODIFIED="1727255841348" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/setting" />
     <SUITE FILE_PATH="coverage/V4$wifiCrack.coverage" NAME="wifiCrack Coverage Results" MODIFIED="1727187853896" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/Desktop" />
@@ -720,10 +777,10 @@
     <SUITE FILE_PATH="coverage/V4$dataAreaSpider.coverage" NAME="dataAreaSpider 覆盖结果" MODIFIED="1721213351748" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/DataAreaSpider" />
     <SUITE FILE_PATH="coverage/V4$download_iimg.coverage" NAME="download_iimg Coverage Results" MODIFIED="1726743873105" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/reviewBUG" />
     <SUITE FILE_PATH="coverage/V4$one_passVerify.coverage" NAME="one_passVerify Coverage Results" MODIFIED="1728829460110" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/FunComponent" />
-    <SUITE FILE_PATH="coverage/V4$mainSpiderV1.coverage" NAME="mainSpiderV1 Coverage Results" MODIFIED="1732689608300" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/reviewBUG/passCapTest" />
+    <SUITE FILE_PATH="coverage/V4$mainSpiderV1.coverage" NAME="mainSpiderV1 Coverage Results" MODIFIED="1733753043460" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/reviewBUG/passCapTest" />
     <SUITE FILE_PATH="coverage/V4$jy_click.coverage" NAME="jy_click Coverage Results" MODIFIED="1729007297957" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Text_select_captcha/src/method" />
-    <SUITE FILE_PATH="coverage/V4$user_manage.coverage" NAME="user_manage Coverage Results" MODIFIED="1732676668034" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AccountDetection" />
+    <SUITE FILE_PATH="coverage/V4$user_manage.coverage" NAME="user_manage Coverage Results" MODIFIED="1733751218868" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AccountDetection" />
     <SUITE FILE_PATH="coverage/V4$searchView1.coverage" NAME="searchView1 Coverage Results" MODIFIED="1727648072608" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dataSpider/SearchIDApi" />
-    <SUITE FILE_PATH="coverage/V4$simpleLogin__1_.coverage" NAME="simpleLogin (1) Coverage Results" MODIFIED="1731603940750" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/reviewBUG/passCap" />
+    <SUITE FILE_PATH="coverage/V4$simpleLogin__1_.coverage" NAME="simpleLogin (1) Coverage Results" MODIFIED="1733216546174" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AccountDetection" />
   </component>
 </project>

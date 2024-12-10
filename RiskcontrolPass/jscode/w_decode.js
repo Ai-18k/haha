@@ -6492,7 +6492,7 @@ function _fff(aa,par,cc) {
                                 new_text.setLeft=aa.dis
                                 }
                             new_text.passtime = 1160
-                            if (aa["type"]==="word") {
+                            if (["word", "icon", "phrase"].includes(aa["type"])) {
                                 new_text.userresponse = aa.smark
                             }else{
                                 new_text.userresponse = aa.dis/1.0059466666666665 + 2

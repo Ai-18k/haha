@@ -29,13 +29,14 @@ from feapder.network.user_agent import get
 from loguru import logger
 from retrying import retry
 import ddddocr
-
+import random
+from geetest4_word import get_word_position
 
 def proxy_list():
     tunnel = "d152.kdltps.com:15818"
     # 用户名密码方式
     username = "t13206952228334"
-    password = "wtx4i2in"
+    password = "wtx4i2in:%d"%random.randint(1,5)
     proxies = {
         "http": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel},
         "https": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel}
@@ -85,8 +86,7 @@ class CC1:
         else:
            raise Exception("链接失效")
 
-
-class CC:
+class CC2:
     def PostPic(self,pic_list):
         if len(pic_list) == 4:
             pic_list.append("")
@@ -213,13 +213,15 @@ class Login_module:
                     tag = requests.get("https://static.geetest.com/" + img_url).content
                     # self.download_img(tag, str(index), type, uuid1)
                     # word_pic=ImageProcess.wordprocess(tag)
-                    word_pic=base64.b64encode(tag).decode("utf-8")
-                    base_list.append(word_pic)
+                    # word_pic=base64.b64encode(tag).decode("utf-8")
+                    # base_list.append(word_pic)
+                    base_list.append(tag)
                 imgs_url = "https://static.geetest.com/" + resp["data"]['imgs']
                 slide_bytes = requests.get(imgs_url).content
-                base_list=[base64.b64encode(slide_bytes).decode("utf-8")]+base_list
+                # base_list=[base64.b64encode(slide_bytes).decode("utf-8")]+base_list
                 # new_pic=ImageProcess.mergePic(slide_bytes,bytes_list)
-                click_list = CC().PostPic(base_list)
+                # click_list = CC().PostPic(base_list)
+                click_list = get_word_position(slide_bytes,base_list)
                 click_smark = []
                 for _word in click_list:
                     click_smark.append([round(int(_word[0]) * 100 / 3), round(int(_word[1]) * 50)])

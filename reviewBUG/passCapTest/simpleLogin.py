@@ -36,7 +36,7 @@ from loguru import logger
 from feapder.network.user_agent import get
 # from curl_cffi import requests
 from retrying import retry
-
+from geetest4_word import get_word_position
 
 ocr = ddddocr.DdddOcr(det=False, ocr=False)
 ocr1 = ddddocr.DdddOcr(beta=True)  # 切换为第二套ocr模型
@@ -103,7 +103,7 @@ class CC2:
         else:
             raise Exception("链接失效")
 
-class CC:
+class CC3:
     def PostPic(self,pic_list):
         if len(pic_list) == 4:
             pic_list.append("")
@@ -133,6 +133,7 @@ class CC:
                             x1, y1, x2, y2 = crop
                             xy.append([(x1 + x2) / 2, (y1 + y2) / 2])
                         return xy
+
 
 class LoginModule:
 
@@ -185,6 +186,7 @@ class LoginModule:
                 payload = resp["data"]["payload"]
                 static_path =resp["data"]["static_path"]
                 params_list = {
+                    "captcha_id": "517df78b31ff1b8f841cd86fc0db9f3e",
                     "lot_number": lot_number,
                     "process_token": process_token,
                     "pow_detail": pow_detail,
@@ -198,12 +200,14 @@ class LoginModule:
                     base_list = []
                     for index, img_url in enumerate(q_list):
                         tag = requests.get("https://static.geetest.com/" + img_url).content
-                        word_pic = base64.b64encode(tag).decode("utf-8")
-                        base_list.append(word_pic)
+                        # word_pic = base64.b64encode(tag).decode("utf-8")
+                        # base_list.append(word_pic)
+                        base_list.append(tag)
                     imgs_url = "https://static.geetest.com/" + resp["data"]['imgs']
                     slide_bytes = requests.get(imgs_url).content
-                    new_pic=[base64.b64encode(slide_bytes).decode("utf-8")]+base_list
-                    click_list = CC().PostPic(new_pic)
+                    # new_pic=[base64.b64encode(slide_bytes).decode("utf-8")]+base_list
+                    # click_list = CC().PostPic(new_pic)
+                    click_list =get_word_position(slide_bytes,base_list)
                     click_smark = []
                     for _word in click_list:
                         click_smark.append([round(int(_word[0]) * 100 / 3), round(int(_word[1]) * 50)])
@@ -226,9 +230,7 @@ class LoginModule:
         except Exception as e:
             logger.error(e)
 
-
-    def re_js_code(self):
-        params_list = self.get_1()
+    def re_jscodeV1(self,params_list):
         headers = {
             "Host": "static.geetest.com",
             "pragma": "no-cache",
@@ -256,110 +258,26 @@ class LoginModule:
         str_code += matche_01[0] + matche_01[1]
         matche_02 = re.findall(rf'{head}\..*?}};', response.text, re.S)
         str_code += matche_02[2] + matche_02[3] + f"function {head}() {{}};"
-        pattern = r'!function\s*\(\)\s*{[^}]*}()'
-        matche_03 = re.search(pattern, response.text, re.S)
-        text = matche_03.group()
-        matche_04 = re.search(r"var.*?.shift\(\);", text, re.S)
-        str_code += "function get_param(){" + matche_04.group()
-        pattern = r'\{\s*"(\\u[0-9a-fA-F]+)+":\s*[_\w]+\([0-9]+\)\s*\}'
-        # 查找匹配项
-        match = re.search(pattern, text)
-        if match:
-            matche_05 = match.group(0)
-        else:
-            matche_05 = re.search(r'\{"(.*?)}', text, re.S)
-        try:
-            str_code1 = str_code + "return " + matche_05.strip() + "};}"
-            res = execjs.compile(str_code1).call("get_param")
-        except:
-            try:
-                str_code2 = str_code + "return " + matche_05.strip() + "}"
-                res = execjs.compile(str_code2.encode().decode("utf-8")).call("get_param")
-            except:
-                str_code3 = str_code + "return " + matche_05.strip()+ "};"
-                res = execjs.compile(str_code3).call("get_param")
-        return {"par_param": res, "par_data": params_list}
+        matche_03 = re.findall(r"!function\(\)\s*\{[\s\S]*?\}\(\),", response.text, re.S)[0]
+        pattern = r"!function\(\)\s*\{\s*!(.*?)\}\(\),"  # 匹配 function() 的块
+        matche_04 = re.findall(pattern, matche_03, re.S)[0]  # 启用多行模式
+        str_code += "var code=" + matche_04 + ";return [this._lib,this.lib._abo]}"
+        res = execjs.compile(str_code).call("code")
+        print(res)
+        return {"par_param": res[0], "keys": res[1],"paramsList": params_list}
 
-
-    def Composite_parameter(self, lotNumber):
-        lot = {
-            "$_JP": [
-                {
-                    "$_JP": [
-                        {
-                            "$_JP": [
-                                2,
-                                3
-                            ]
-                        },
-                        {
-                            "$_JP": [
-                                17,
-                                18
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "$_JP": [
-                        {
-                            "$_JP": [
-                                15
-                            ]
-                        },
-                        {
-                            "$_JP": [
-                                5
-                            ]
-                        },
-                        {
-                            "$_JP": [
-                                9
-                            ]
-                        },
-                        {
-                            "$_JP": [
-                                17
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "$_JP": [
-                        {
-                            "$_JP": [
-                                10,
-                                15
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-        lotRes = {
-            "$_JP": [
-                {
-                    "$_JP": [
-                        {
-                            "$_JP": [
-                                1,
-                                8
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
+    def Composite_parameter(self,lot, lotRes, lotNumber):
+        key = list(lot.keys())[0]
         def split_lot_number(lot, lotNumber):
             result = []
             split_numbers = []
-            for sublist in lot["$_JP"]:
+            for sublist in lot[key]:
                 temp = []
-                for num in sublist["$_JP"]:
+                for num in sublist[key]:
                     if isinstance(num, list):
                         temp.append([x + 1 for x in num])
                     else:
-                        temp.append(num["$_JP"])
+                        temp.append(num[key])
                 result.append(temp)
             for sublist in result:
                 temp = ""
@@ -373,7 +291,8 @@ class LoginModule:
             return split_numbers
         res1 = split_lot_number(lot, lotNumber)
         res2 = split_lot_number(lotRes, lotNumber)
-        return {res1[0]: {res1[1]: {res1[2]: res2[0]}}}
+        return {res1[0]: {res1[1]: res2[0]}}
+
 
     def get_2(self):
         headers = {
@@ -394,21 +313,25 @@ class LoginModule:
             "sec-ch-ua-platform": "\"Windows\""
         }
         url = "https://gcaptcha4.geetest.com/verify"
-        # par = self.re_js_code()
-        par = self.get_1()
-        par["par_param"] = {'Wovl': 'M3MD'}
-        param = self.Composite_parameter(par["lot_number"])
+        data = self.get_1()
+        print(data)
+        par = self.re_jscodeV1(data)
+        with open("mapToDict.js", encoding="utf-8") as file:
+            ctx = file.read()
+        result = execjs.compile(ctx).call("v", par["keys"])
+        param = self.Composite_parameter(result["lot"], result["lotRes"], data["lot_number"])
+        print(param)
         jscode = open("w_decode.js", encoding="utf-8").read()
-        data = execjs.compile(jscode).call("_fff", par, par["par_param"], param)
+        w = execjs.compile(jscode).call("_fff", data, par["par_param"], param)
         params = {
             "captcha_id": "517df78b31ff1b8f841cd86fc0db9f3e",
             "client_type": "web",
-            "lot_number": par["lot_number"],
-            "payload": par["payload"],
-            "process_token": par["process_token"],
+            "lot_number": data["lot_number"],
+            "payload": data["payload"],
+            "process_token": data["process_token"],
             "payload_protocol": "1",
             "pt": "1",
-            "w": data["res"]
+            "w": w["res"]
         }
         response = self.session.get(url,headers=headers,params=params,proxies=self.Request["proxy"])
         if response.status_code == 200:
@@ -417,7 +340,7 @@ class LoginModule:
             captcha_output = resp["data"]["seccode"]["captcha_output"]
             lot_number = resp["data"]["seccode"]["lot_number"]
             pass_token = resp["data"]["seccode"]["pass_token"]
-            self.Request["sign"] = data["pow_sign"]
+            self.Request["sign"] = w["pow_sign"]
             params_list1 = {
                 "lot_number": lot_number,
                 "pass_token": pass_token,
@@ -428,8 +351,9 @@ class LoginModule:
         else:
             logger.error(f"请求状态码:{response.status_code}")
 
+
     def get_3(self):
-        try:
+        # try:
             data = self.get_2()
             headers = {
                 "Accept": "application/json, text/plain, */*",
@@ -464,10 +388,7 @@ class LoginModule:
                 "captcha_output": data["captcha_output"],
                 "captcha_type": "pcLogin"
             }
-            response = self.session.get(url,
-                                            headers=headers,
-                                            params=params,
-                                            proxies=self.Request["proxy"])
+            response = self.session.get(url,headers=headers,params=params,proxies=self.Request["proxy"])
             if response.status_code == 200:
                 res = json.loads(str(response.text).strip("(").strip(")"))
                 print(res)
@@ -494,10 +415,10 @@ class LoginModule:
                     time.sleep(1)
                     self.get_3()
                     return
-        except Exception as e:
-            logger.error(e)
-            self.main(self.Request["mobil"])
-            return
+        # except Exception as e:
+        #     logger.error(e)
+        #     self.main(self.Request["mobil"])
+        #     return
 
     def get_cookie_csrf(self):
         headers = {
@@ -524,8 +445,9 @@ class LoginModule:
         url = "https://www.tianyancha.com/"
         self.session.get(url, headers=headers, proxies=self.Request["proxy"])
         self.Request["X-TYCID"]=self.session.cookies.get("TYCID")
-        headers = {
+        self.headers = {
             'Referer': 'https://www.tianyancha.com/',
+            "User-Agent": self.Request["ua"]
         }
         self.session.get('https://hm.baidu.com/hm.js?e92c8d65d92d534b0fc290df538b4758', headers=headers)
 
@@ -565,7 +487,8 @@ class LoginModule:
             "http": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel},
             "https": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel}
         }
-        return proxies
+        # return proxies
+        return None
 
     def main(self,mobil):
         self.Request["proxy"] =self.proxy_list()
@@ -601,6 +524,8 @@ class LoginModule:
 
 
 if __name__ == '__main__':
-    mobil = {"mobil": "13116253102", "pwd": "cc123456"}
+    # mobil = {"mobil": "18669098295", "pwd": "cc123456"}
+    mobil = {"mobil": "18612186353", "pwd": "Jiaojiao123"}
+    mobil = {"mobil": "13115414334", "pwd": "xavier1974107"}
     # Add code here to set up a local proxy on port 57580
     LoginModule().main(mobil)

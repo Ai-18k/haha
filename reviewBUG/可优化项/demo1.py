@@ -18,6 +18,7 @@ import redis
 import requests
 from feapder.network.user_agent import get
 from loguru import logger
+from geetest4_word import get_word_position
 
 session = requests.Session()
 conn = redis.Redis(host='127.0.0.1', port=7980, db=0, password="qwe!@#SDF345788",socket_connect_timeout=70)
@@ -28,7 +29,7 @@ print("Project root:", PROJECT_ROOT)
 sys.path.append(PROJECT_ROOT)
 
 
-class CC:
+class CC1:
     def PostPic(self,pic_list):
         if len(pic_list) == 4:
             pic_list.append("")
@@ -36,7 +37,8 @@ class CC:
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
         }
-        url = "http://192.168.5.167:10121/geetest4_word/gradio_api/queue/"
+        # url = "http://192.168.5.167:10121/geetest4_word/gradio_api/queue/"
+        url = "http://127.0.0.1:1012/geetest4_word/gradio_api/queue/"
         params = {"": ""}
         data = {"data": pic_list,"fn_index": 1,"session_hash": tmp}
         data = json.dumps(data, separators=(',', ':'))
@@ -121,13 +123,15 @@ def get_jy_gcaptcha4Code():
                                         tag = requests.get("https://static.geetest.com/" + img_url).content
                                         # self.download_img(tag, str(index), type, uuid1)
                                         # word_pic = ImageProcess.wordprocess(tag)
-                                        word_pic = base64.b64encode(tag).decode("utf-8")
-                                        base_list.append(word_pic)
+                                        # word_pic = base64.b64encode(tag).decode("utf-8")
+                                        # base_list.append(word_pic)
+                                        base_list.append(tag)
                                 imgs_url = "https://static.geetest.com/" + resp["data"]['imgs']
                                 slide_bytes = requests.get(imgs_url).content
                                 # new_pic = ImageProcess.mergePic(slide_bytes, bytes_list)
-                                new_pic = [base64.b64encode(slide_bytes).decode("utf-8")] + base_list
-                                click_list = CC().PostPic(new_pic)
+                                # new_pic = [base64.b64encode(slide_bytes).decode("utf-8")] + base_list
+                                # click_list = CC().PostPic(new_pic)
+                                click_list = get_word_position(slide_bytes, base_list)
                                 click_smark = []
                                 for _word in click_list:
                                         click_smark.append([round(int(_word[0]) * 100 / 3), round(int(_word[1]) * 50)])
@@ -181,7 +185,7 @@ def get_jy_gcaptcha4Code():
             str_code+="var code=" + matche_04 + ";return [this._lib,this.lib._abo]}"
             res=execjs.compile(str_code).call("code")
             print(res)
-            return {"head": head, "par_param": res[0], "keys": res[1],"content":response.text}
+            return {"head": head, "par_param": res[0], "keys": res[1],"content":response.text,"paramsList":params_list}
 
         def re_js_code(params_list):
             headers = {
@@ -235,8 +239,43 @@ def get_jy_gcaptcha4Code():
                 res = execjs.compile(str_code3).call("get_param")
             return {"head":head,"par_param": res,"content":response.text}
 
+        def Composite_parameter(lot,lotRes,lotNumber):
+            key=list(lot.keys())[0]
+            print(key)
+            def split_lot_number(lot,lotNumber):
+                result = []
+                split_numbers = []
+                for sublist in lot[key]:
+                    temp = []
+                    for num in sublist[key]:
+                        if isinstance(num, list):
+                            temp.append([x + 1 for x in num])
+                        else:
+                            temp.append(num[key])
+                    result.append(temp)
+                for sublist in result:
+                    temp = ""
+                    for num in sublist:
+                        if len(num) > 1:
+                            num[-1] += 1
+                            temp += lotNumber[num[0]:num[1]]
+                        else:
+                            temp += lotNumber[num[0]]
+                    split_numbers.append(temp)
+                return split_numbers
+            res1 = split_lot_number(lot, lotNumber)
+            res2 = split_lot_number(lotRes, lotNumber)
+            return {res1[0]: {res1[1]:res2[0]}}
+
         data=get_1()
         par=re_jscodeV1(data)
+        with open("mapToDict.js",encoding="utf-8")as file:
+            ctx=file.read()
+        result=execjs.compile(ctx).call("v",par["keys"])
+        print(result)
+        print(par["paramsList"])
+        res=Composite_parameter(result["lot"], result["lotRes"], par["paramsList"]["lot_number"])
+        print(res)
         codehash=hashlib.md5(par["content"].encode("utf-8")).hexdigest()
         return {"head":par["head"],"md5":codehash,"params":par["par_param"],"keys":par["keys"]}
 

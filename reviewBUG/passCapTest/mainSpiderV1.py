@@ -31,7 +31,6 @@ sys.path.append(PROJECT_ROOT)
 #     print(f"Import error: {e}")
 #     print("Looking for MQitems in:", [os.path.join(path, 'MQitems') for path in sys.path])
 
-
 from MQitems.PikaUse import SendMQ
 from ParseFile.parsehtml import parasHTML
 # 其他导入
@@ -58,7 +57,7 @@ class DetailSpider:
     mq = SendMQ()
 
     def __init__(self):
-        self.session=requests.session()
+        self.session=requests.Session()
         self.conn = redis.Redis(host='127.0.0.1', port=7980, db=0, password="qwe!@#SDF345788",socket_connect_timeout=70)
         self.client = pymongo.MongoClient(host='127.0.0.1', port=27017)
         self.coll_2 = self.client["company"]["test"]["company"]
@@ -91,6 +90,8 @@ class DetailSpider:
             "https": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel}
         }
         return proxies
+        # return None
+
 
     @retry(wait_fixed=1)
     def get_data(self, info):
@@ -117,6 +118,7 @@ class DetailSpider:
             }
             url = "https://www.tianyancha.com/company/%s" % str(info["id"])
             response = self.session.get(url, headers=headers, proxies=self.proxy_list())
+            print(self.session.headers)
             logger.info(url)
             logger.info(self.Reqest["mobil"])
             logger.info(info)
@@ -457,7 +459,6 @@ class DetailSpider:
             logger.error(e)
             self.coll1.insert_one(info)
 
-
     def main(self):
         with ThreadPoolExecutor(4) as f:
             futures = []
@@ -483,13 +484,14 @@ class DetailSpider:
                                 # future = f.submit(self.get_data, info=info)
                                 # futures.append(future)
                                     self.get_data(info)
+
                             else:
+                                # for future in futures:
+                                #     future.result()
                                 logger.warning(f"【*】公司存在已过滤:{info}")
                         # if len(futures)>=20:
                         #     for future in futures:
                         #         future.result()
-                    # for future in futures:
-                    #     future.result()
                     break
 
 

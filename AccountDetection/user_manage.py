@@ -24,6 +24,7 @@ import redis
 # conn = redis.Redis(host='139.9.70.234', port=6379, db=2, password="anbo123",socket_connect_timeout=70)
 # local_conn = redis.Redis(host='192.168.5.167', port=9736, db=0, password="3r332r@",socket_connect_timeout=70)
 local_VQ_conn = redis.Redis(host='192.168.5.181', port=7933, db=0, password="fer@nhaweif576KUG",socket_connect_timeout=70)
+# local_VQ_conn = redis.Redis(host='127.0.0.1', port=7980, db=0, password="qwe!@#SDF345788",socket_connect_timeout=1170)
 
 
 def qingguo_proxy():
@@ -196,9 +197,9 @@ class UserScreen():
                 local_VQ_conn.sadd("临时手机号过滤",info["mobil"])
             # self.main()
             try:
-                # result = open("去重账号.txt", encoding="utf-8").readlines()
+                result = open("去重账号.txt", encoding="utf-8").readlines()
                 # result = open("待筛选的用户名密码.txt", encoding="utf-8").readlines()
-                result = open("入库.txt", encoding="utf-8").readlines()
+                # result = open("入库.txt", encoding="utf-8").readlines()
                 # result =local_VQ_conn.lrange("test",0,-1)
                 with ThreadPoolExecutor(2) as f:
                     _ = 0

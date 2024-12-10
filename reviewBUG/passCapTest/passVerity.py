@@ -20,95 +20,17 @@ print("Project root:", PROJECT_ROOT)
 sys.path.append(PROJECT_ROOT)
 
 import base64
-import io
 import re
-import time
 import cv2
 import ddddocr
 import execjs
 from loguru import logger
 import json
 import uuid
-from retrying import retry
 from curl_cffi import requests as req
 import requests
+from passVerify.geetest4_icon import get_icon_position
 
-
-class CC1:
-    def PostPic(self, final_image):
-        out_buff = io.BytesIO()
-        final_image.save(out_buff, format='PNG')
-        byte_pic = out_buff.getvalue()
-        headers = {
-            "Accept": "application/json, text/plain, */*",
-            "Accept-Language": "zh-CN,zh;q=0.9",
-            "Cache-Control": "no-cache",
-            "Connection": "keep-alive",
-            "Content-Type": "application/json",
-            "DNT": "1",
-            "Origin": "http://192.168.5.181:8011",
-            "Pragma": "no-cache",
-            "Referer": "http://192.168.5.181:8011/char1",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-        }
-        url = "http://192.168.5.181:8011/dianxuan/identify"
-        data = {
-            "dataType": 2,
-            "imageSource": base64.b64encode(byte_pic).decode('utf-8'),
-        }
-        data = json.dumps(data, separators=(',', ':'))
-        response = requests.post(url, headers=headers, data=data)
-        if response.status_code == 200:
-            data = response.json()
-            _crop = data["data"]["res"]["crop_centre"]
-            return _crop
-        else:
-            raise Exception("链接失效")
-
-
-class CC:
-    def PostPic(self, pic_list):
-        if len(pic_list) == 4:
-            pic_list.append("")
-        tmp = str(time.time())
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
-        }
-        url = "http://192.168.5.181:10121/geetest4_icon/gradio_api/queue/"
-        # url = "http://127.0.0.1:1012/geetest4_icon/gradio_api/queue/"
-        params = {"": ""}
-        data = {
-            "data": pic_list,
-            "event_data": None,
-            "fn_index": 1,
-            "trigger_id": 121,
-            "session_hash": tmp
-        }
-        data = json.dumps(data, separators=(',', ':'))
-        requests.post(url + "join", headers=headers, params=params, data=data, verify=False)
-        param = {
-            "session_hash": tmp
-        }
-        time.sleep(0.1)
-        response = requests.get(url + "data", headers=headers, params=param, verify=False)
-        message_count = 0  # 初始化计数器
-        # 逐行读取事件流数据
-        for line in response.iter_lines(decode_unicode=True):
-            if line:  # 跳过空行
-                if line.startswith("data:"):
-                    data = line[5:].strip()  # 去掉 "data:" 前缀并清理空格
-                    message_count += 1
-                    # 检查是否已接收到第三条消息
-                    if message_count == 3:
-                        xy = []
-                        plan = json.loads(data)["output"]["data"][1]
-                        for crop in plan:
-                            x1, y1, x2, y2 = crop
-                            xy.append([(x1 + x2) / 2, (y1 + y2) / 2])
-                        return xy
-
-
-# @retry(wait_fixed=1000)
 def verify(content):
     url = "http://api.jfbym.com/api/YmServer/customApi"
     data = {
@@ -132,11 +54,8 @@ def verify(content):
     else:
         raise Exception("识别失败")
 
-
 ocr = ddddocr.DdddOcr(det=False, ocr=False, show_ad=False)
-ocr1 = ddddocr.DdddOcr(beta=True, show_ad=False)  # 切换为第二套ocr模型
 ocr2 = ddddocr.DdddOcr(det=True, show_ad=False)
-
 
 class Demo:
 
@@ -172,24 +91,12 @@ class Demo:
             if filename == "click_img":
                 self.ocr_img(file_path, dir_path)
 
-
     def get_1(self):
         # try:
         headers = {
             "Host": "gcaptcha4.geetest.com",
-            "Pragma": "no-cache",
-            "Cache-Control": "no-cache",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
-            "sec-ch-ua": "\"Chromium\";v=\"130\", \"Google Chrome\";v=\"130\", \"Not?A_Brand\";v=\"99\"",
-            "DNT": "1",
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": "\"Windows\"",
-            "Accept": "*/*",
-            "Sec-Fetch-Site": "cross-site",
-            "Sec-Fetch-Mode": "no-cors",
-            "Sec-Fetch-Dest": "script",
             "Referer": "https://www.tianyancha.com/",
-            "Accept-Language": "zh-CN,zh;q=0.9"
         }
         uuid1 = uuid.uuid1()
         url = "https://gcaptcha4.geetest.com/load"
@@ -224,12 +131,10 @@ class Demo:
                 bytes_list = []
                 for index, img_url in enumerate(q_list):
                     tag = requests.get("https://static.geetest.com/" + img_url).content
-                    word_pic = base64.b64encode(tag).decode("utf-8")
-                    bytes_list.append(word_pic)
+                    bytes_list.append(tag)
                 imgs_url = "https://static.geetest.com/" + res["data"]['imgs']
                 slide_bytes = requests.get(imgs_url).content
-                bytes_list = [base64.b64encode(slide_bytes).decode("utf-8")] + bytes_list
-                click_list = CC().PostPic(bytes_list)
+                click_list = get_icon_position(slide_bytes,bytes_list)
                 click_smark = []
                 for _word in click_list:
                     click_smark.append([round(int(_word[0]) * 100 / 3), round(int(_word[1]) * 50)])
@@ -254,122 +159,19 @@ class Demo:
                 print(response.json())
             return params_list
 
-    def Composite_parameter(self,lotNumber):
-        """
-         {
-            "$_BAv": [
-                {
-                    "$_BAv": [
-                        {
-                            "$_BAv": [
-                                15,
-                                17
-                            ]
-                        },
-                        {
-                            "$_BAv": [
-                                12,
-                                14
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "$_BAv": [
-                        {
-                            "$_BAv": [
-                                13,
-                                14
-                            ]
-                        },
-                        {
-                            "$_BAv": [
-                                6,
-                                7
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
 
-        {
-            "$_BAv": [
-                {
-                    "$_BAv": [
-                        {
-                            "$_BAv": [
-                                7,
-                                14
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-
-
-        """
-        lot =  {
-            "$_BAv": [
-                {
-                    "$_BAv": [
-                        {
-                            "$_BAv": [
-                                15,
-                                17
-                            ]
-                        },
-                        {
-                            "$_BAv": [
-                                12,
-                                14
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "$_BAv": [
-                        {
-                            "$_BAv": [
-                                13,
-                                14
-                            ]
-                        },
-                        {
-                            "$_BAv": [
-                                6,
-                                7
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-        lotRes = {
-            "$_BAv": [
-                {
-                    "$_BAv": [
-                        {
-                            "$_BAv": [
-                                7,
-                                14
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
+    def Composite_parameter(self,lot, lotRes, lotNumber):
+        key = list(lot.keys())[0]
         def split_lot_number(lot, lotNumber):
             result = []
             split_numbers = []
-            for sublist in lot["$_BAv"]:
+            for sublist in lot[key]:
                 temp = []
-                for num in sublist["$_BAv"]:
+                for num in sublist[key]:
                     if isinstance(num, list):
                         temp.append([x + 1 for x in num])
                     else:
-                        temp.append(num["$_BAv"])
+                        temp.append(num[key])
                 result.append(temp)
             for sublist in result:
                 temp = ""
@@ -386,25 +188,12 @@ class Demo:
         return {res1[0]: {res1[1]: res2[0]}}
 
 
-    def re_js_code(self):
-        params_list = self.get_1()
+    def re_jscodeV1(self,params_list):
         headers = {
             "Host": "static.geetest.com",
-            "pragma": "no-cache",
-            "cache-control": "no-cache",
-            "sec-ch-ua": "\"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google "
-                         "Chrome\";v=\"114\"",
             "origin": "https://www.tianyancha.com",
-            "dnt": "1",
-            "sec-ch-ua-mobile": "?0",
             "User-Agent": self.Reqest["ua"],
-            "sec-ch-ua-platform": "\"Windows\"",
-            "accept": "*/*",
-            "sec-fetch-site": "cross-site",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-dest": "script",
             "referer": "https://www.tianyancha.com/",
-            "accept-language": "zh-CN,zh;q=0.9"
         }
         url = "https://static.geetest.com" + params_list["static_path"] + "/js/gcaptcha4.js"
         response = self.session.get(url, headers=headers)
@@ -415,30 +204,13 @@ class Demo:
         str_code += matche_01[0] + matche_01[1]
         matche_02 = re.findall(rf'{head}\..*?}};', response.text, re.S)
         str_code += matche_02[2] + matche_02[3] + f"function {head}() {{}};"
-        pattern = r'!function\s*\(\)\s*{[^}]*}()'
-        matche_03 = re.search(pattern, response.text, re.S)
-        text = matche_03.group()
-        matche_04 = re.search(r"var.*?.shift\(\);", text, re.S)
-        str_code += "function get_param(){" + matche_04.group()
-        pattern = r'\{\s*"(\\u[0-9a-fA-F]+)+":\s*[_\w]+\([0-9]+\)\s*\}'
-        # 查找匹配项
-        match = re.search(pattern, text)
-        if match:
-            matche_05 = match.group(0)
-        else:
-            matche_05 = re.search(r'\{"(.*?)}', text, re.S)
-        try:
-            str_code1 = str_code + "return " + matche_05.strip() + "};}"
-            res = execjs.compile(str_code1).call("get_param")
-        except:
-            try:
-                str_code2 = str_code + "return " + matche_05.strip() + "}"
-                res = execjs.compile(str_code2.encode().decode("utf-8")).call("get_param")
-            except:
-                str_code3 = str_code + "return " + matche_05.strip()+ "};"
-                res = execjs.compile(str_code3).call("get_param")
-        return {"par_param": res, "par_data": params_list}
-
+        matche_03 = re.findall(r"!function\(\)\s*\{[\s\S]*?\}\(\),", response.text, re.S)[0]
+        pattern = r"!function\(\)\s*\{\s*!(.*?)\}\(\),"  # 匹配 function() 的块
+        matche_04 = re.findall(pattern, matche_03, re.S)[0]  # 启用多行模式
+        str_code += "var code=" + matche_04 + ";return [this._lib,this.lib._abo]}"
+        res = execjs.compile(str_code).call("code")
+        print(res)
+        return {"head": head, "par_param": res[0], "keys": res[1], "content": response.text, "paramsList": params_list}
 
     def proxy_list(self):
         # 隧道域名:端口号
@@ -451,7 +223,6 @@ class Demo:
             "https": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel}
         }
         return proxies
-
 
     def get_2(self):
         headers = {
@@ -472,22 +243,25 @@ class Demo:
             "sec-ch-ua-platform": "\"Windows\""
         }
         url = "https://gcaptcha4.geetest.com/verify"
-        # par = self.re_js_code()
-        par = self.get_1()
-        par["par_param"] ={'Wovl': 'M3MD'}
-        param = self.Composite_parameter(par["lot_number"])
+        data = self.get_1()
+        print(data)
+        par = self.re_jscodeV1(data)
+        with open("mapToDict.js", encoding="utf-8") as file:
+            ctx = file.read()
+        result = execjs.compile(ctx).call("v", par["keys"])
+        param = self.Composite_parameter(result["lot"], result["lotRes"], data["lot_number"])
         print(param)
         jscode = open("w_decode.js", encoding="utf-8").read()
-        data = execjs.compile(jscode).call("_fff", par, par["par_param"], param)
+        w = execjs.compile(jscode).call("_fff", data, par["par_param"], param)
         params = {
             "captcha_id": "af29b3003fc94f2ba29e865b31ee86ee",
             "client_type": "web",
-            "lot_number": par["lot_number"],
-            "payload": par["payload"],
-            "process_token": par["process_token"],
+            "lot_number": data["lot_number"],
+            "payload": data["payload"],
+            "process_token": data["process_token"],
             "payload_protocol": "1",
             "pt": "1",
-            "w": data["res"]
+            "w": w["res"]
         }
         response = self.session.get(url,headers=headers,params=params)
         if response.status_code == 200:
@@ -496,7 +270,7 @@ class Demo:
             captcha_output = resp["data"]["seccode"]["captcha_output"]
             lot_number = resp["data"]["seccode"]["lot_number"]
             pass_token = resp["data"]["seccode"]["pass_token"]
-            self.Reqest["sign"] = data["pow_sign"]
+            self.Reqest["sign"] = w["pow_sign"]
             params_list1 = {
                 "lot_number": lot_number,
                 "pass_token": pass_token,

@@ -45,8 +45,6 @@ def read_mongoDate():
             break
 
 
-
-
 #100w数据以下
 from pymongo import MongoClient
 # client = MongoClient(host='139.9.70.234', port=12700, username="root", password="QuyHlxXhW2PSHTwT",
@@ -56,7 +54,7 @@ from pymongo import MongoClient
 client = MongoClient(host='192.168.5.167', port=27017)
 
 keys=["new_add_company_id","new_add_company_id_01"]
-cli = client["hubei"]["company"]
+cli = client["gansu"]["sorcomp"]
 
 def cp_mongoDate():
     _=1
@@ -103,26 +101,27 @@ def save(data):
 def mongoToRedis():
 
     from redis import Redis
-    local_conn = Redis(host='192.168.5.177', port=8490, db=0, password="#Tn=EP(q%{", socket_connect_timeout=1170)
+    local_conn = Redis(host='192.168.5.181', port=7933, db=0, password="fer@nhaweif576KUG", socket_connect_timeout=1170)
 
     def save(company):
         # local_conn.sadd("shandong:filter:company_id", company["company"])
         print(company)
-        local_conn.sadd("hubei:filter:company_id", company)
+        local_conn.sadd("gansu:filter:comp", company)
         # local_conn.sadd("hubei:filter:company", company["company"])
 
     with ThreadPoolExecutor(max_workers=5) as f:
         pageSize=1000
         futures=[]
         _ = 0
-        # for currentPage in range(3690,38000):
-        for currentPage in range(2532,56000):
-            data = cli.find({}, {"_id": False}).skip((currentPage - 1) * pageSize).limit(pageSize)
+        for currentPage in range(560000):
+            data = cli.find({}, {"_id": False}).skip((currentPage) * pageSize).limit(pageSize)
+            if not data:
+                break
             for company in data:
                 if "_id" in company:
                     del company["_id"]
-                print(company["keys"][2])
-                futures.append(f.submit(save,company=company["keys"][2]))
+                print(company["name"])
+                futures.append(f.submit(save,company=company["name"]))
                 _+=1
                 print("......................第: ",_)
                 if len(futures)>=30:
@@ -144,7 +143,7 @@ def mongoToRedis():
             #     break
             # break
 
-# mongoToRedis()
+mongoToRedis()
 
 def cityarealist():
     import requests
