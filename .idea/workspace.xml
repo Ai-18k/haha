@@ -5,44 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cd0e7a52-cc8a-44f1-88b6-d25722e0babb" name="变更" comment="变更">
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FunComponent/copylocalToServ.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FunComponent/mongoCtrl.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PC/pc.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PC/pyinstall.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/passVerify/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reviewBUG/ipProxyTest.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reviewBUG/passCapTest/demo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reviewBUG/passCapTest/html/info.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reviewBUG/passCapTest/html/info_2419312210.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reviewBUG/passCapTest/html/info_3433763766.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/V4.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/V4.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AccountDetection/simpleLogin.py" beforeDir="false" afterPath="$PROJECT_DIR$/AccountDetection/simpleLogin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FunComponent/M.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FunComponent/M1.py" beforeDir="false" afterPath="$PROJECT_DIR$/FunComponent/M1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FunComponent/MongoMonitor.py" beforeDir="false" afterPath="$PROJECT_DIR$/FunComponent/MongoMonitor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FunComponent/TransMongo.py" beforeDir="false" afterPath="$PROJECT_DIR$/FunComponent/TransMongo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FunComponent/full.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FunComponent/gap.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataSpider/DataAreaSpider/signCook.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/geetest4_word/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/passVerify/geetest4_word/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/geetest4_word/models/geetest4_word_det_v1.onnx" beforeDir="false" afterPath="$PROJECT_DIR$/passVerify/geetest4_word/models/geetest4_word_det_v1.onnx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/geetest4_word/models/geetest4_word_siamese_v3.onnx" beforeDir="false" afterPath="$PROJECT_DIR$/passVerify/geetest4_word/models/geetest4_word_siamese_v3.onnx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/geetest4_word/predict.py" beforeDir="false" afterPath="$PROJECT_DIR$/passVerify/geetest4_word/predict.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reviewBUG/passCapTest/22.js" beforeDir="false" afterPath="$PROJECT_DIR$/reviewBUG/passCapTest/22.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reviewBUG/passCapTest/mainSpiderV1.py" beforeDir="false" afterPath="$PROJECT_DIR$/reviewBUG/passCapTest/mainSpiderV1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reviewBUG/passCapTest/passVerity.py" beforeDir="false" afterPath="$PROJECT_DIR$/reviewBUG/passCapTest/passVerity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reviewBUG/passCapTest/simpleLogin.py" beforeDir="false" afterPath="$PROJECT_DIR$/reviewBUG/passCapTest/simpleLogin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reviewBUG/passCapTest/v4_dataArea.py" beforeDir="false" afterPath="$PROJECT_DIR$/reviewBUG/passCapTest/v4_dataArea.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reviewBUG/passVerity.py" beforeDir="false" afterPath="$PROJECT_DIR$/reviewBUG/passVerity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reviewBUG/可优化项/demo1.py" beforeDir="false" afterPath="$PROJECT_DIR$/reviewBUG/可优化项/decodeJY.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reviewBUG/可优化项/mapToDict.js" beforeDir="false" afterPath="$PROJECT_DIR$/reviewBUG/可优化项/mapToDict.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reviewBUG/风控源代码/1_1.js" beforeDir="false" afterPath="$PROJECT_DIR$/reviewBUG/风控源代码/1_1.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reviewBUG/风控源代码/2.js" beforeDir="false" afterPath="$PROJECT_DIR$/reviewBUG/风控源代码/2.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reviewBUG/风控源代码/jy_decode.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/setting/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/setting/config.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -206,7 +169,7 @@
     "Python.详情页数据提取.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "javascript.nodejs.core.library.configured.version": "20.13.1",
     "javascript.nodejs.core.library.typings.version": "20.13.0",
@@ -576,7 +539,7 @@
       <workItem from="1737441248776" duration="39000" />
       <workItem from="1737442489539" duration="63000" />
       <workItem from="1738819934534" duration="2858000" />
-      <workItem from="1738822830980" duration="703000" />
+      <workItem from="1738822830980" duration="2183000" />
     </task>
     <servers />
   </component>
