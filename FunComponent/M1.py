@@ -79,11 +79,11 @@ def filterkeys(keys):
 
 # 去重
 def PolyWeightRemov():
-    cli = serv_client["fujian"]["2nf_add_company_id"]
-    # Aggregation pipeline
+    cli = serv_client["yunnan"]["fail_电信许可"]
     pipeline = [
         {
             '$group': {
+                # '_id': {'name': '$name'},  # Group by the 'company' field
                 '_id': {'company': '$company'},  # Group by the 'company' field
                 'duplicates': {'$addToSet': '$_id'},  # Collect all _id values into an array
                 'count': {'$sum': 1}  # Count occurrences of each group
@@ -102,17 +102,24 @@ def PolyWeightRemov():
             }
         }
     ]
-    # Execute the aggregation pipeline
     results = list(cli.aggregate(pipeline))
 
-    # Remove the duplicates
     for doc in results:
         for duplicate_id in doc['duplicates']:
             cli.delete_one({'_id': duplicate_id})
 
-    # Close the connection
     serv_client.close()
 
+
+PolyWeightRemov()
+
+
+def search(company):
+    db=serv_client["beijing"]["sorcomp"]
+    res=db.find({"company":company})
+    print(res)
+
+# search("北京汇远成才商贸有限公司")
 
 def keysiter():
     Overkey = []
@@ -175,7 +182,5 @@ def keysiter():
         Overkey.append(database)
     logger.error(Overkey)
 
-# 49237   北京肆海建设有限公司
-# 50470   北京正诺原科技发展有限公司
 
-keysiter()
+

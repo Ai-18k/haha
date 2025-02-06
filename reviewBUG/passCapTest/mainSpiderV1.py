@@ -84,7 +84,7 @@ class DetailSpider:
         tunnel = "d152.kdltps.com:15818"
         # 用户名密码方式
         username = "t13206952228334"
-        password = "wtx4i2in:%d"%random.randint(1,5)
+        password = "wtx4i2in:%d"%random.randint(1,8)
         proxies = {
             "http": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel},
             "https": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel}
@@ -93,13 +93,14 @@ class DetailSpider:
         # return None
 
 
-    @retry(wait_fixed=1)
+    # @retry(stop_max_attempt_number=5, wait_fixed=1000)
+    @retry(wait_fixed=1000)
     def get_data(self, info):
-        try:
+        # try:
             self.session.cookies.set("auth_token", self.Reqest["token"])
             self.session.cookies.set("searchSessionId", "{:.8f}".format(time.time()))
             self.session.cookies.set("Hm_lpvt_e92c8d65d92d534b0fc290df538b4758", str(int(time.time())))
-            headers = {
+            self.session.headers.update({
                 "Host": "www.tianyancha.com",
                 "Cache-Control": "max-age=0",
                 "sec-ch-ua": "\"Chromium\";v=\"130\", \"Google Chrome\";v=\"130\", \"Not?A_Brand\";v=\"99\"",
@@ -115,10 +116,9 @@ class DetailSpider:
                 "Sec-Fetch-Dest": "document",
                 "Referer": "https://www.tianyancha.com/company/%s" % info["id"],
                 "Accept-Language": "zh-CN,zh;q=0.9"
-            }
+            })
             url = "https://www.tianyancha.com/company/%s" % str(info["id"])
-            response = self.session.get(url, headers=headers, proxies=self.proxy_list())
-            print(self.session.headers)
+            response = self.session.get(url, proxies=self.proxy_list())
             logger.info(url)
             logger.info(self.Reqest["mobil"])
             logger.info(info)
@@ -180,7 +180,7 @@ class DetailSpider:
                             else:
                                 self.Reqest = json.loads(res.decode("utf-8"))
                                 print(self.Reqest)
-                                # self.session.cookies = requests.utils.cookiejar_from_dict(self.Reqest["cookie_dict"])
+                                self.session.cookies = requests.utils.cookiejar_from_dict(self.Reqest["cookie_dict"])
                                 raise Exception("失效")
                 else:
                     logger.info("数据正常解析!!")
@@ -189,7 +189,7 @@ class DetailSpider:
                         html.xpath('//tbody/tr[6]/td[2]/span/text()'))) if html.xpath('//tbody/tr[6]/td[2]/span/text()') else None
                     json_date = json.loads(html.xpath('//script[@id="__NEXT_DATA__"]/text()')[0])
                     data = json_date["props"]["pageProps"]["dehydratedState"]["queries"][0]["state"]["data"]["data"]
-                    # self.coll_2.insert_one(data)
+                    self.coll_2.insert_one(data)
                     item_info = dict()
                     item_info["short_name"] = data["alias"] if data["alias"] else None
                     hnlist = list()
@@ -406,12 +406,12 @@ class DetailSpider:
                 print(response.text)
                 html = etree.HTML(response.text)
                 self.Reqest["cookies"] = requests.utils.dict_from_cookiejar(self.session.cookies)
-                self.Reqest["headers"] = headers
+                self.Reqest["headers"] = self.session.headers
+                print(self.Reqest)
                 script = html.xpath("//body//script[1]/text()")[0]
                 jscode = open("2.js", encoding="utf-8").read()
                 span_par = execjs.compile(jscode).call("cc", script)
                 logger.info(span_par)
-                logger.info(self.Reqest)
                 _isPass = Demo(self.Reqest).passVerity(span_par)
                 # cookies = requests.utils.dict_from_cookiejar(self.session.cookies)
                 # _isPass = main(cookies, headers)
@@ -442,7 +442,7 @@ class DetailSpider:
                     else:
                         self.Reqest = json.loads(res.decode("utf-8"))
                         print(self.Reqest)
-                        # self.session.cookies = requests.utils.cookiejar_from_dict(self.Reqest["cookie_dict"])
+                        self.session.cookies = requests.utils.cookiejar_from_dict(self.Reqest["cookie_dict"])
                         raise Exception("账号封禁！！")
             else:
                 print(response.text)
@@ -453,11 +453,12 @@ class DetailSpider:
                     else:
                         self.Reqest = json.loads(res.decode("utf-8"))
                         print(self.Reqest)
-                        # self.session.cookies = requests.utils.cookiejar_from_dict(self.Reqest["cookie_dict"])
+                        self.session.cookies = requests.utils.cookiejar_from_dict(self.Reqest["cookie_dict"])
                         raise Exception("失效")
-        except Exception as e:
-            logger.error(e)
-            self.coll1.insert_one(info)
+        # except Exception as e:
+        #     logger.error(e)
+        #     self.coll1.insert_one(info)
+
 
     def main(self):
         with ThreadPoolExecutor(4) as f:

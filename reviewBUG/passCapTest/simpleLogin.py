@@ -35,8 +35,7 @@ import requests
 from loguru import logger
 from feapder.network.user_agent import get
 # from curl_cffi import requests
-from retrying import retry
-from geetest4_word import get_word_position
+from passVerify.geetest4_word import get_word_position
 
 ocr = ddddocr.DdddOcr(det=False, ocr=False)
 ocr1 = ddddocr.DdddOcr(beta=True)  # 切换为第二套ocr模型
@@ -263,7 +262,6 @@ class LoginModule:
         matche_04 = re.findall(pattern, matche_03, re.S)[0]  # 启用多行模式
         str_code += "var code=" + matche_04 + ";return [this._lib,this.lib._abo]}"
         res = execjs.compile(str_code).call("code")
-        print(res)
         return {"par_param": res[0], "keys": res[1],"paramsList": params_list}
 
     def Composite_parameter(self,lot, lotRes, lotNumber):
@@ -291,7 +289,15 @@ class LoginModule:
             return split_numbers
         res1 = split_lot_number(lot, lotNumber)
         res2 = split_lot_number(lotRes, lotNumber)
-        return {res1[0]: {res1[1]: res2[0]}}
+        if len(res1) > 4:
+            return {res1[0]: {res1[1]: {res1[2]: {res1[3]: res2[0]}}}}
+        elif len(res1) == 3:
+            return {res1[0]: {res1[1]: {res1[2]: res2[0]}}}
+        elif len(res1) == 2:
+            return {res1[0]: {res1[1]: res2[0]}}
+        else:
+            logger.error("检查长度！！")
+            raise Exception("长度不符合标准！！！")
 
 
     def get_2(self):
@@ -482,13 +488,13 @@ class LoginModule:
         tunnel = "d152.kdltps.com:15818"
         # 用户名密码方式
         username = "t13206952228334"
-        password = "wtx4i2in:%d"%random.randint(1,5)
+        password = "wtx4i2in:%d"%random.randint(1,8)
         proxies = {
             "http": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel},
             "https": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel}
         }
-        # return proxies
-        return None
+        return proxies
+        # return None
 
     def main(self,mobil):
         self.Request["proxy"] =self.proxy_list()
@@ -524,8 +530,10 @@ class LoginModule:
 
 
 if __name__ == '__main__':
-    # mobil = {"mobil": "18669098295", "pwd": "cc123456"}
-    mobil = {"mobil": "18612186353", "pwd": "Jiaojiao123"}
-    mobil = {"mobil": "13115414334", "pwd": "xavier1974107"}
-    # Add code here to set up a local proxy on port 57580
+    # mobil = {"mobil": "13581809179", "pwd": "zy5418ursb"}
+    # mobil = {"mobil": "13361201920", "pwd": "xqh791217"}
+    # mobil ={"mobil": "18611533322", "pwd": "qweasd123"}
+    mobil ={"mobil": "13957315803", "pwd": "ma123456"}
+    # mobil ={"mobil": "18551038790", "pwd": "cc123456"}
+
     LoginModule().main(mobil)

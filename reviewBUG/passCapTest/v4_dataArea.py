@@ -9,12 +9,11 @@
 @Copyright：©2019-2024 职业
 :return:
 """
-import base64
-import io
+
 import math
 import uuid
 from concurrent.futures import ThreadPoolExecutor
-from pymongo import MongoClient
+from pymongo import MongoClient,WriteConcern
 import os
 import random
 from feapder.network.user_agent import get
@@ -27,133 +26,29 @@ import time
 from urllib.parse import quote
 import re
 import redis
-from retrying import retry
 import ddddocr
-from io import BytesIO
 import cv2
-from PIL import Image
-
-from FunComponent.AccountDetection import ImageProcess
+from retrying import retry
+from passVerify.geetest4_word import get_word_position
 
 ocr = ddddocr.DdddOcr(det=False, ocr=False,show_ad=False)
-ocr1 = ddddocr.DdddOcr(beta=True,show_ad=False)  # 切换为第二套ocr模型
 ocr2 = ddddocr.DdddOcr(det=True,show_ad=False)
-
-
-class CC11:
-    def PostPic(self,img:bytes,codesore:str):
-        headers = {
-            "Accept": "application/json, text/plain, */*",
-            "Accept-Language": "zh-CN,zh;q=0.9",
-            "Cache-Control": "no-cache",
-            "Connection": "keep-alive",
-            "Content-Type": "application/json",
-            "DNT": "1",
-            "Origin": "http://124.222.86.140:8000",
-            "Pragma": "no-cache",
-            "Referer": "http://124.222.86.140:8000/char1",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-        }
-        # url = "http://124.222.86.140:8000/api/charDianxuan/identify"
-        url = "http://127.0.0.1"
-        data = {
-            "imageSource": base64.b64encode(img).decode("utf-8"),
-            "dataType": 2,
-            "input_chars": codesore
-        }
-        data = json.dumps(data, separators=(',', ':'))
-        response = requests.post(url, headers=headers, data=data, verify=False)
-        if response.status_code == 200:
-            data=response.json()
-            _crop=data["data"]["res"]["crop_centre"]
-            return _crop
-        else:
-            return None
-
-class CC2:
-    def PostPic(self,final_image):
-        out_buff=io.BytesIO()
-        final_image.save(out_buff, format='PNG')
-        byte_pic=out_buff.getvalue()
-        headers = {
-            "Accept": "application/json, text/plain, */*",
-            "Accept-Language": "zh-CN,zh;q=0.9",
-            "Cache-Control": "no-cache",
-            "Connection": "keep-alive",
-            "Content-Type": "application/json",
-            "DNT": "1",
-            "Origin": "http://192.168.5.181:8011",
-            "Pragma": "no-cache",
-            "Referer": "http://192.168.5.181:8011/char1",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-        }
-        url = "http://192.168.5.181:8011/dianxuan/identify"
-        data = {
-            "dataType": 2,
-            "imageSource": base64.b64encode(byte_pic).decode('utf-8'),
-        }
-        data = json.dumps(data, separators=(',', ':'))
-        response = requests.post(url, headers=headers, data=data)
-        if response.status_code == 200:
-            data=response.json()
-            _crop=data["data"]["res"]["crop_centre"]
-            return _crop
-        else:
-           raise Exception("链接失效")
-
-class CC:
-    def PostPic(self,pic_list):
-        tmp = str(time.time())
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
-        }
-        url = "http://192.168.5.181:10121/geetest4_word/gradio_api/queue/"
-        # url = "http://127.0.0.1:1012/geetest4_word/gradio_api/queue/"
-        params = {
-            "": ""
-        }
-        data = {
-            "data":pic_list,
-            "fn_index": 1,
-            "session_hash": tmp
-        }
-        data = json.dumps(data, separators=(',', ':'))
-        requests.post(url + "join", headers=headers, params=params, data=data, verify=False)
-        params = {
-            "session_hash": tmp
-        }
-        response = requests.get(url + "data", headers=headers, params=params, verify=False)
-        message_count = 0  # 初始化计数器
-        # 逐行读取事件流数据
-        for line in response.iter_lines(decode_unicode=True):
-            if line:  # 跳过空行
-                if line.startswith("data:"):
-                    data = line[5:].strip()  # 去掉 "data:" 前缀并清理空格
-                    message_count += 1
-                    # 检查是否已接收到第三条消息
-                    if message_count == 3:
-                        xy = []
-                        plan = json.loads(data)["output"]["data"][1]
-                        for crop in plan:
-                            x1, y1, x2, y2 = crop
-                            xy.append([(x1 + x2) / 2, (y1 + y2) / 2])
-                        return xy
-
 
 class SuccessCODE():
 
     def __init__(self):
         self.client = MongoClient(host='127.0.0.1', port=27017)
-        self.local_conn = redis.Redis(host='127.0.0.1', port=7980, db=0, password="qwe!@#SDF345788",
-                                      socket_connect_timeout=1170)
+        self.local_conn = redis.Redis(host='127.0.0.1', port=7980, db=0, password="qwe!@#SDF345788",socket_connect_timeout=1170)
         self.session = requests.session()
-        self.coll = self.client["test"]["company_id"]  
+        self.coll = self.client["test"]["company_id"]
+        self.s_data = self.client["test"]["sorcomp"]
         self.Request={}
         self.filter = "test:filter:company_id"
         self.filter_params = "test:filter:params"
+        self.filter_comp = "test:filter:comp"
         self.com_id = "test:company_id"
         self.params="test:params"
-
+        self.write_concern = WriteConcern(w=1)
 
     def ocr_img(self,img, filepath):
         with open(img, 'rb') as f:
@@ -182,208 +77,285 @@ class SuccessCODE():
             if filename == "click_img":
                 self.ocr_img(file_path, dir_path)
 
-
     def get_1(self):
-        # try:
+        try:
+            uuid1 = uuid.uuid1()
+            self.get_cookie_csrf()
+            headers = {
+                "Host": "gcaptcha4.geetest.com",
+                "Pragma": "no-cache",
+                "Cache-Control": "no-cache",
+                "sec-ch-ua": "\"Chromium\";v=\"128\", \"Not;A=Brand\";v=\"24\", \"Google Chrome\";v=\"128\"",
+                "DNT": "1",
+                "sec-ch-ua-mobile": "?0",
+                "User-Agent": self.Request["ua"],
+                "sec-ch-ua-platform": "\"Windows\"",
+                "Accept": "*/*",
+                "Sec-Fetch-Site": "cross-site",
+                "Sec-Fetch-Mode": "no-cors",
+                "Sec-Fetch-Dest": "script",
+                "Referer": "https://www.tianyancha.com/",
+                "Accept-Language": "zh-CN,zh;q=0.9"
+            }
+            url = "https://gcaptcha4.geetest.com/load"
+            params = {
+                # "callback": "geetest_1726673346207",
+                "captcha_id": "517df78b31ff1b8f841cd86fc0db9f3e",
+                "challenge": uuid1,
+                "client_type": "web",
+                "lang": "zho"
+            }
+            response = self.session.get(url, headers=headers, params=params, proxies=self.Request["proxy"])
+            if response.status_code == 200:
+                cookies = response.cookies.get("captcha_v4_user")
+                resp = json.loads(response.text.strip("(").strip(")"))
+                type = resp["data"]['captcha_type']
+                lot_number = resp["data"]["lot_number"]
+                process_token = resp["data"]["process_token"]
+                pow_detail = resp["data"]["pow_detail"]
+                pow_detail = [pow_detail[i] for i in pow_detail if isinstance(pow_detail, dict)]
+                payload = resp["data"]["payload"]
+                static_path = resp["data"]["static_path"]
+                params_list = {
+                    "lot_number": lot_number,
+                    "process_token": process_token,
+                    "pow_detail": pow_detail,
+                    "payload": payload,
+                    "cookies": cookies,
+                    "static_path": static_path
+                }
+                if type == 'word':
+                    print(">>>>>>>>>>>>>>>>>>>>>>>>点选>>>>>>>>>>>>>>")
+                    q_list = resp["data"]['ques']
+                    base_list = []
+                    for index, img_url in enumerate(q_list):
+                        tag = requests.get("https://static.geetest.com/" + img_url).content
+                        base_list.append(tag)
+                    imgs_url = "https://static.geetest.com/" + resp["data"]['imgs']
+                    slide_bytes = requests.get(imgs_url).content
+                    click_list = get_word_position(slide_bytes,base_list)
+                    click_smark = []
+                    for _word in click_list:
+                        click_smark.append([round(int(_word[0]) * 100 / 3), round(int(_word[1]) * 50)])
+                    logger.info(click_smark)
+                    # self.download_img(slide_bytes, "click_img", type, uuid1)
+                    params_list["smark"] = click_smark
+                    params_list["type"] = "word"
+                elif type == 'slide':
+                    print(">>>>>>>>>>>>>>>>>>>>>>>>滑块>>>>>>>>>>>>>>")
+                    slide_url = "https://static.geetest.com/" + resp["data"]['slice']
+                    bg_url = "https://static.geetest.com/" + resp["data"]['bg']
+                    target_bytes = requests.get(slide_url).content
+                    bg_bytes = requests.get(bg_url).content
+                    dis = ocr.slide_match(target_bytes, bg_bytes, simple_target=True)["target"][0]
+                    logger.info(dis)
+                    # self.download_img(target_bytes, "slide_img", type, uuid1)
+                    params_list["dis"] = dis
+                    params_list["type"] = "slide"
+                return params_list
+        except Exception as e:
+            logger.error(e)
+
+    def re_js_code(self):
+        params_list = self.get_1()
         headers = {
-            "Host": "gcaptcha4.geetest.com",
-            "Pragma": "no-cache",
-            "Cache-Control": "no-cache",
-            "sec-ch-ua": "\"Chromium\";v=\"128\", \"Not;A=Brand\";v=\"24\", \"Google Chrome\";v=\"128\"",
-            "DNT": "1",
+            "Host": "static.geetest.com",
+            "pragma": "no-cache",
+            "cache-control": "no-cache",
+            "sec-ch-ua": "\"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google "
+                         "Chrome\";v=\"114\"",
+            "origin": "https://www.tianyancha.com",
+            "dnt": "1",
             "sec-ch-ua-mobile": "?0",
             "User-Agent": self.Request["ua"],
             "sec-ch-ua-platform": "\"Windows\"",
-            "Accept": "*/*",
-            "Sec-Fetch-Site": "cross-site",
-            "Sec-Fetch-Mode": "no-cors",
-            "Sec-Fetch-Dest": "script",
-            "Referer": "https://www.tianyancha.com/",
-            "Accept-Language": "zh-CN,zh;q=0.9"
+            "accept": "*/*",
+            "sec-fetch-site": "cross-site",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-dest": "script",
+            "referer": "https://www.tianyancha.com/",
+            "accept-language": "zh-CN,zh;q=0.9"
         }
-        url = "https://gcaptcha4.geetest.com/load"
+        url = "https://static.geetest.com" + params_list["static_path"] + "/js/gcaptcha4.js"
+        response = self.session.get(url, headers=headers)
+        str_code = ""
+        match = re.search(r'(.*?)\.', response.text, re.S)
+        head = match.group().strip(".")
+        matche_01 = re.findall(rf"{head}\..*?\}}\(\);", response.text, re.S)
+        str_code += matche_01[0] + matche_01[1]
+        matche_02 = re.findall(rf'{head}\..*?}};', response.text, re.S)
+        str_code += matche_02[2] + matche_02[3] + f"function {head}() {{}};"
+        pattern = r'!function\s*\(\)\s*{[^}]*}()'
+        matche_03 = re.search(pattern, response.text, re.S)
+        text = matche_03.group()
+        matche_04 = re.search(r"var.*?.shift\(\);", text, re.S)
+        str_code += "function get_param(){" + matche_04.group()
+        pattern = r'\{\s*"(\\u[0-9a-fA-F]+)+":\s*[_\w]+\([0-9]+\)\s*\}'
+        # 查找匹配项
+        match = re.search(pattern, text)
+        if match:
+            matche_05 = match.group(0)
+        else:
+            matche_05 = re.search(r'\{"(.*?)}', text, re.S)
+        try:
+            str_code1 = str_code + "return " + matche_05.strip() + "};}"
+            res = execjs.compile(str_code1).call("get_param")
+        except:
+            try:
+                str_code2 = str_code + "return " + matche_05.strip() + "}"
+                res = execjs.compile(str_code2.encode().decode("utf-8")).call("get_param")
+            except:
+                str_code3 = str_code + "return " + matche_05.strip() + "};"
+                res = execjs.compile(str_code3).call("get_param")
+        return {"par_param": res, "par_data": params_list}
+
+    def Composite_parameter(self, lotNumber):
+        lot = {
+            "$_JP": [
+                {
+                    "$_JP": [
+                        {
+                            "$_JP": [
+                                2,
+                                3
+                            ]
+                        },
+                        {
+                            "$_JP": [
+                                17,
+                                18
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "$_JP": [
+                        {
+                            "$_JP": [
+                                15
+                            ]
+                        },
+                        {
+                            "$_JP": [
+                                5
+                            ]
+                        },
+                        {
+                            "$_JP": [
+                                9
+                            ]
+                        },
+                        {
+                            "$_JP": [
+                                17
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "$_JP": [
+                        {
+                            "$_JP": [
+                                10,
+                                15
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+        lotRes = {
+            "$_JP": [
+                {
+                    "$_JP": [
+                        {
+                            "$_JP": [
+                                1,
+                                8
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+        def split_lot_number(lot, lotNumber):
+            result = []
+            split_numbers = []
+            for sublist in lot["$_JP"]:
+                temp = []
+                for num in sublist["$_JP"]:
+                    if isinstance(num, list):
+                        temp.append([x + 1 for x in num])
+                    else:
+                        temp.append(num["$_JP"])
+                result.append(temp)
+            for sublist in result:
+                temp = ""
+                for num in sublist:
+                    if len(num) > 1:
+                        num[-1] += 1
+                        temp += lotNumber[num[0]:num[1]]
+                    else:
+                        temp += lotNumber[num[0]]
+                split_numbers.append(temp)
+            return split_numbers
+        res1 = split_lot_number(lot, lotNumber)
+        res2 = split_lot_number(lotRes, lotNumber)
+        return {res1[0]: {res1[1]: {res1[2]: res2[0]}}}
+
+    @retry(stop_max_attempt_number=5, wait_fixed=1000)
+    def get_2(self):
+        headers = {
+            "Accept": "*/*",
+            "Accept-Language": "zh-CN,zh;q=0.9",
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "DNT": "1",
+            "Pragma": "no-cache",
+            "Referer": "https://www.tianyancha.com/",
+            "Sec-Fetch-Dest": "script",
+            "Sec-Fetch-Mode": "no-cors",
+            "Sec-Fetch-Site": "cross-site",
+            "User-Agent": self.Request["ua"],
+            "sec-ch-ua": "\"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", "
+                         "\"Chromium\";v=\"123\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\""
+        }
+        url = "https://gcaptcha4.geetest.com/verify"
+        # par = self.re_js_code()
+        par = self.get_1()
+        par["par_param"] = {'pMVM': 'AwII'}
+        param = self.Composite_parameter(par["lot_number"])
+        jscode = open("w_decode.js", encoding="utf-8").read()
+        data = execjs.compile(jscode).call("_fff", par, par["par_param"], param)
         params = {
-            # "callback": "geetest_1726673346207",
             "captcha_id": "517df78b31ff1b8f841cd86fc0db9f3e",
-            "challenge": "09d9c310-e098-467a-8b6c-c61ae6642e3c",
             "client_type": "web",
-            "lang": "zho"
+            "lot_number": par["lot_number"],
+            "payload": par["payload"],
+            "process_token": par["process_token"],
+            "payload_protocol": "1",
+            "pt": "1",
+            "w": data["res"]
         }
         response = self.session.get(url, headers=headers, params=params, proxies=self.Request["proxy"])
         if response.status_code == 200:
-            cookies = response.cookies.get("captcha_v4_user")
-            resp = json.loads(response.text.strip("(").strip(")"))
-            # print(res)
-            type = resp["data"]['captcha_type']
-            lot_number = resp["data"]["lot_number"]
-            process_token =resp["data"]["process_token"]
-            pow_detail = resp["data"]["pow_detail"]
-            pow_detail = [pow_detail[i] for i in pow_detail if isinstance(pow_detail, dict)]
-            payload = resp["data"]["payload"]
-            static_path = resp["data"]["static_path"]
-            params_list = {
-                "captcha_id": "517df78b31ff1b8f841cd86fc0db9f3e",
+            resp = json.loads(str(response.text).strip("(").strip(")"))
+            gen_time = resp["data"]["seccode"]["gen_time"]
+            captcha_output = resp["data"]["seccode"]["captcha_output"]
+            lot_number = resp["data"]["seccode"]["lot_number"]
+            pass_token = resp["data"]["seccode"]["pass_token"]
+            self.Request["sign"] = data["pow_sign"]
+            params_list1 = {
                 "lot_number": lot_number,
-                "process_token": process_token,
-                "pow_detail": pow_detail,
-                "payload": payload,
-                "cookies": cookies,
-                "static_path": static_path
+                "pass_token": pass_token,
+                "gen_time": gen_time,
+                "captcha_output": captcha_output
             }
-            # uuid1 = uuid.uuid1()
-            if type == 'word':
-                print(">>>>>>>>>>>>>>>>>>>>>>>>点选>>>>>>>>>>>>>>")
-                q_list = resp["data"]['ques']
-                # word_list = []
-                # for index, img_url in enumerate(q_list):
-                #     tag = requests.get("https://static.geetest.com/" + img_url).content
-                #     # self.download_img(tag, str(index), type, uuid1)
-                #     tag = Image.open(BytesIO(tag))
-                #     white_bg = Image.new("RGBA", tag.size, (255, 255, 255, 255))
-                #     white_bg.paste(tag, (0, 0), tag)
-                #     result = ocr1.classification(white_bg, png_fix=True)
-                #     word_list.append(result)
-                # imgs_url = "https://static.geetest.com/" + res["data"]['imgs']
-                # slide_bytes = requests.get(imgs_url).content
-                # word_str = "".join(i for i in word_list)
-                # click_list = CC().PostPic(slide_bytes, word_str)
-                bytes_list = []
-                for index, img_url in enumerate(q_list):
-                    tag = requests.get("https://static.geetest.com/" + img_url).content
-                    # self.download_img(tag, str(index), type, uuid1)
-                    # word_pic = ImageProcess.wordprocess(tag)
-                    word_pic=base64.b64encode(tag).decode("utf-8")
-                    bytes_list.append(word_pic)
-                imgs_url = "https://static.geetest.com/" + resp["data"]['imgs']
-                slide_bytes = requests.get(imgs_url).content
-                # new_pic = ImageProcess.mergePic(slide_bytes, bytes_list)
-                new_pic=[base64.b64encode(slide_bytes).decode("utf-8")]+bytes_list
-                click_list = CC().PostPic(new_pic)
-                click_smark = []
-                for _word in click_list:
-                    click_smark.append([round(int(_word[0]) * 100 / 3), round(int(_word[1]) * 50)])
-                # self.download_img(slide_bytes, "click_img", type, uuid1)
-                logger.info(click_smark)
-                params_list["smark"] = click_smark
-                params_list["type"] = "word"
-            elif type == 'slide':
-                print(">>>>>>>>>>>>>>>>>>>>>>>>滑块>>>>>>>>>>>>>>")
-                slide_url = "https://static.geetest.com/" + resp["data"]['slice']
-                bg_url = "https://static.geetest.com/" + resp["data"]['bg']
-                # print("slide_img:" + slide_url)
-                # print("bg_img:" + bg_url)
-                target_bytes = requests.get(slide_url).content
-                bg_bytes = requests.get(bg_url).content
-                dis = ocr.slide_match(target_bytes, bg_bytes, simple_target=True)["target"][0]
-                logger.info(dis)
-                # self.download_img(bg_bytes, "bg_img", type, uuid1)
-                # self.download_img(target_bytes, "slide_img", type, uuid1)
-                params_list["dis"] = dis
-                params_list["type"] = "slide"
-            return params_list
-
-
-    def re_js_code(self):
-
-            params_list=self.get_1()
-            headers = {
-                    "Host": "static.geetest.com",
-                    "pragma": "no-cache",
-                    "cache-control": "no-cache",
-                    "sec-ch-ua": "\"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google "
-                                 "Chrome\";v=\"114\"",
-                    "origin": "https://www.tianyancha.com",
-                    "dnt": "1",
-                    "sec-ch-ua-mobile": "?0",
-                    "user-agent": self.Request["ua"],
-                    "sec-ch-ua-platform": "\"Windows\"",
-                    "accept": "*/*",
-                    "sec-fetch-site": "cross-site",
-                    "sec-fetch-mode": "cors",
-                    "sec-fetch-dest": "script",
-                    "referer": "https://www.tianyancha.com/",
-                    "accept-language": "zh-CN,zh;q=0.9"
-                    }
-            url = "https://static.geetest.com"+params_list["static_path"]+"/js/gcaptcha4.js"
-            # logger.info("【R】>>>>>>正在解析js......")
-            response = self.session.get(url,headers=headers,proxies=self.Request["proxy"])
-            str_code = ""
-            match = re.search(r'(.*?)\.', response.text, re.S)
-            head = match.group().strip(".")
-            matche_01 = re.findall(rf"{head}\..*?\}}\(\);", response.text, re.S)
-            str_code += matche_01[0] + matche_01[1]
-            matche_02 = re.findall(rf'{head}\..*?}};', response.text, re.S)
-            str_code += matche_02[2] + matche_02[3] + f"function {head}() {{}};"
-            matche_03 = re.search(r"!function\(\){var.*?};}\(\),", response.text, re.S)
-            text = matche_03.group()
-            matche_04 = re.search(r"var.*?};", text, re.S)
-            str_code += "function get_param(){" + matche_04.group()
-            matche_05 = re.search(r'\{".*?}};', text, re.S)
-            str_code += "return " + matche_05.group() + "};"
-            res = execjs.compile(str_code).call("get_param")
-            return {"par_param":res,"par_data":params_list}
-
-
-    def get_2(self):
-        try:
-            headers = {
-                    "Accept": "*/*",
-                    "Accept-Language": "zh-CN,zh;q=0.9",
-                    "Cache-Control": "no-cache",
-                    "Connection": "keep-alive",
-                    "DNT": "1",
-                    "Pragma": "no-cache",
-                    "Referer": "https://www.tianyancha.com/",
-                    "Sec-Fetch-Dest": "script",
-                    "Sec-Fetch-Mode": "no-cors",
-                    "Sec-Fetch-Site": "cross-site",
-                    "User-Agent": self.Request["ua"],
-                    "sec-ch-ua": "\"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", "
-                                 "\"Chromium\";v=\"123\"",
-                    "sec-ch-ua-mobile": "?0",
-                    "sec-ch-ua-platform": "\"Windows\""
-                    }
-            url = "https://gcaptcha4.geetest.com/verify"
-            res=self.re_js_code()
-            logger.info(f"》》》》》》正在获取js参数............")
-            jscode = open("../../RiskcontrolPass/jscode/w_decode.js", encoding="utf-8").read()
-            data = execjs.compile(jscode).call("_fff", res["par_data"], res["par_param"])
-            logger.info(data)
-            params = {
-                "captcha_id": res["par_data"]["captcha_id"],
-                "client_type": "web",
-                "lot_number": res["par_data"]["lot_number"],
-                "payload": res["par_data"]["payload"],
-                "process_token": res["par_data"]["process_token"],
-                "payload_protocol": "1",
-                "pt": "1",
-                "w": data["res"]
-            }
-            response = self.session.get(url,
-                    headers=headers,
-                    params=params,
-                    proxies=self.Request["proxy"])
-            if response.status_code == 200:
-                resp = json.loads(str(response.text).strip("(").strip(")"))
-                print(resp)
-                gen_time =resp["data"]["seccode"]["gen_time"]
-                captcha_output =resp["data"]["seccode"]["captcha_output"]
-                captcha_id = resp["data"]["seccode"]["captcha_id"]
-                lot_number = resp["data"]["seccode"]["lot_number"]
-                pass_token = resp["data"]["seccode"]["pass_token"]
-                self.Request["X-TYCID"]=data["pow_sign"]
-                params_list1 = {
-                        "captcha_id": captcha_id,
-                        "lot_number": lot_number,
-                        "pass_token": pass_token,
-                        "gen_time": gen_time,
-                        "captcha_output": captcha_output,
-                        "pow_sign": data["pow_sign"],
-                        }
-                return params_list1
-        except Exception as e:
-            logger.info(e)
-
+            return params_list1
+        else:
+            logger.error(f"请求状态码:{response.status_code}")
 
     def get_3(self):
         try:
@@ -414,39 +386,35 @@ class SuccessCODE():
                 "mobile": self.Request["mobil"]["mobil"],
                 "cdpassword": hashlib.md5(self.Request["mobil"]["pwd"].encode("utf-8")).hexdigest(),  # md5算法
                 "loginway": "PL",
-                "captcha_id": data["captcha_id"],
+                "captcha_id": "517df78b31ff1b8f841cd86fc0db9f3e",
                 "lot_number": data["lot_number"],
                 "pass_token": data["pass_token"],
                 "gen_time": data["gen_time"],
                 "captcha_output": data["captcha_output"],
                 "captcha_type": "pcLogin"
             }
-            try:
-                response = self.session.get(url,
-                                            headers=headers,
-                                            params=params,
-                                            proxies=self.Request["proxy"])
-            except:
-                response = self.session.get(url,
-                                            headers=headers,
-                                            params=params,
-                                            proxies=self.Request["proxy"])
+            response = self.session.get(url,
+                                        headers=headers,
+                                        params=params,
+                                        proxies=self.Request["proxy"])
             if response.status_code == 200:
                 res = json.loads(str(response.text).strip("(").strip(")"))
                 print(res)
-                if res["message"]=="":
+                if res["message"] == "":
                     token = res["data"]['token']
-                    id=str(res["data"]['userId'])
-                    self.Request["userid"]=id
-                    self.create_cookie(self.Request["mobil"]["mobil"],id)
+                    id = str(res["data"]['userId'])
+                    self.Request["userid"] = id
+                    self.create_cookie(self.Request["mobil"]["mobil"], id)
                     logger.success("登录成功，同学开始愉快的玩耍吧！！")
                     logger.info("【R】{}用户登录已成功！获取的sign：{}".format(id, token))
-                    return token, data["pow_sign"]
-                elif res["message"]=="账号存在风险，暂不能操作" or "输入的手机号码与密码不匹配，推荐使用短信登录":
-                    self.local_conn.sadd("ErrorMobil", json.dumps(self.Request["mobil"]))
-                    self.local_conn.lrem("testMobil", 1, json.dumps(self.Request["mobil"]))
-                    mobil = self.local_conn.lpop("testMobil")
-                    self.local_conn.rpush("testMobil", mobil)
+                    self.session.cookies.set("auth_token", token)
+                    self.Request["token"] = token
+                    self.get_cookie_csrf()
+                elif res["message"] == "账号存在风险，暂不能操作" or "输入的手机号码与密码不匹配，推荐使用短信登录":
+                    self.local_VQ_conn.sadd("ErrorMobil", json.dumps(self.Request["mobil"]))
+                    self.local_VQ_conn.lrem("searchMobil", 1, json.dumps(self.Request["mobil"]))
+                    mobil = self.local_VQ_conn.lpop("searchMobil")
+                    self.local_VQ_conn.rpush("searchMobil", mobil)
                     self.Request["mobil"] = json.loads(mobil)
                     self.get_3()
                 else:
@@ -459,8 +427,8 @@ class SuccessCODE():
             self.main()
             return
 
+    @retry(stop_max_attempt_number=5, wait_fixed=1000)
     def get_cookie_csrf(self):
-        token, sign = self.get_3()
         headers = {
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,"
                       "image/avif,image/webp,image/apng,*/*;q=0.8,"
@@ -482,21 +450,19 @@ class SuccessCODE():
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": "\"Windows\""
         }
-        self.session.cookies.set("auth_token", token)
         url = "https://www.tianyancha.com/"
-        try:
-            self.session.get(url, headers=headers, proxies=self.Request["proxy"])
-        except:
-            time.sleep(2)
-            self.session.get(url, headers=headers, proxies=self.Request["proxy"])
-        self.Request["token"] = token
-        self.Request["sign"] = sign
+        self.session.get(url, headers=headers, proxies=self.Request["proxy"])
+        self.Request["X-TYCID"] = self.session.cookies.get("TYCID")
+        headers = {
+            'Referer': 'https://www.tianyancha.com/',
+        }
+        self.session.get('https://hm.baidu.com/hm.js?e92c8d65d92d534b0fc290df538b4758', headers=headers)
 
-    def create_cookie(self,m,id):
-        js_code = open("../../RiskcontrolPass/jscode/signCook.js", encoding="utf-8").read()
-        res = execjs.compile(js_code).call("get_ssion",id)
+    def create_cookie(self, m, id):
+        js_code = open("signCook.js", encoding="utf-8").read()
+        res = execjs.compile(js_code).call("get_ssion", id)
         sensorsdata = quote(json.dumps({
-            "distinct_id":id,
+            "distinct_id": id,
             "first_id": res["device_id"],
             "props": {},
             "identities": res["identities"],
@@ -510,7 +476,7 @@ class SuccessCODE():
             "state": "4",
             "vipManager": "0",
             "mobile": m,
-            "userId":id,
+            "userId": id,
             "isExpired": "0"
         }))
         self.session.cookies.set("sensorsdata2015jssdkcross", sensorsdata)
@@ -518,32 +484,22 @@ class SuccessCODE():
         self.session.cookies.set("tyc-user-info-save-time", str(int(time.time() * 1000)))
         self.session.cookies.set("tyc-user-phone", "%255B%252218587162714%2522%255D")
 
-    @retry(wait_fixed=2)
     def proxy_list(self):
-        proxyAddr = "tun-yowmaw.qg.net:17228"
-        authKey = "17C8C7A6"
-        password = "F825824D03DC"
-        proxyUrl = "http://%(user)s:%(password)s@%(server)s" % {
-            "user": authKey,
-            "password": password,
-            "server": proxyAddr,
-        }
+        # 隧道域名:端口号
+        tunnel = "d152.kdltps.com:15818"
+        # 用户名密码方式
+        username = "t13206952228334"
+        password = "wtx4i2in:%d"%random.randint(1,8)
         proxies = {
-            "http": proxyUrl,
-            "https": proxyUrl,
+            "http": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel},
+            "https": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel}
         }
-        # resp = requests.get("https://myip.top", proxies=proxies)
-        # if resp.status_code == 200:
-        #     print(resp.text)
-        return proxies
-        # return None
-        # else:
-        #     raise Exception("请求代理")
+        # return proxies
+        return None
 
-
-    def next_page(self,info,page):
+    def next_page(self, info, page):
         while True:
-            try:
+            # try:
                 self.session.headers.update({
                     "Accept": "application/json, text/plain, */*",
                     "Content-Type": "application/json",
@@ -552,15 +508,16 @@ class SuccessCODE():
                     "pm": "451",
                     "spm": "i246",
                     "page_id": "SearchResult",
-                    "X-TYCID": self.Request["sign"],
+                    "X-TYCID": self.Request["X-TYCID"],
                     "X-AUTH-TOKEN": self.Request["token"]
                 })
-                url = "https://capi.tianyancha.com/cloud-tempest/web/searchCompanyV4"
+                url = "https://capi.tianyancha.com/cloud-tempest/company/advance"
                 params = {
                     "_": str(int(time.time() * 1000))
                 }
                 data = {
-                    "filterJson": "{\"economicTypeMethod\":{\"key\":\"economicTypeMethod\",\"items\":[{\"value\":\"1\"}]},\"institutionTypeMethod\":{\"key\":\"institutionTypeMethod\",\"items\":[{\"value\":\"0\"}]},\"word\":{\"key\":\"word\",\"items\":[{\"value\":\"\"}]},\"areaCode\":{\"key\":\"areaCode\",\"items\":[{\"value\":%s}]},\"establishTimeRange\":{\"key\":\"establishTimeRange\",\"items\":[{\"value\":%s},{\"value\":%s}]},\"institutionType\":{\"key\":\"institutionType\",\"items\":[{\"value\":\"个体工商户\"},{\"value\":\"全民所有制\"},{\"value\":\"集体所有制\"},{\"value\":\"联营企业\"},{\"value\":\"农民专业合作社\"},{\"value\":\"事业单位\"},{\"value\":\"学校\"}]}}"%(info["areaCode"],info["new_day"],info["next_day"]),
+                    "filterJson": "{\"economicTypeMethod\":{\"key\":\"economicTypeMethod\",\"items\":[{\"value\":\"1\"}]},\"institutionTypeMethod\":{\"key\":\"institutionTypeMethod\",\"items\":[{\"value\":\"0\"}]},\"word\":{\"key\":\"word\",\"items\":[{\"value\":\"\"}]},\"areaCode\":{\"key\":\"areaCode\",\"items\":[{\"value\":%s}]},\"establishTimeRange\":{\"key\":\"establishTimeRange\",\"items\":[{\"value\":%s},{\"value\":%s}]},\"institutionType\":{\"key\":\"institutionType\",\"items\":[{\"value\":\"个体工商户\"},{\"value\":\"全民所有制\"},{\"value\":\"集体所有制\"},{\"value\":\"联营企业\"},{\"value\":\"农民专业合作社\"},{\"value\":\"事业单位\"},{\"value\":\"学校\"}]}}" % (
+                        info["areaCode"], info["new_day"], info["next_day"]),
                     "searchType": 1,
                     "sessionNo": self.Request["sessionNo"],
                     "allowModifyQuery": 1,
@@ -576,111 +533,124 @@ class SuccessCODE():
                     "pageSize": 20
                 }
                 str_data = json.dumps(data, separators=(',', ':'))
-                response = self.session.post(url,params=params,data=str_data,proxies=self.proxy_list())
+                response = self.session.post(url, params=params, data=str_data, proxies=self.Request["proxy"])
                 logger.info(info)
                 logger.info(self.Request["mobil"])
                 logger.info(response.status_code)
                 if response.status_code == 200:
-                    if response.json()["errorCode"] == "":
-                        if "data" in response.json() and "companyList" in response.json()["data"]:
-                            num=math.ceil(response.json()["data"]["companyTotal"] / 20) if response.json()["data"]["companyTotal"] else 0
+                    if response.json()["message"] == "":
+                        if "data" in response.json() and "items" in response.json()["data"]:
+                            num = math.ceil(response.json()["data"]["resultCount"] / 20) if response.json()["data"][
+                                "resultCount"] else 0
                             logger.info(f'这个链接共{num}页数据')
                             logger.info(f'当前是第{page}页')
                             if page > num:
                                 break
-                            compList = response.json().get("data").get("companyList")
+                            compList = response.json()["data"]["items"]
+                            info_list = []
+                            item_list = []
                             for item in compList:
+                                if self.local_conn.sadd(self.filter_comp, item["name"]):
+                                    item["areaCode"] = info["areaCode"]
+                                    item["city"] = info["city"]
+                                    item_list.append(item)
                                 res = self.local_conn.sadd(self.filter, item["name"])
                                 if res:
-                                    info.update({"company": item["name"], "id": item["id"]})
-                                    self.coll.insert_one(info)
-                                    if "_id" in info:
-                                        del info["_id"]
+                                    info.update({"company": item["name"], "id": item["gid"]})
+                                    info_list.append(info)
                                     self.local_conn.lpush(self.com_id, json.dumps(info))
                                     logger.success(info)
                                 else:
-                                    logger.warning("【*】已过滤:{}".format({"company": item["name"], "id": item["id"]}))
+                                    logger.warning("【*】已过滤:{}".format({"company": item["name"], "id": item["gid"]}))
+                            if item_list:
+                                try:
+                                    self.s_data.with_options(write_concern=self.write_concern).insert_many(item_list)
+                                    logger.success("【*】items-------------保存成功！！")
+                                    item_list.clear()
+                                except Exception as e:
+                                    logger.error(e)
+                            if info_list:
+                                try:
+                                    self.coll.with_options(write_concern=self.write_concern).insert_many(info_list)
+                                    logger.success("【*1】info-------------保存成功！！")
+                                except Exception as e:
+                                    logger.error(e)
+                                info_list.clear()
                         else:
-                            # logger.info(response.text)
+                            logger.info(response.text)
                             print("1>>>>>>>>>>>>>>>>>%s" % response.text)
                             time.sleep(1)
-                            mobil = self.local_conn.lpop("testMobil")
-                            self.local_conn.rpush("testMobil", mobil)
+                            mobil = self.local_conn.lpop("searchMobil")
+                            self.local_conn.rpush("searchMobil", mobil)
                             self.Request["mobil"] = json.loads(mobil)
                             self.Request["ua"] = get()
                             self.Request["proxy"] = self.proxy_list()
-                            self.get_cookie_csrf()
-                            timestamp = int(time.time() - random.randint(50000, 60000))
+                            self.get_3()
+                            timestamp = int(time.time() - random.randint(30000, 40000))
                             self.session.cookies.set("Hm_lvt_e92c8d65d92d534b0fc290df538b4758",
                                                      "{},{},{},{}".format(
-                                                         str(timestamp - random.randint(30000, 40000)),
                                                          str(timestamp - random.randint(20000, 30000)),
                                                          str(timestamp - random.randint(10000, 20000)),
+                                                         str(timestamp - random.randint(5000, 10000)),
                                                          str(timestamp)))
                             self.Request["sessionNo"] = "{:.8f}".format(time.time())
                             self.session.cookies.set("Hm_lpvt_e92c8d65d92d534b0fc290df538b4758",
                                                      str(int(time.time())))
-                            # raise Exception(f"HTTP status code {response.status_code} received.")
                             self.next_page(info, page)
-                            break
-                    elif response.json()["errorCode"] ==302004:
+                    elif response.json()["message"] == "mustlogin":
                         print("2 >>>>>>>>>>>>>", response.text)
                         time.sleep(1)
-                        mobil = self.local_conn.lpop("testMobil")
-                        self.local_conn.rpush("testMobil", mobil)
+                        mobil = self.local_conn.lpop("searchMobil")
+                        self.local_conn.rpush("searchMobil", mobil)
                         self.Request["mobil"] = json.loads(mobil)
                         self.Request["ua"] = get()
                         self.Request["proxy"] = self.proxy_list()
-                        self.get_cookie_csrf()
-                        timestamp = int(time.time() - random.randint(50000, 60000))
+                        self.get_3()
+                        timestamp = int(time.time() - random.randint(30000, 40000))
                         self.session.cookies.set("Hm_lvt_e92c8d65d92d534b0fc290df538b4758",
                                                  "{},{},{},{}".format(
-                                                     str(timestamp - random.randint(30000, 40000)),
                                                      str(timestamp - random.randint(20000, 30000)),
                                                      str(timestamp - random.randint(10000, 20000)),
+                                                     str(timestamp - random.randint(5000, 10000)),
                                                      str(timestamp)))
                         self.Request["sessionNo"] = "{:.8f}".format(time.time())
                         self.session.cookies.set("Hm_lpvt_e92c8d65d92d534b0fc290df538b4758",
                                                  str(int(time.time())))
                         # raise Exception(f"HTTP status code {response.status_code} received.")
                         self.next_page(info, page)
-                        break
-                    elif response.json()["errorCode"] ==303000:
+                    elif response.json()["errorCode"] == 303000:
                         print("3 >>>>>>>>>>>>>", response.text)
                         self.local_conn.sadd("ErrorMobil", json.dumps(self.Request["mobil"]))
-                        self.local_conn.lrem("testMobil", 1, json.dumps(self.Request["mobil"]))
-                        mobil = self.local_conn.lpop("testMobil")
-                        self.local_conn.rpush("testMobil", mobil)
+                        print(">>>>>>>>>>>>>>>>>>>>")
+                        self.local_conn.lrem("searchMobil", 1, json.dumps(self.Request["mobil"]))
+                        mobil = self.local_conn.lpop("searchMobil")
+                        self.local_conn.rpush("searchMobil", mobil)
                         self.Request["mobil"] = json.loads(mobil)
                         self.Request["ua"] = get()
                         self.Request["proxy"] = self.proxy_list()
-                        self.get_cookie_csrf()
-                        timestamp = int(time.time() - random.randint(50000, 60000))
+                        self.get_3()
+                        timestamp = int(time.time() - random.randint(30000, 40000))
                         self.session.cookies.set("Hm_lvt_e92c8d65d92d534b0fc290df538b4758",
                                                  "{},{},{},{}".format(
-                                                     str(timestamp - random.randint(30000, 40000)),
                                                      str(timestamp - random.randint(20000, 30000)),
                                                      str(timestamp - random.randint(10000, 20000)),
+                                                     str(timestamp - random.randint(5000, 10000)),
                                                      str(timestamp)))
                         self.Request["sessionNo"] = "{:.8f}".format(time.time())
-                        self.session.cookies.set("Hm_lpvt_e92c8d65d92d534b0fc290df538b4758",
-                                                 str(int(time.time())))
-                        # raise Exception(f"HTTP status code {response.status_code} received.")
+                        self.session.cookies.set("Hm_lpvt_e92c8d65d92d534b0fc290df538b4758",str(int(time.time())))
                         self.next_page(info, page)
-                        break
-                    else:
-                        print("4>>>>>>>>>>>>>>>>>%s"%response.text)
-                        # raise Exception(f"HTTP status code {response.status_code} received.")
-                        time.sleep(20)
-                        self.next_page(info,page)
-                        break
+                    elif response.json()["message"] == "您的操作过于频繁, 请稍后重试":
+                        print("4>>>>>>>>>>>>>>>>>%s" % response.text)
+                        time.sleep(40)
+                        self.next_page(info, page)
                 else:
                     print("有风控?")
-                page+=1
-            except Exception as e:
-                logger.error(e)
-                self.local_conn.lpush("test:fail_params",json.dumps(info))
-
+                page += 1
+            # except Exception as e:
+            #     logger.error(e)
+            #     if "_id" in info:
+            #         del info["_id"]
+            #     self.local_conn.lpush("qinghai:fail_params", json.dumps(info))
 
     def main(self):
         with ThreadPoolExecutor(2) as f:
@@ -689,7 +659,7 @@ class SuccessCODE():
             mobil = self.local_conn.lpop("testMobil")
             self.local_conn.rpush("testMobil", mobil)
             self.Request["mobil"] = json.loads(mobil)
-            self.get_cookie_csrf()
+            self.get_3()
             timestamp = int(time.time() - random.randint(30000, 40000))
             self.session.cookies.set("Hm_lvt_e92c8d65d92d534b0fc290df538b4758","{},{},{},{}".
                                      format(str(timestamp - random.randint(20000, 30000)),
@@ -702,13 +672,13 @@ class SuccessCODE():
             futures=[]
             while True:
                 try:
-                    if _ % 200==0:
+                    if _ % 900==0:
                         self.Request["ua"]=get()
                         self.Request["proxy"]=self.proxy_list()
                         mobil = self.local_conn.lpop("testMobil")
                         self.local_conn.rpush("testMobil", mobil)
                         self.Request["mobil"] = json.loads(mobil)
-                        self.get_cookie_csrf()
+                        self.get_3()
                         timestamp = int(time.time() - random.randint(50000,60000))
                         self.session.cookies.set("Hm_lvt_e92c8d65d92d534b0fc290df538b4758", "{},{},{},{}".
                                                  format(str(timestamp - random.randint(30000, 40000)),
@@ -727,6 +697,7 @@ class SuccessCODE():
                         if self.local_conn.sadd(self.filter_params, info_str):
                             # futures.append(f.submit(self.next_page,info=info,page=1))
                             self.next_page(info,1)
+                            _ += 1
                         else:
                             logger.warning(f"【*】参数已经存在:{info}")
                     else:
@@ -740,7 +711,6 @@ class SuccessCODE():
                     #             time.sleep(1)
                     #             future.result()
                     #     futures.clear()
-                    _ += 1
                     logger.info(f"。。。。。。。。。。。。这是第 {_} 家公司")
                 except redis.exceptions.TimeoutError as e:
                     logger.error(e)
@@ -758,3 +728,5 @@ class SuccessCODE():
 if __name__ == '__main__':
     sc = SuccessCODE()
     sc.main()
+
+

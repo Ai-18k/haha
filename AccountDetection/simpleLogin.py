@@ -22,7 +22,6 @@ import uuid
 from urllib.parse import quote
 import cv2
 import execjs
-import subprocess
 import redis
 import requests
 from feapder.network.user_agent import get
@@ -30,7 +29,7 @@ from loguru import logger
 from retrying import retry
 import ddddocr
 import random
-from geetest4_word import get_word_position
+from passVerify.geetest4_word import get_word_position
 
 def proxy_list():
     tunnel = "d152.kdltps.com:15818"

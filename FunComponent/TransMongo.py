@@ -2,6 +2,8 @@
 import json
 import time
 from concurrent.futures import ThreadPoolExecutor
+
+import pymongo
 from redis.client import Redis
 
 
@@ -143,7 +145,7 @@ def mongoToRedis():
             #     break
             # break
 
-mongoToRedis()
+# mongoToRedis()
 
 def cityarealist():
     import requests
@@ -179,10 +181,18 @@ def cityarealist():
 
 
 
+def test():
+    client = pymongo.MongoClient(host='127.0.0.1', port=27017)
+    collection=client["filter"]["company"]
+    collection.create_index([('company', pymongo.ASCENDING)], unique=True)
+    for i in range(10):
+        try:
+            collection.insert_one({'company': "company"})
+            print("数据插入成功！")
+        except pymongo.errors.DuplicateKeyError:
+            print("数据已存在，插入失败！")
 
-
-
-
+test()
 
 
 

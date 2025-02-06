@@ -93,6 +93,6 @@ serv_company=f"{area}:filter:company"
 
 def init():
     init_map={
-
+    
     }
 
