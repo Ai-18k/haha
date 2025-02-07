@@ -45,6 +45,7 @@ class UploadServ:
             retry_delay=300,
             connection_attempts=10
         )
+
         try:
             # 创建连接和频道
             connection = pika.BlockingConnection(parameters)

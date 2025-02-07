@@ -29,6 +29,8 @@ with open('Vchongqing.json', 'r', encoding='utf-8') as file:
 Vqtext=json.loads(text)
 # print(serv_client.list_database_names())
 
+
+
 def findDB(db):
     with ThreadPoolExecutor(4) as f:
         f_dbs = serv_client[db].list_collection_names()
