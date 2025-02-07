@@ -14,6 +14,8 @@ class SendMQ:
         self.coll = self.client[key1][key2]
         self.coll1 = self.client[key1][key2]
         self.coll2 = self.client[key1]["MQfail"]
+        self.coll3 = self.client[key1]["filter_companyid"]
+        self.coll4 = self.client[key1]["error_data"]
         self.pageSize = num
         self.company_list=[]
 
@@ -163,13 +165,13 @@ class SendMQ:
                 # logger.info(item_info)
                 if item_info is None:
                     return
-                # try:
-                #     logger.info(item_info[2])
-                #     # collection_5_1.insert_one({'company': item_info[2]})
-                #     # collection_5.insert_one({"data":item_info})
-                #     logger.success("数据插入成功！")
-                # except pymongo.errors.DuplicateKeyError:
-                #     logger.error("数据已存在，插入失败！")
+                try:
+                    logger.info(item_info[2])
+                    self.coll3.insert_one({'company': item_info[2]})
+                    self.coll3.insert_one({"data":item_info})
+                    logger.success("数据插入成功！")
+                except pymongo.errors.DuplicateKeyError:
+                    logger.error("数据已存在，插入失败！")
                 if len(item_info) == 29 or 31:
                     # self.local_conn.sadd("shandong:filter:company", item_info[2])
                     # collection_5.insert_one({"data": item_info})
@@ -247,32 +249,32 @@ class SendMQ:
                     }
                 elif len(item_info) == 12:
                     try:
-                        collection_6_1.insert_one({'keys': item_info[7]})
+                        self.coll3.insert_one({'keys': item_info[7]})
                         print("数据插入成功！")
                     except pymongo.errors.DuplicateKeyError:
                         print("数据已存在，插入失败！")
-                    data1 = {
+                    data = {
                         "relation_company_name": item_info[7],
                         "relation_industry_name": item_info[9],
                         "relation_industry_pname": item_info[11]
                     }
-                    logger.info(data1)
+                    logger.info(data)
                     # company_with_list.append(data1)
                 else:
                     logger.error(len(item_info))
                     logger.error(item_info)
+                    data=None
                     pass
                 logger.info(data)
                 self.company_list.append(data)
             else:
                 with open("异常数据.json", "a", encoding="utf-8") as f:
                     f.write(item)
-
         except Exception as e:
             logger.error(e)
             if "_id" in item:
                 del item["_id"]
-            collection_7.insert_one(item)
+            self.coll4.insert_one(item)
 
     def send(self,currentPage):
         with ThreadPoolExecutor(3) as f:
@@ -426,6 +428,8 @@ class SendMQ:
     # except Exception as e:
     #     collection_8_1.insert_one(item)
     #     pass
+
+
     def localMongoToMQ(self):
         self.coll.count_documents()
         with ThreadPoolExecutor(3) as f:

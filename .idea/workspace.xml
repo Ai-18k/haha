@@ -6,11 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="cd0e7a52-cc8a-44f1-88b6-d25722e0babb" name="变更" comment="变更">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/666666" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/666666.pub" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/FunComponent/FixpointTodata.py" beforeDir="false" afterPath="$PROJECT_DIR$/FunComponent/FixpointTodata.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yangliang1994#" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/yangliang1994#.pub" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FunComponent/M1.py" beforeDir="false" afterPath="$PROJECT_DIR$/FunComponent/M1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,9 +35,16 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {}
-}</component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "history": [
+    {
+      "state": "OPEN"
+    }
+  ],
+  "lastFilter": {
+    "state": "OPEN"
+  }
+}]]></component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
       <filtered-out-file-type name="LOCAL_BRANCH" />
@@ -49,12 +53,12 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/18klove/test-v4&quot;,
-    &quot;accountId&quot;: &quot;cd5400f2-fa8c-435e-a001-e59ee85deeac&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "git@github.com:18klove/test-v4.git",
+    "accountId": "cd5400f2-fa8c-435e-a001-e59ee85deeac"
   }
-}</component>
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/Documents/WeChat Files/wxid_sr7g69d080vj21/FileStorage/File/2024-08/爬虫代码测试.py" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -548,7 +552,25 @@
       <workItem from="1737442489539" duration="63000" />
       <workItem from="1738819934534" duration="2858000" />
       <workItem from="1738822830980" duration="8929000" />
+      <workItem from="1738888130858" duration="2795000" />
     </task>
+    <task id="LOCAL-00001" summary="变更">
+      <option name="closed" value="true" />
+      <created>1738888259346</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1738888259346</updated>
+    </task>
+    <task id="LOCAL-00002" summary="变更">
+      <option name="closed" value="true" />
+      <created>1738888281719</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1738888281719</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
