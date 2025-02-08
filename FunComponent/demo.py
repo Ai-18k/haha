@@ -188,7 +188,7 @@ class UploadServ:
     def local_mongo_to_mq(self):
         """从本地MongoDB获取数据并发送到MQ"""
         num = self.coll.estimated_document_count()
-        self.start = 0
+        self.start = 12900
 
         with ThreadPoolExecutor(3) as f:
             futures = []
@@ -209,3 +209,6 @@ if __name__ == '__main__':
     key1 = "beijing"
     key2 = "sorcomp"
     UploadServ(key1, key2, 100).local_mongo_to_mq()
+
+
+# 12942
