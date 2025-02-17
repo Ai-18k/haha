@@ -43,7 +43,7 @@ collection = client["TYCDate"]["company"]
 collection_2 = client["TYCDate"]["company_with"]
 collection_2_1 = client["mydata"]["coll"]
 
-conn = redis.Redis(host='182.43.38.79', port=6379, db=5, password="lzh990130", socket_connect_timeout=170)
+conn = redis.Redis(host='182.43.38.79', port=6379, db=2, password="lzh990130", socket_connect_timeout=170)
 local_conn = redis.Redis(host='192.168.5.167', port=9736, db=0, password="3r332r@", socket_connect_timeout=170)
 # conn_1 = redis.Redis(host='127.0.0.1',port=6379,db=5)
 # db= pymysql.connect(host="192.168.5.53",
@@ -1001,9 +1001,7 @@ def localMongoToMQ():
                 futures.clear()
         for future in futures:
             future.result()
-
-
-localMongoToMQ()
+# localMongoToMQ()
 
 # data=(0, 1, '2024-06-11 16:30:13', None, None, None, None, '福安市晶唯一服装店', None, None, None, '批发业')
 # item_info=(1, '奋安铝业', '奋安铝业股份有限公司', '黄奋', '2296713441', 350100,
@@ -1245,6 +1243,22 @@ def copydata():
 # for i in range(5):
 #     res=local_conn.lpop("sifaUser")
 #     local_T4_conn.lpush("test1Mobil",res)
+
+
+conn=pymongo.MongoClient(host='192.168.5.167', port=27017)
+def copydata():
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        conn["fujian"]['company'].create_index([('seq_num', pymongo.ASCENDING)])
+        # 定义聚合管道
+        pipeline = [
+            {"$match": {"seq_num": {"$gte": 100}}},
+            {"$sort": {"seq_num": pymongo.ASCENDING}},
+            # {"$limit": 10}
+        ]
+        cursor = conn["fujian"]['sorcomp'].aggregate(pipeline, allowDiskUse=True).batch_size(50)
+        for item in cursor:
+            print(item)
+
 
 
 if __name__ == "__main__":

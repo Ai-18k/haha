@@ -4,6 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 import pika
 import pymongo
 from loguru import logger
+from pymongo import errors
 from redis import Redis
 from ParseFile.detailparam import getdata
 from MQitems.PikaUse import SendMQ
@@ -25,11 +26,9 @@ class UploadServ:
         self.coll = self.client[key1][key2]
         self.coll2 = self.client[key1]["MQfail"]
         self.coll4 = self.client[key1]["error_data"]
-        self.coll4.create_index([('error_data', pymongo.ASCENDING)], unique=True)
+        self.coll4.create_index([('error_data', pymongo.ASCENDING)], unique=True, sparse=True)
         self.pageSize = num
         self.processed_ids = set()  # 处理过的公司ID集合
-
-        # Thread-local storage for thread-specific data
         self.thread_local = threading.local()
 
     def _send_message_to_queue(self, flg, item_info):
@@ -45,6 +44,7 @@ class UploadServ:
             retry_delay=300,
             connection_attempts=10
         )
+
         try:
             # 创建连接和频道
             connection = pika.BlockingConnection(parameters)
@@ -91,7 +91,6 @@ class UploadServ:
         """处理每个公司信息"""
         try:
             item_info = getdata(info)
-
             if "areaCode" not in info:
                 if info["name"] in Vqtext:
                     data1 = Vqtext[info["name"]]
@@ -103,10 +102,8 @@ class UploadServ:
             else:
                 item_info["areaCode"] = info["areaCode"]
                 item_info["city"] = info["city"]
-
             if "_id" in item_info:
                 del item_info["_id"]
-
             # Ensure we don't process the same company twice
             company_id = item_info.get("tyxydm")  # Assuming tyxydm is unique
             if company_id in self.processed_ids:
@@ -167,14 +164,17 @@ class UploadServ:
             if len(self.thread_local.data_item) >= 20:
                 SendMQ().mongoToMQ(0, self.thread_local.data_item)
                 self.thread_local.data_item.clear()
-
         except Exception as e:
             logger.error(f"处理失败: {e}")
-            self.coll4.insert_one(info)
+            try:
+                self.coll4.insert_one(info)
+                print("数据插入成功！")
+            except errors.DuplicateKeyError:
+                print("数据已存在，插入失败！")
 
     def send_data_to_mq(self, currentPage):
         """分页发送数据到消息队列"""
-        with ThreadPoolExecutor(3) as f:
+        with ThreadPoolExecutor(6) as f:
             data = self.coll.find({}, {"_id": False}).skip(currentPage * self.pageSize).limit(self.pageSize)
             futures = []
             for item in data:
@@ -187,9 +187,10 @@ class UploadServ:
     def local_mongo_to_mq(self):
         """从本地MongoDB获取数据并发送到MQ"""
         num = self.coll.estimated_document_count()
-        self.start = 0
+        self.start= 30510
+        # self.start= 30300
 
-        with ThreadPoolExecutor(3) as f:
+        with ThreadPoolExecutor(5) as f:
             futures = []
             for i in range(self.start, num // self.pageSize + 1):
             # for i in range(self.start, 2):
@@ -208,3 +209,9 @@ if __name__ == '__main__':
     key1 = "beijing"
     key2 = "sorcomp"
     UploadServ(key1, key2, 100).local_mongo_to_mq()
+
+
+
+
+
+

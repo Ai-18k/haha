@@ -21,18 +21,20 @@ def getdata(data):
         hnlist = list()
         if "historyNames" in data:
             logger.info("历史名称:------->{}".format(data["historyNames"]))
-            if "\n" in data["historyNames"]:
-                hnlist.append(str(data["historyNames"]).split("\n").replace("-",""))
+            hdata=str(data["historyNames"]).strip().replace("-","").split(",")
+            if isinstance(hdata,list):
+                hnlist=hdata
             else:
-                hnlist.append(str(data["historyNames"]).replace("-",""))
+                hnlist.append(str(data["historyNames"]).strip().replace("-",""))
         else:
             hnlist = list()
         item_info["historyNames"] = hnlist
 
         item_info["company_name"] = data["name"] if data["name"] else None
-
-        item_info["legal_name"] = data["legalPersonName"] if data["legalPersonName"] else None
-
+        if "legalPerson" in data:
+            item_info["legal_name"] = data["legalPerson"] if data["legalPerson"] else None
+        else:
+            item_info["legal_name"] = data["legalPersonName"] if data["legalPersonName"] else None
         if "phoneNum" in data:
             item_info["legal_telephone"] = data["phoneNum"] if data["phoneNum"] else None
         else:
@@ -43,7 +45,7 @@ def getdata(data):
         item_info["registered_address"] = data["regLocation"] if data["regLocation"] else None
 
         if "phoneList" in data:
-            item_info["company_phone"] =",".join([item for item in data["phoneList"]])
+            item_info["company_phone"] =",".join([item for item in data["phoneList"]]) if  data["phoneList"] else None
         else:
             item_info["company_phone"] = None
 
@@ -100,8 +102,10 @@ def getdata(data):
                 "regNumber"] else None
         else:
             item_info["gszch"] = None
-
-        item_info["nsrsbh"] = data["taxCode"] if data["taxCode"] else None
+        if "creditCode" in data:
+            item_info["nsrsbh"] = data["creditCode"] if data["creditCode"] else None
+        else:
+            item_info["nsrsbh"] = data["taxCode"] if data["taxCode"] else None
 
         item_info["zzjgdm"] = data["orgNumber"] if data["orgNumber"] else None
 
@@ -126,8 +130,8 @@ def getdata(data):
                 "taxQualification"] else None
         else:
             item_info["nsrzz"] = None
-
-        if data["companyType"]==3:
+        filter=data["companyType"] if "companyType" in data else data["entityType"]
+        if filter==3:
             if "orgType" in data:
                 item_info["type"] = data["orgType"] if data["orgType"] else None
                 item_info["company_type"] = None

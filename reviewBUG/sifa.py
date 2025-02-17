@@ -5,6 +5,8 @@ import re
 import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
+
+import pymongo
 import redis
 from loguru import logger
 from pymongo import MongoClient
@@ -33,12 +35,14 @@ class FLSS:
     def __init__(self):
         self.conn = redis.Redis(host='139.9.70.234', port=6379, db=2, password="anbo123",socket_connect_timeout=170)
         self.local_conn = redis.Redis(host='192.168.5.167', port=9736, db=0, password="3r332r@",socket_connect_timeout=170)
+        self.local_VQ_conn = redis.Redis(host='192.168.5.181', port=10281, db=0, password="*s,8<[VVS6h.nnWZ=cv{",
+                                      socket_connect_timeout=1170)
         self.Request=None
         self.headers = None
         self.session=requests.session()
         self.ua=None
         self.client_01 = MongoClient(host='139.9.70.234', port=12700, username="root", password="QuyHlxXhW2PSHTwT",authSource="admin")
-        self.client=MongoClient(host='192.168.5.167', port=27017)
+        self.client=MongoClient(host='127.0.0.1', port=27017)
         self.cli_5 = self.client["shanghai"]["company_id"]
         self.cli = self.client["shanghai"]["sfaj"]
         self.cli_1 = self.client["shanghai"]["zlxx"]
@@ -47,6 +51,9 @@ class FLSS:
         self.coll_3 = self.client_01["shanghai"]["专利"]
         self.coll_3_1 = self.client_01["shanghai"]["fail_专利"]
         self.coll_4 = self.client_01["shanghai"]["fail_company_id"]
+        self.col1 = self.client["test1"]["test"]
+        self.col2 = self.client["test2"]["test"]
+        self.col3 = self.client["test3"]["test"]
         self.sfaj_item = list()
         self.zlxx_item = list()
         self.page = 1
@@ -976,9 +983,147 @@ class FLSS:
                                     # break
                 self.page+=1
 
+    # 法院公告
+    def fayuanhistroy(self, info):
+        while True:
+            try:
+                url = "https://capi.tianyancha.com/cloud-judicial-risk/company/courtAnnouncement"
+                params = {
+                    "_": str(int(time.time() * 1000))
+                }
+                data = {
+                    "pageSize": 10,
+                    "pageNum": self.page,
+                    "gid": info["id"],
+                    "history": 0,
+                    "identity": "-100",
+                    "bltntypename": "-100",
+                    "publishYear": "-100",
+                    "reason": "-100",
+                    "fullSearchText": ""
+                }
+                data = json.dumps(data, separators=(',', ':'))
+                response = requests.post(url, headers=self.headers, params=params, data=data)
+                print("【*】法院公告-->", response.text)
+                if response.status_code == 200:
+                    if response.json()["state"] == "ok" and response.json()['message'] == "":
+                        num = math.ceil(int(response.json()["data"]['realTotal']) / 10) if response.json()["data"][
+                            'realTotal'] else 0
+                        logger.info(f'这个链接共{num}页数据')
+                        logger.info(f'当前是第{self.page}页')
+                        if self.page > num:
+                            break
+                        info_list = response.json()["data"]["list"]
+                        for item in info_list:
+                            item["companyName"] = info["company"]
+                            self.col2.insert_one(item)
+                            otherIdentity = []
+                            if item['identityList']:
+                                for li in item['identityList']:
+                                    li_list = []
+                                    for i in li['list']:
+                                        if info["company"] in str(item['identityList']):
+                                            if info["company"] in i['name']:
+                                                ajsf = li['identity']
+                                        else:
+                                            ajsf = ""
+                                        if len(li['list']) > 1:
+                                            name = i['name']
+                                            li_list.append(name)
+                                        else:
+                                            name = li['list'][0]['name']
+                                            li_list.append(name)
+                                    data = {
+                                        'identity': li['identity'],
+                                        'list': li_list
+                                    }
+                                    otherIdentity.append(data)
+                            else:
+                                ajsf = ""
+                                otherIdentity = "[]"
+                            json_data = {
+                                'relationCompanyName': info["company"],
+                                'judicialType': '法院公告',
+                                'history': 0,
+                                'judicialUnit': item["courtcode"],
+                                'recordDate': item['publishdate'],
+                                'judicialName': '',
+                                'judicialNumber': item['caseno'],
+                                'filingDate': '',
+                                'judicialMoney': '',
+                                'infoType': item["bltntypename"],
+                                'judicialContent': item['content'],
+                                'sjmc': '',
+                                'ajsf': ajsf,
+                                'otherIdentity': otherIdentity,
+                                'ay': item['reason'],
+                                'sfDqslcx': '',
+                                'xfXfdx': '',
+                                'xfGldx': '',
+                                'xfSql': '',
+                                'bzxr': '',
+                                'sxSxxw': '',
+                                'sxLxqk': '',
+                                'jyYcrq': '',
+                                'jy_ycyy': '',
+                                'gqStatus': '',
+                            }
+                            self.col3.insert_one(json_data)
+                            if "_id" in json_data:
+                                del json_data["_id"]
+                            logger.success(f"【*法院公告】数据保存成功:{json_data}!!")
+                            logger.info(f"第 {self.page} 页数据！！")
+                            # self.send_data(3, json_data)
+                            # break
+                    else:
+                        while True:
+                            res = self.local_VQ_conn.lpop("sifaCookie")
+                            if res is None:
+                                print(">>>>>>>>>>>正在获取cookie信息.............")
+                                time.sleep(1)
+                            else:
+                                self.Request = json.loads(res.decode("utf-8"))
+                                print(self.Request)
+                                self.session.cookies = requests.utils.cookiejar_from_dict(
+                                    self.Request["cookie_dict"])
+                                self.headers = {
+                                    "Host": "capi.tianyancha.com",
+                                    "sec-ch-ua": "\"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", "
+                                                 "\"Google "
+                                                 "Chrome\";v=\"114\"",
+                                    "sec-ch-ua-platform": "\"Windows\"",
+                                    "X-TYCID": self.Request['sign'],
+                                    "DNT": "1",
+                                    "sec-ch-ua-mobile": "?0",
+                                    "User-Agent": self.Request['ua'],
+                                    "Content-Type": "application/json",
+                                    "Accept": "application/json, text/plain, */*",
+                                    "X-AUTH-TOKEN": self.Request["token"],
+                                    "version": "TYC-Web",
+                                    "Origin": "https://www.tianyancha.com",
+                                    "Sec-Fetch-Site": "same-site",
+                                    "Sec-Fetch-Mode": "cors",
+                                    "Sec-Fetch-Dest": "empty",
+                                    "Referer": "https://www.tianyancha.com/",
+                                    "Accept-Language": "zh-CN,zh;q=0.9"}
+                                self.fayuanhistroy(info)
+                                break
+                        break
+                self.page += 1
+            except Exception as e:
+                logger.error(e)
+                info["page"] = self.page
+                if "_id" in info:
+                    del info["_id"]
+                try:
+                    self.col1.insert_one(info)
+                    print("数据插入成功！")
+                except pymongo.errors.DuplicateKeyError:
+                    print("数据已存在，插入失败！")
 
     def run(self):
-            res = self.local_conn.lpop("searchCookie")
+            # res = self.local_conn.lpop("searchCookie")
+            res = self.local_VQ_conn.lpop("sifaCookie")
             if res is None:
                 time.sleep(1)
             else:
@@ -1031,8 +1176,9 @@ class FLSS:
                 # self.zlxx(company_id)
                 """"""
                 """{'state': 'ok', 'message': '', 'special': '', 'vipMessage': '', 'isLogin': 0, 'errorCode': 0, 'data': {'companyGraphId': 4733837777, 'count': 1.txt, 'year_lmbx': [{'value': '-100', 'key': '全部年份', 'itemKey': '全部年份'}, {'value': '2024', 'key': '2024（1.txt）', 'itemKey': '2024', 'itemCount': 1.txt}], 'historyCount': 2, 'items': [{'caseCode': '(2024)陕0112执恢4303号', 'serviceType': 1.txt, 'gid': 1855185201, 'applicantList': [{'applicantCid': '4235736541', 'applicantAlias': '劳利斯', 'applicantLogo': None, 'applicantType': 1.txt, 'applicant': '陕西劳利斯建筑工程有限公司'}], 'zhixingId': None, 'filePath': 'http://zxgk.court.gov.cn/xglfile/3606/2024-09-04/29688b4dcba94d77a36343d8a1f5949d.pdf', 'publishDate': '2024-09-04 00:00:00', 'businessId': 'e9v9mov7f0b343220b014010flb3m2b8', 'execCourtName': '西安市未央区人民法院', 'type': 2, 'xname': '周明义', 'caseUuid': '20bfaea2d6c84033ab65f8f718827550', 'applicant': '陕西劳利斯建筑工程有限公司', 'toco': 6, 'serviceCount': 6, 'hasOssPath': 0, 'qyinfo': '', 'caseCreateTime': 1724774400000, 'logo': None, 'alias': None, 'explainMessage': None, 'id': '67278423', 'ossPath': '', 'cid': 4733837777}]}}"""
-                company_id={"company": "陕西劳利斯建筑工程有限公司", "id": 1855185201}
-                self.Restrain(company_id)
+                company_id={"company": "宁德时代新能源科技股份有限公司", "id": 2343820668}
+                # company_id={"company": "宁德时代新能源科技股份有限公司", "id": 2343820668}
+                self.fayuanhistroy(company_id)
 
                 # company_id = {"company": "广州禧臻运输有限公司", "id": 2341514248}
                 # company_id = {"company": "济南宏仁大药店有限公司", "id": 2337611216}

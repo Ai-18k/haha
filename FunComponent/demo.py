@@ -1,9 +1,15 @@
+import ctypes
 import json
+import os
+import subprocess
+import sys
 import threading
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import pika
 import pymongo
 from loguru import logger
+from pymongo import errors, WriteConcern, MongoClient
+from pymongo.errors import ConnectionFailure
 from redis import Redis
 from ParseFile.detailparam import getdata
 from MQitems.PikaUse import SendMQ
@@ -13,121 +19,107 @@ from MQitems.PikaUse import SendMQ
 with open('Vchongqing.json', 'r', encoding='utf-8') as file:
     Vqtext = json.load(file)
 
-
-class UploadServ:
-
-    def __init__(self, key1, key2, num):
-        # 初始化连接
+class Merge:
+    def __init__(self, key1):
+        self.key1=key1
         self.serv_conn = Redis('139.9.70.234', 6379, 2, "anbo123", socket_connect_timeout=170)
         self.addr = json.loads(self.serv_conn.get(key1).decode('utf-8'))
-        self.client = pymongo.MongoClient(host='192.168.5.167', port=27017)
-        self.local_conn = Redis("192.168.5." + self.addr[0], self.addr[1], self.addr[2], self.addr[3], socket_connect_timeout=1170)
-        self.coll = self.client[key1][key2]
+        self.client = MongoClient(host='192.168.5.167', port=27017)
+        self.local_conn = Redis("192.168.5." + self.addr[0], self.addr[1], self.addr[2], self.addr[3],socket_connect_timeout=1170)
+        self.write_concern = WriteConcern(w=1)
+        self.coll = self.client[key1]["sorcomp"]
         self.coll2 = self.client[key1]["MQfail"]
         self.coll4 = self.client[key1]["error_data"]
-        self.coll4.create_index([('error_data', pymongo.ASCENDING)], unique=True)
-        self.pageSize = num
+        self.coll4.create_index([('error_data', pymongo.ASCENDING)], unique=True, sparse=True)
         self.processed_ids = set()  # 处理过的公司ID集合
-
-        # Thread-local storage for thread-specific data
         self.thread_local = threading.local()
 
-    def _send_message_to_queue(self, flg, item_info):
-        """向指定队列发送消息"""
-        credentials = pika.PlainCredentials('user', 'user123')
-        parameters = pika.ConnectionParameters(
-            host='139.9.70.234',
-            port=5672,
-            virtual_host='/',
-            credentials=credentials,
-            socket_timeout=100,
-            heartbeat=300,
-            retry_delay=300,
-            connection_attempts=10
-        )
-
+    def is_admin(self):
         try:
-            # 创建连接和频道
-            connection = pika.BlockingConnection(parameters)
-            channel = connection.channel()
-            channe2 = connection.channel()
-            channe3 = connection.channel()
-            channe4 = connection.channel()
-            channe5 = connection.channel()
+            return (sys.platform == "win32" and ctypes.windll.shell32.IsUserAnAdmin() != 0)
+        except:
+            return False
 
-            # 创建队列
-            channel.queue_declare(queue='qqbx.dc.company', durable=True)
-            channe2.queue_declare(queue='qqbx.dc.industry', durable=True)
-            channe3.queue_declare(queue='qqbx.dc.qualification', durable=True)
-            channe4.queue_declare(queue='qqbx.dc.judicial', durable=True)
-            channe5.queue_declare(queue='qqbx.dc.property', durable=True)
+    def is_mongo_running(self):
+        try:
+            # 发送 ping 命令来测试连接
+            self.client.admin.command('ping')
+            return True
+        except ConnectionFailure:
+            return False
 
-            # 根据flg选择发送的队列
-            if flg == 1:
-                self._send_to_channel(channel, item_info, "qqbx.dc.company")
-            elif flg == 2:
-                self._send_to_channel(channe2, item_info, "qqbx.dc.industry")
-            elif flg == 3:
-                self._send_to_channel(channe3, item_info, "qqbx.dc.qualification")
-            elif flg == 4:
-                self._send_to_channel(channe4, item_info, "qqbx.dc.judicial")
+    def run_as_admin(self, command):
+        while True:
+            if self.is_mongo_running():
+                print("MongoDB 服务已启动")
+                return True
             else:
-                self._send_to_channel(channe5, item_info, "qqbx.dc.property")
-
-            connection.close()
-        except Exception as e:
-            logger.error(f"发送失败: {e}")
-            self.coll2.insert_one(item_info)
-
-    def _send_to_channel(self, channel, item_info, queue_name):
-        """发送信息到指定的队列"""
-        try:
-            channel.basic_publish(exchange='', routing_key=queue_name, body=json.dumps(item_info))
-            logger.success(f"【* {queue_name}】发送成功: {item_info}!")
-        except Exception as e:
-            logger.error(f"发送失败 {queue_name}: {e}")
-            self.coll2.insert_one(item_info)
-
-    def process_item_info(self, info):
-        """处理每个公司信息"""
-        try:
-            item_info = getdata(info)
-
-            if "areaCode" not in info:
-                if info["name"] in Vqtext:
-                    data1 = Vqtext[info["name"]]
-                    item_info["city"] = data1["city"]
-                    item_info["areaCode"] = data1["areaCode"]
+                if self.is_admin():
+                    subprocess.run(f"net start {command}", shell=True)
+                    print(f"服务 {command} 已启动")
                 else:
-                    item_info["city"] = info.get("districtName", None)
-                    item_info["areaCode"] = None
-            else:
-                item_info["areaCode"] = info["areaCode"]
-                item_info["city"] = info["city"]
+                    # 请求提升权限
+                    try:
+                        subprocess.run(
+                            f'powershell -Command "Start-Process cmd.exe -ArgumentList \'/c net start {command}\' -Credential (New-Object System.Management.Automation.PSCredential(\'anbo\', (ConvertTo-SecureString \'anbo1234\' -AsPlainText -Force)))"',
+                            shell=True)
+                        print(f"服务 {command} 已启动")
+                    except Exception as e:
+                        print(f"启动服务失败: {e}")
 
-            if "_id" in item_info:
-                del item_info["_id"]
+    def senddata(self):
+        try:
+            SendMQ().mongoToMQ(2, self.thread_local.kechuang_item)
+            self.thread_local.kechuang_item.clear()
 
-            # Ensure we don't process the same company twice
-            company_id = item_info.get("tyxydm")  # Assuming tyxydm is unique
-            if company_id in self.processed_ids:
-                logger.info(f"跳过重复公司: {company_id}")
-                return  # Skip processing if already processed
+            # if len(self.thread_local.data1_item) >= 20:
+            SendMQ().mongoToMQ(1, self.thread_local.data1_item)
+            self.thread_local.data1_item.clear()
 
-            # Mark as processed
-            self.processed_ids.add(company_id)
+            # if len(self.thread_local.data_item) >= 20:
+            SendMQ().mongoToMQ(0, self.thread_local.data_item)
+            self.thread_local.data_item.clear()
+        except Exception as e:
+            logger.error(e)
 
-            # Thread-local storage for data
-            if not hasattr(self.thread_local, 'kechuang_item'):
-                self.thread_local.kechuang_item = []
-            if not hasattr(self.thread_local, 'data_item'):
-                self.thread_local.data_item = []
-            if not hasattr(self.thread_local, 'data1_item'):
-                self.thread_local.data1_item = []
+    def process_item_info(self, items):
+        """处理每个公司信息"""
+        for info in items:
+            try:
+                item_info = getdata(info)
+                if "areaCode" not in info:
+                    if info["name"] in Vqtext:
+                        data1 = Vqtext[info["name"]]
+                        item_info["city"] = data1["city"]
+                        item_info["areaCode"] = data1["areaCode"]
+                    else:
+                        item_info["city"] = info.get("districtName", None)
+                        item_info["areaCode"] = None
+                else:
+                    item_info["areaCode"] = info["areaCode"]
+                    item_info["city"] = info["city"]
+                if "_id" in item_info:
+                    del item_info["_id"]
+                # Ensure we don't process the same company twice
+                company_id = item_info.get("tyxydm")  # Assuming tyxydm is unique
+                if company_id in self.processed_ids:
+                    logger.info(f"跳过重复公司: {company_id}")
+                    return  # Skip processing if already processed
 
-            self.thread_local.data1_item.append(item_info["nameLevels"])
-            self.thread_local.kechuang_item.extend(item_info['labelLists'])
-            self.thread_local.data_item.append({
+                # Mark as processed
+                self.processed_ids.add(company_id)
+
+                # Thread-local storage for data
+                if not hasattr(self.thread_local, 'kechuang_item'):
+                    self.thread_local.kechuang_item = []
+                if not hasattr(self.thread_local, 'data_item'):
+                    self.thread_local.data_item = []
+                if not hasattr(self.thread_local, 'data1_item'):
+                    self.thread_local.data1_item = []
+
+                self.thread_local.data1_item.append(item_info["nameLevels"])
+                self.thread_local.kechuang_item.extend(item_info['labelLists'])
+                self.thread_local.data_item.append({
                 "shortName": item_info["short_name"],
                 "companyName": item_info["company_name"],
                 "legalName": item_info["legal_name"],
@@ -155,60 +147,86 @@ class UploadServ:
                 "areaCode": item_info["areaCode"],
                 "dataSource": 1
             })
-
-            # 批量发送数据
+            except Exception as e:
+                logger.error(f"处理失败: {e}")
+                try:
+                    self.coll4.insert_one(info)
+                    print("数据插入成功！")
+                except errors.DuplicateKeyError:
+                    print("数据已存在，插入失败！")
+        # 批量发送数据
             if len(self.thread_local.kechuang_item) >= 20:
-                SendMQ().mongoToMQ(2, self.thread_local.kechuang_item)
-                self.thread_local.kechuang_item.clear()
+               self.senddata()
+        self.senddata()
 
-            if len(self.thread_local.data1_item) >= 20:
-                SendMQ().mongoToMQ(1, self.thread_local.data1_item)
-                self.thread_local.data1_item.clear()
-
-            if len(self.thread_local.data_item) >= 20:
-                SendMQ().mongoToMQ(0, self.thread_local.data_item)
-                self.thread_local.data_item.clear()
-
+    def copy_collection(self, db_name):
+        try:
+            old_db = self.client[db_name]
+            old_collection = old_db["sorcomp"]
+            last_id =int(self.serv_conn.get("copyDate:lasted").decode("utf-8")) if self.serv_conn.get("copyDate:lasted") else None
+            currentPage = int(self.serv_conn.get("copyDate:pageNum").decode("utf-8")) if self.serv_conn.get("copyDate:pageNum") else 0
+            pageSize = 1000
+            total_copied = int(self.serv_conn.get("copyDate:total_copied").decode("utf-8")) if self.serv_conn.get("copyDate:total_copied") else 0
+            with ThreadPoolExecutor(6) as workers:
+                futures=[]
+                while True:
+                    query = {}
+                    if last_id:
+                        query["_id"] = {"$gt": last_id}  # 基于 _id 分页
+                    docs_cursor = old_collection.find(query).sort("_id", 1).limit(pageSize)
+                    docs = list(docs_cursor)
+                    if not docs:  # 如果没有数据，退出循环
+                        print(f"{db_name}.sorcomp 没有更多数据需要复制。")
+                        break
+                    futures.append(workers.submit(self.process_item_info, docs))
+                    total_copied += len(docs)
+                    self.serv_conn.set("copyDate:total_copied", total_copied)
+                    # 打印进度
+                    print(f"成功复制 {(currentPage + 1) * pageSize} 条数据到 {db_name}.sorcomp")
+                    last_id = docs[-1]["_id"]
+                    self.serv_conn.set("copyDate:lastid",str(last_id))
+                    currentPage += 1
+                    self.serv_conn.set("copyDate:pageNum",currentPage)
+                    if len(futures)>=20:
+                        for future in futures:
+                            future.result()
+                for future in futures:
+                    future.result()
+                print(f"数据库 {db_name} 的集合 sorcomp 完成数据上传，成功上传 {total_copied} 条记录。")
         except Exception as e:
-            logger.error(f"处理失败: {e}")
-            self.coll4.insert_one(info)
+            logger.error(f"复制 {db_name}.sorcomp 时出现错误: {e}")
+            # self.start_service_windows('MongoDB')
+            self.run_as_admin('MongoDB')
+            raise ConnectionFailure("链接成功")
 
-    def send_data_to_mq(self, currentPage):
-        """分页发送数据到消息队列"""
-        with ThreadPoolExecutor(3) as f:
-            data = self.coll.find({}, {"_id": False}).skip(currentPage * self.pageSize).limit(self.pageSize)
-            futures = []
-            for item in data:
-                futures.append(f.submit(self.process_item_info, item))
-            for future in futures:
-                future.result()
-
-        logger.success(f"第 {currentPage + 1} 页数据发送成功")
-
-    def local_mongo_to_mq(self):
-        """从本地MongoDB获取数据并发送到MQ"""
-        num = self.coll.estimated_document_count()
-        self.start = 12900
-
-        with ThreadPoolExecutor(3) as f:
-            futures = []
-            for i in range(self.start, num // self.pageSize + 1):
-            # for i in range(self.start, 2):
-                futures.append(f.submit(self.send_data_to_mq, i))
-                logger.info(f"第 {i} 页数据")
-                if len(futures) >= 100:
-                    for future in futures:
-                        future.result()
-                    futures.clear()
-
-            for future in futures:
-                future.result()
+    def copy_mongo_multithreaded(self):
+            try:
+                threads = []
+                with ThreadPoolExecutor(max_workers=6) as f:
+                    threads.append(f.submit(self.copy_collection, db_name=self.key1))
+                    # 等待所有线程完成
+                    for future in as_completed(threads):
+                        future.result()  # 这会确保所有线程都已经完成
+            except ConnectionFailure:
+                print("无法连接到 MongoDB 服务器。请检查网络连接。")
+                # self.start_service_windows('MongoDB')
+                # raise ConnectionFailure("链接成功")
+            except Exception as e:
+                print(f"出现错误: {e}")
+                # self.start_service_windows('MongoDB')
+                # raise ConnectionFailure("链接成功")
 
 
 if __name__ == '__main__':
-    key1 = "beijing"
-    key2 = "sorcomp"
-    UploadServ(key1, key2, 100).local_mongo_to_mq()
+    serv_conn = Redis('139.9.70.234', 6379, 2, "anbo123", socket_connect_timeout=170)
+    area_list = ["tianjin", "heilongjiang", "henan", "hainan", "sichuan", "yunnan",
+                 "xizang", "gansu", "qinghai", "ningxia", "sanxi", "anhui",
+                 "jilin", "liaoning", "shanxi", "beijing", "guangxi", "neimenggu",
+                 "tianjin", "hebei", "xinjiang", "guizhou", "chongqing", "hunan", "jiangxi", "guangdong",
+                 "hubei", "shandong", "fujian", "shanghai", "jiangsu","zhejiang"]
+    area=serv_conn.get("copyDate:area").decode("utf-8") if serv_conn.get("copyDate:area") else "tianjin"
+    Merge(area).copy_mongo_multithreaded()
+    serv_conn.set("copyDate:area", area)
 
 
-# 12942
+
