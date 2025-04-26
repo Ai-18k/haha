@@ -1,0 +1,293 @@
+2025-03-28 17:48:35,273 - INFO - 成功连接到 Redis
+2025-03-28 17:48:35,355 - INFO - 成功连接到 MongoDB
+2025-03-28 17:48:35,367 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-28 17:48:35,367 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-28 17:48:37,202 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据
+2025-03-28 17:49:33,247 - INFO - 成功连接到 Redis
+2025-03-28 17:49:33,267 - INFO - 成功连接到 MongoDB
+2025-03-28 17:49:33,269 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-28 17:49:33,269 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-28 17:49:34,083 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-28 17:49:35,576 - INFO - 处理键: guangxi:filter:gdcomp
+2025-03-28 17:49:35,712 - INFO - 键 'guangxi:filter:gdcomp' 包含 27845 条数据:
+2025-03-28 17:49:35,829 - INFO - 处理键: guangxi:filter:sbxx
+2025-03-28 17:49:41,951 - INFO - 成功连接到 Redis
+2025-03-28 17:49:41,979 - INFO - 成功连接到 MongoDB
+2025-03-28 17:49:41,981 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-28 17:49:41,981 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-28 17:49:42,641 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-28 17:49:57,612 - INFO - 成功连接到 Redis
+2025-03-28 17:49:57,670 - INFO - 成功连接到 MongoDB
+2025-03-28 17:50:09,631 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-28 17:50:12,128 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-28 17:50:37,014 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 09:40:43,960 - INFO - 成功连接到 Redis
+2025-03-31 09:40:44,011 - INFO - 成功连接到 MongoDB
+2025-03-31 09:40:44,013 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 09:40:44,013 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 09:40:44,641 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 09:40:45,457 - INFO - 处理键: guangxi:filter:gdcomp
+2025-03-31 09:40:45,538 - INFO - 键 'guangxi:filter:gdcomp' 包含 27845 条数据:
+2025-03-31 09:40:45,629 - INFO - 处理键: guangxi:filter:sbxx
+2025-03-31 09:40:46,545 - INFO - 键 'guangxi:filter:sbxx' 包含 254300 条数据:
+2025-03-31 09:40:47,387 - INFO - 处理键: guangxi:filter:gudong
+2025-03-31 09:40:51,792 - INFO - 键 'guangxi:filter:gudong' 包含 1864273 条数据:
+2025-03-31 09:43:00,803 - INFO - 成功连接到 Redis
+2025-03-31 09:43:00,844 - INFO - 成功连接到 MongoDB
+2025-03-31 09:44:15,064 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 09:44:53,749 - INFO - 成功连接到 Redis
+2025-03-31 09:44:53,816 - INFO - 成功连接到 MongoDB
+2025-03-31 09:44:53,818 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 09:45:01,065 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 09:59:48,572 - INFO - 成功连接到 Redis
+2025-03-31 09:59:48,598 - INFO - 成功连接到 MongoDB
+2025-03-31 09:59:48,599 - INFO - 未找到任何匹配 'beijing:filter*' 的键
+2025-03-31 09:59:48,600 - INFO - 未找到任何匹配 'chongqing:filter*' 的键
+2025-03-31 09:59:48,601 - INFO - 未找到任何匹配 'fujian:filter*' 的键
+2025-03-31 09:59:48,602 - INFO - 未找到任何匹配 'guizhou:filter*' 的键
+2025-03-31 09:59:48,603 - INFO - 未找到任何匹配 'hainan:filter*' 的键
+2025-03-31 09:59:48,605 - INFO - 找到 11 个匹配 'hebei:filter*' 的键
+2025-03-31 09:59:48,605 - INFO - 处理键: hebei:filter:rzzzq
+2025-03-31 09:59:48,716 - INFO - 键 'hebei:filter:rzzzq' 包含 4860 条数据:
+2025-03-31 09:59:48,717 - ERROR - 获取 guangxi:filter 数据时出错: document must be an instance of dict, bson.son.SON, bson.raw_bson.RawBSONDocument, or a type that inherits from collections.MutableMapping
+2025-03-31 09:59:48,718 - INFO - 未找到任何匹配 'hubei:filter*' 的键
+2025-03-31 09:59:48,719 - INFO - 未找到任何匹配 'jiangsu:filter*' 的键
+2025-03-31 09:59:48,720 - INFO - 未找到任何匹配 'jiangxi:filter*' 的键
+2025-03-31 09:59:48,722 - INFO - 未找到任何匹配 'jilin:filter*' 的键
+2025-03-31 09:59:48,723 - INFO - 未找到任何匹配 'neimenggu:filter*' 的键
+2025-03-31 09:59:48,724 - INFO - 未找到任何匹配 'ningxia:filter*' 的键
+2025-03-31 09:59:48,725 - INFO - 未找到任何匹配 'sanxi:filter*' 的键
+2025-03-31 09:59:48,726 - INFO - 未找到任何匹配 'shandong:filter*' 的键
+2025-03-31 09:59:48,727 - INFO - 未找到任何匹配 'shanghai:filter*' 的键
+2025-03-31 09:59:48,728 - INFO - 未找到任何匹配 'shanxi:filter*' 的键
+2025-03-31 09:59:48,729 - INFO - 未找到任何匹配 'xinjiang:filter*' 的键
+2025-03-31 09:59:48,730 - INFO - 未找到任何匹配 'xizang:filter*' 的键
+2025-03-31 09:59:48,731 - INFO - 未找到任何匹配 'zhejiang:filter*' 的键
+2025-03-31 09:59:48,732 - INFO - 未找到任何匹配 'liaoning:filter*' 的键
+2025-03-31 09:59:48,733 - INFO - 未找到任何匹配 'sichuan:filter*' 的键
+2025-03-31 09:59:48,734 - INFO - 未找到任何匹配 'hunan:filter*' 的键
+2025-03-31 09:59:48,735 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 09:59:48,735 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 09:59:49,396 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 09:59:49,396 - ERROR - 获取 guangxi:filter 数据时出错: document must be an instance of dict, bson.son.SON, bson.raw_bson.RawBSONDocument, or a type that inherits from collections.MutableMapping
+2025-03-31 09:59:49,410 - INFO - 未找到任何匹配 'anhui:filter*' 的键
+2025-03-31 09:59:49,411 - INFO - 未找到任何匹配 'henan:filter*' 的键
+2025-03-31 09:59:49,412 - INFO - 未找到任何匹配 'yunnan:filter*' 的键
+2025-03-31 09:59:49,413 - INFO - 未找到任何匹配 'guangdong:filter*' 的键
+2025-03-31 09:59:49,414 - INFO - 未找到任何匹配 'heilongjiang:filter*' 的键
+2025-03-31 09:59:49,415 - INFO - 未找到任何匹配 'qinghai:filter*' 的键
+2025-03-31 09:59:49,416 - INFO - 未找到任何匹配 'tianjin:filter*' 的键
+2025-03-31 09:59:49,417 - INFO - 未找到任何匹配 'gansu:filter*' 的键
+2025-03-31 09:59:49,418 - INFO - 未找到任何匹配 'taiwan:filter*' 的键
+2025-03-31 09:59:49,419 - INFO - 未找到任何匹配 'xianggang:filter*' 的键
+2025-03-31 09:59:49,421 - INFO - 操作完成
+2025-03-31 10:00:49,374 - INFO - 成功连接到 Redis
+2025-03-31 10:00:49,392 - INFO - 成功连接到 MongoDB
+2025-03-31 10:00:49,393 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:00:49,393 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:00:50,055 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:00:50,055 - ERROR - 获取 guangxi:filter 数据时出错: document must be an instance of dict, bson.son.SON, bson.raw_bson.RawBSONDocument, or a type that inherits from collections.MutableMapping
+2025-03-31 10:00:50,070 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:00:50,070 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:00:50,688 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:00:50,688 - ERROR - 获取 guangxi:filter 数据时出错: document must be an instance of dict, bson.son.SON, bson.raw_bson.RawBSONDocument, or a type that inherits from collections.MutableMapping
+2025-03-31 10:00:50,700 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:00:50,700 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:00:51,345 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:00:51,346 - ERROR - 获取 guangxi:filter 数据时出错: document must be an instance of dict, bson.son.SON, bson.raw_bson.RawBSONDocument, or a type that inherits from collections.MutableMapping
+2025-03-31 10:00:51,360 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:00:51,360 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:00:51,973 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:00:51,973 - ERROR - 获取 guangxi:filter 数据时出错: document must be an instance of dict, bson.son.SON, bson.raw_bson.RawBSONDocument, or a type that inherits from collections.MutableMapping
+2025-03-31 10:00:51,985 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:00:51,985 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:00:52,611 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:00:52,611 - ERROR - 获取 guangxi:filter 数据时出错: document must be an instance of dict, bson.son.SON, bson.raw_bson.RawBSONDocument, or a type that inherits from collections.MutableMapping
+2025-03-31 10:00:52,622 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:00:52,622 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:00:53,229 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:00:53,229 - ERROR - 获取 guangxi:filter 数据时出错: document must be an instance of dict, bson.son.SON, bson.raw_bson.RawBSONDocument, or a type that inherits from collections.MutableMapping
+2025-03-31 10:00:53,241 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:00:53,241 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:00:53,851 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:00:53,851 - ERROR - 获取 guangxi:filter 数据时出错: document must be an instance of dict, bson.son.SON, bson.raw_bson.RawBSONDocument, or a type that inherits from collections.MutableMapping
+2025-03-31 10:00:53,862 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:00:53,863 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:00:54,475 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:00:54,475 - ERROR - 获取 guangxi:filter 数据时出错: document must be an instance of dict, bson.son.SON, bson.raw_bson.RawBSONDocument, or a type that inherits from collections.MutableMapping
+2025-03-31 10:00:54,485 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:00:54,486 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:00:55,088 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:00:55,088 - ERROR - 获取 guangxi:filter 数据时出错: document must be an instance of dict, bson.son.SON, bson.raw_bson.RawBSONDocument, or a type that inherits from collections.MutableMapping
+2025-03-31 10:00:55,099 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:00:55,099 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:00:55,706 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:00:55,706 - ERROR - 获取 guangxi:filter 数据时出错: document must be an instance of dict, bson.son.SON, bson.raw_bson.RawBSONDocument, or a type that inherits from collections.MutableMapping
+2025-03-31 10:00:55,718 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:00:55,718 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:00:56,323 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:00:56,323 - ERROR - 获取 guangxi:filter 数据时出错: document must be an instance of dict, bson.son.SON, bson.raw_bson.RawBSONDocument, or a type that inherits from collections.MutableMapping
+2025-03-31 10:00:56,334 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:00:56,334 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:00:56,938 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:00:56,938 - ERROR - 获取 guangxi:filter 数据时出错: document must be an instance of dict, bson.son.SON, bson.raw_bson.RawBSONDocument, or a type that inherits from collections.MutableMapping
+2025-03-31 10:00:56,949 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:00:56,949 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:00:57,555 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:00:57,555 - ERROR - 获取 guangxi:filter 数据时出错: document must be an instance of dict, bson.son.SON, bson.raw_bson.RawBSONDocument, or a type that inherits from collections.MutableMapping
+2025-03-31 10:00:57,567 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:00:57,567 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:00:58,169 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:00:58,170 - ERROR - 获取 guangxi:filter 数据时出错: document must be an instance of dict, bson.son.SON, bson.raw_bson.RawBSONDocument, or a type that inherits from collections.MutableMapping
+2025-03-31 10:02:14,613 - INFO - 成功连接到 Redis
+2025-03-31 10:02:14,637 - INFO - 成功连接到 MongoDB
+2025-03-31 10:02:14,639 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:02:14,639 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:02:15,273 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:06:35,664 - INFO - 成功连接到 Redis
+2025-03-31 10:06:35,669 - INFO - 成功连接到 MongoDB
+2025-03-31 10:06:35,670 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:06:35,670 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:06:36,291 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:07:34,092 - INFO - 成功连接到 Redis
+2025-03-31 10:07:34,097 - INFO - 成功连接到 MongoDB
+2025-03-31 10:07:34,098 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:07:34,098 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:07:34,737 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:08:10,566 - INFO - 成功连接到 Redis
+2025-03-31 10:08:10,609 - INFO - 成功连接到 MongoDB
+2025-03-31 10:08:26,163 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:08:34,136 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:10:09,380 - INFO - 成功连接到 Redis
+2025-03-31 10:10:09,405 - INFO - 成功连接到 MongoDB
+2025-03-31 10:10:09,407 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:10:09,407 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:10:10,027 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 10:11:17,384 - INFO - 处理键: guangxi:filter:gdcomp
+2025-03-31 10:11:17,471 - INFO - 键 'guangxi:filter:gdcomp' 包含 27845 条数据:
+2025-03-31 10:11:24,708 - INFO - 处理键: guangxi:filter:sbxx
+2025-03-31 10:11:25,338 - INFO - 键 'guangxi:filter:sbxx' 包含 254300 条数据:
+2025-03-31 10:12:38,072 - INFO - 处理键: guangxi:filter:gudong
+2025-03-31 10:12:42,777 - INFO - 键 'guangxi:filter:gudong' 包含 1864273 条数据:
+2025-03-31 10:21:42,258 - INFO - 处理键: guangxi:filter:cpws_com
+2025-03-31 10:21:42,470 - INFO - 键 'guangxi:filter:cpws_com' 包含 38654 条数据:
+2025-03-31 10:21:53,417 - INFO - 处理键: guangxi:filter:h_cpws_com
+2025-03-31 10:21:53,453 - INFO - 键 'guangxi:filter:h_cpws_com' 包含 11786 条数据:
+2025-03-31 10:21:56,616 - INFO - 处理键: guangxi:filter:company_id
+2025-03-31 10:22:01,365 - INFO - 键 'guangxi:filter:company_id' 包含 1868813 条数据:
+2025-03-31 10:30:47,058 - INFO - 处理键: guangxi:filter:xzxk
+2025-03-31 10:30:47,811 - INFO - 键 'guangxi:filter:xzxk' 包含 254127 条数据:
+2025-03-31 10:31:58,454 - INFO - 处理键: guangxi:filter:dxxk
+2025-03-31 10:31:59,078 - INFO - 键 'guangxi:filter:dxxk' 包含 254153 条数据:
+2025-03-31 10:33:05,703 - INFO - 处理键: guangxi:filter:comp
+2025-03-31 10:33:10,303 - INFO - 键 'guangxi:filter:comp' 包含 1868143 条数据:
+2025-03-31 10:41:05,563 - INFO - 处理键: guangxi:filter:rzzzq
+2025-03-31 10:41:06,290 - INFO - 键 'guangxi:filter:rzzzq' 包含 254235 条数据:
+2025-03-31 10:42:10,087 - INFO - 处理键: guangxi:filter:params
+2025-03-31 10:42:10,229 - INFO - 键 'guangxi:filter:params' 包含 53584 条数据:
+2025-03-31 10:42:23,616 - INFO - 处理键: guangxi:filter:sfaj
+2025-03-31 10:42:23,694 - INFO - 键 'guangxi:filter:sfaj' 包含 27631 条数据:
+2025-03-31 10:42:30,546 - INFO - 处理键: guangxi:filter:zpzzq
+2025-03-31 10:42:31,359 - INFO - 键 'guangxi:filter:zpzzq' 包含 254272 条数据:
+2025-03-31 10:43:35,567 - INFO - 处理键: guangxi:filter:params1
+2025-03-31 10:43:35,590 - INFO - 键 'guangxi:filter:params1' 包含 710 条数据:
+2025-03-31 10:43:35,766 - INFO - 处理键: guangxi:filter:company
+2025-03-31 10:43:35,777 - INFO - 键 'guangxi:filter:company' 包含 1550 条数据:
+2025-03-31 10:43:36,199 - INFO - 处理键: guangxi:filter:zlxx_com
+2025-03-31 10:43:36,329 - INFO - 键 'guangxi:filter:zlxx_com' 包含 27649 条数据:
+2025-03-31 10:43:43,359 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 10:43:43,359 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 10:43:43,978 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 11:19:08,431 - INFO - 成功连接到 Redis
+2025-03-31 11:19:08,466 - INFO - 成功连接到 MongoDB
+2025-03-31 11:19:08,468 - INFO - 找到 17 个匹配 'guangxi:filter*' 的键
+2025-03-31 11:19:08,468 - INFO - 处理键: guangxi:filter:zzzs
+2025-03-31 11:19:09,457 - INFO - 键 'guangxi:filter:zzzs' 包含 254198 条数据:
+2025-03-31 11:19:47,911 - INFO - 成功连接到 Redis
+2025-03-31 11:19:47,949 - INFO - 成功连接到 MongoDB
+2025-03-31 11:19:47,953 - INFO - 未找到任何匹配 'fujian:filter*' 的键
+2025-03-31 11:19:47,954 - INFO - 未找到任何匹配 'guizhou:filter*' 的键
+2025-03-31 11:19:47,955 - INFO - 操作完成
+2025-03-31 11:22:16,950 - INFO - 成功连接到 Redis
+2025-03-31 11:22:16,960 - INFO - 成功连接到 MongoDB
+2025-03-31 11:22:16,961 - INFO - 找到 17 个匹配 'fujian:filter*' 的键
+2025-03-31 11:22:16,961 - INFO - 处理键: fujian:filter:sfaj
+2025-03-31 11:22:17,168 - INFO - 键 'fujian:filter:sfaj' 包含 28378 条数据:
+2025-03-31 11:22:50,109 - INFO - 处理键: fujian:filter:company_id
+2025-03-31 11:22:51,703 - ERROR - 获取 guangxi:filter 数据时出错: Error while reading from socket: (10054, '远程主机强迫关闭了一个现有的连接。', None, 10054, None)
+2025-03-31 11:23:12,760 - ERROR - 获取 guangxi:filter 数据时出错: Timeout connecting to server
+2025-03-31 11:23:12,763 - INFO - 操作完成
+2025-03-31 11:26:40,423 - ERROR - Redis 连接失败: Timeout connecting to server
+2025-03-31 11:26:40,423 - ERROR - 程序执行出错: Timeout connecting to server
+2025-03-31 11:27:39,446 - INFO - 成功连接到 Redis
+2025-03-31 11:27:39,478 - INFO - 成功连接到 MongoDB
+2025-03-31 11:27:39,479 - INFO - 找到 17 个匹配 'fujian:filter*' 的键
+2025-03-31 11:27:39,479 - INFO - 处理键: fujian:filter:rzzzq
+2025-03-31 11:27:41,601 - INFO - 键 'fujian:filter:rzzzq' 包含 848588 条数据:
+2025-03-31 11:45:21,848 - INFO - 处理键: fujian:filter:zzzs
+2025-03-31 11:45:24,101 - INFO - 键 'fujian:filter:zzzs' 包含 848585 条数据:
+2025-03-31 12:04:29,127 - INFO - 处理键: fujian:filter:comp
+2025-03-31 12:04:37,194 - INFO - 键 'fujian:filter:comp' 包含 3342725 条数据:
+2025-03-31 13:29:11,784 - INFO - 处理键: fujian:filter:dxxk
+2025-03-31 13:29:15,801 - INFO - 键 'fujian:filter:dxxk' 包含 848593 条数据:
+2025-03-31 13:48:43,396 - INFO - 处理键: fujian:filter:gudong
+2025-03-31 13:48:52,011 - INFO - 键 'fujian:filter:gudong' 包含 3331075 条数据:
+2025-03-31 15:02:29,498 - INFO - 处理键: fujian:filter:cpws_com
+2025-03-31 15:02:31,243 - INFO - 键 'fujian:filter:cpws_com' 包含 450106 条数据:
+2025-03-31 15:11:37,618 - INFO - 处理键: fujian:filter:zlxx_com
+2025-03-31 15:11:37,862 - INFO - 键 'fujian:filter:zlxx_com' 包含 6582 条数据:
+2025-03-31 15:11:45,559 - INFO - 处理键: fujian:filter:gdcomp
+2025-03-31 15:11:46,156 - INFO - 键 'fujian:filter:gdcomp' 包含 133063 条数据:
+2025-03-31 15:14:32,709 - INFO - 处理键: fujian:filter:company
+2025-03-31 15:14:35,023 - INFO - 键 'fujian:filter:company' 包含 499802 条数据:
+2025-03-31 15:26:38,522 - INFO - 处理键: fujian:filter:sbxx
+2025-03-31 15:26:42,085 - INFO - 键 'fujian:filter:sbxx' 包含 848601 条数据:
+2025-03-31 15:44:33,345 - INFO - 处理键: fujian:filter:zpzzq
+2025-03-31 15:44:35,549 - INFO - 键 'fujian:filter:zpzzq' 包含 848597 条数据:
+2025-03-31 16:01:49,468 - INFO - 处理键: fujian:filter:params1
+2025-03-31 16:01:50,025 - INFO - 键 'fujian:filter:params1' 包含 200 条数据:
+2025-03-31 16:01:50,463 - INFO - 处理键: fujian:filter:h_cpws_com
+2025-03-31 16:01:51,771 - INFO - 键 'fujian:filter:h_cpws_com' 包含 346806 条数据:
+2025-03-31 16:09:34,052 - INFO - 处理键: fujian:filter:params
+2025-03-31 16:09:34,827 - INFO - 键 'fujian:filter:params' 包含 41252 条数据:
+2025-03-31 16:10:40,959 - INFO - 处理键: fujian:filter:company_id
+2025-03-31 16:11:10,526 - INFO - 键 'fujian:filter:company_id' 包含 5907838 条数据:
+2025-04-01 09:03:28,211 - INFO - 成功连接到 Redis
+2025-04-01 09:03:28,270 - INFO - 成功连接到 MongoDB
+2025-04-01 09:03:28,280 - INFO - 找到 17 个匹配 'fujian:filter*' 的键
+2025-04-01 09:03:28,280 - INFO - 处理键: fujian:filter:rzzzq
+2025-04-01 09:03:31,070 - INFO - 键 'fujian:filter:rzzzq' 包含 848588 条数据:
+2025-04-01 09:40:51,217 - INFO - 处理键: fujian:filter:zzzs
+2025-04-01 09:40:53,486 - INFO - 键 'fujian:filter:zzzs' 包含 848585 条数据:
+2025-04-01 10:34:28,687 - INFO - 处理键: fujian:filter:comp
+2025-04-01 10:34:43,669 - INFO - 键 'fujian:filter:comp' 包含 3342725 条数据:
+2025-04-01 13:03:17,645 - INFO - 处理键: fujian:filter:dxxk
+2025-04-01 13:03:19,948 - INFO - 键 'fujian:filter:dxxk' 包含 848593 条数据:
+2025-04-01 13:56:09,858 - INFO - 处理键: fujian:filter:gudong
+2025-04-01 13:56:18,998 - INFO - 键 'fujian:filter:gudong' 包含 3331075 条数据:
+2025-04-01 14:47:54,577 - ERROR - 获取 fujian+:filter 数据时出错: interrupted at shutdown, full error: {'ok': 0.0, 'errmsg': 'interrupted at shutdown', 'code': 11600, 'codeName': 'InterruptedAtShutdown'}
+2025-04-01 14:47:54,577 - INFO - 操作完成
+2025-04-01 15:03:09,683 - INFO - 成功连接到 Redis
+2025-04-01 15:03:09,794 - INFO - 成功连接到 MongoDB
+2025-04-01 15:03:09,797 - INFO - 找到 17 个匹配 'fujian:filter*' 的键
+2025-04-01 15:03:09,797 - INFO - 处理键: fujian:filter:company_id
+2025-04-01 15:03:29,994 - INFO - 键 'fujian:filter:company_id' 包含 5907838 条数据:
+2025-04-01 16:59:12,965 - ERROR - 获取 fujian+:filter 数据时出错: 192.168.5.167:27017: [WinError 10054] 远程主机强迫关闭了一个现有的连接。 (configured timeouts: connectTimeoutMS: 20000.0ms)
+2025-04-01 16:59:12,966 - INFO - 操作完成
+2025-04-01 17:08:00,622 - INFO - 成功连接到 Redis
+2025-04-01 17:08:00,644 - INFO - 成功连接到 MongoDB
+2025-04-01 17:08:00,647 - INFO - 找到 17 个匹配 'fujian:filter*' 的键
+2025-04-01 17:08:00,647 - INFO - 处理键: fujian:filter:company_id
+2025-04-01 17:08:15,659 - INFO - 键 'fujian:filter:company_id' 包含 5907838 条数据:
+2025-04-02 10:52:09,429 - INFO - 成功连接到 Redis
+2025-04-02 10:52:09,487 - INFO - 成功连接到 MongoDB
+2025-04-02 10:52:09,489 - INFO - 找到 17 个匹配 'fujian:filter*' 的键
+2025-04-02 10:52:09,490 - INFO - 处理键: fujian:filter:company_id
+2025-04-02 10:52:24,482 - INFO - 键 'fujian:filter:company_id' 包含 5913860 条数据:
+2025-04-02 14:10:31,621 - INFO - 操作完成
+2025-04-02 14:51:46,247 - INFO - 成功连接到 Redis
+2025-04-02 14:51:46,260 - INFO - 成功连接到 MongoDB
+2025-04-02 14:51:46,261 - INFO - 找到 17 个匹配 'fujian:filter*' 的键
+2025-04-02 14:51:46,261 - INFO - 处理键: fujian:filter:company_id
+2025-04-02 14:52:03,426 - INFO - 键 'fujian:filter:company_id' 包含 5913860 条数据:
+2025-04-02 18:00:06,745 - INFO - 操作完成

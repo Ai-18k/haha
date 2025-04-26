@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-# @FileName  :test.py
+# @FileName  :winApi-wechat.py
 # @Time      :2024/12/5 10:00
 # @Author    : 18k
 import re

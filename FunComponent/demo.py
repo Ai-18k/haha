@@ -7,6 +7,7 @@ import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import pika
 import pymongo
+from bson import ObjectId
 from loguru import logger
 from pymongo import errors, WriteConcern, MongoClient
 from pymongo.errors import ConnectionFailure
@@ -20,6 +21,7 @@ with open('Vchongqing.json', 'r', encoding='utf-8') as file:
     Vqtext = json.load(file)
 
 class Merge:
+
     def __init__(self, key1):
         self.key1=key1
         self.serv_conn = Redis('139.9.70.234', 6379, 2, "anbo123", socket_connect_timeout=170)
@@ -163,7 +165,7 @@ class Merge:
         try:
             old_db = self.client[db_name]
             old_collection = old_db["sorcomp"]
-            last_id =int(self.serv_conn.get("copyDate:lasted").decode("utf-8")) if self.serv_conn.get("copyDate:lasted") else None
+            last_id =ObjectId(self.serv_conn.get("copyDate:lasted").decode("utf-8")) if self.serv_conn.get("copyDate:lasted") else None
             currentPage = int(self.serv_conn.get("copyDate:pageNum").decode("utf-8")) if self.serv_conn.get("copyDate:pageNum") else 0
             pageSize = 1000
             total_copied = int(self.serv_conn.get("copyDate:total_copied").decode("utf-8")) if self.serv_conn.get("copyDate:total_copied") else 0
@@ -182,9 +184,9 @@ class Merge:
                     total_copied += len(docs)
                     self.serv_conn.set("copyDate:total_copied", total_copied)
                     # 打印进度
-                    print(f"成功复制 {(currentPage + 1) * pageSize} 条数据到 {db_name}.sorcomp")
+                    print(f"成功上传 {(currentPage + 1) * pageSize} 条数据到 mq ")
                     last_id = docs[-1]["_id"]
-                    self.serv_conn.set("copyDate:lastid",str(last_id))
+                    self.serv_conn.set("copyDate:lasted",str(last_id))
                     currentPage += 1
                     self.serv_conn.set("copyDate:pageNum",currentPage)
                     if len(futures)>=20:
@@ -219,14 +221,19 @@ class Merge:
 
 if __name__ == '__main__':
     serv_conn = Redis('139.9.70.234', 6379, 2, "anbo123", socket_connect_timeout=170)
-    area_list = ["tianjin", "heilongjiang", "henan", "hainan", "sichuan", "yunnan",
-                 "xizang", "gansu", "qinghai", "ningxia", "sanxi", "anhui",
-                 "jilin", "liaoning", "shanxi", "beijing", "guangxi", "neimenggu",
-                 "tianjin", "hebei", "xinjiang", "guizhou", "chongqing", "hunan", "jiangxi", "guangdong",
-                 "hubei", "shandong", "fujian", "shanghai", "jiangsu","zhejiang"]
-    area=serv_conn.get("copyDate:area").decode("utf-8") if serv_conn.get("copyDate:area") else "tianjin"
-    Merge(area).copy_mongo_multithreaded()
-    serv_conn.set("copyDate:area", area)
-
+    area_list = [
+        # "tianjin","heilongjiang", "henan", "liaoning","shanxi","beijing","gansu","qinghai", "ningxia","sanxi","tianjin", "hebei",
+        # "hainan","fujian","shanghai", "shandong","sichuan",
+        "yunnan","xizang","anhui","jilin","guangxi", "neimenggu",
+        "xinjiang", "guizhou", "chongqing", "hunan", "jiangxi", "guangdong",
+        "hubei","jiangsu","zhejiang"
+    ]
+    for area in area_list:
+        serv_conn.set("copyDate:area", area)
+        area=serv_conn.get("copyDate:area").decode("utf-8") if serv_conn.get("copyDate:area") else "tianjin"
+        Merge(area).copy_mongo_multithreaded()
+        serv_conn.set("copyDate:lasted", "")
+        serv_conn.set("copyDate:total_copied", 0)
+        serv_conn.set("copyDate:pageNum",0)
 
 

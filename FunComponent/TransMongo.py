@@ -181,7 +181,6 @@ def cityarealist():
         local_conn.lpush("cityAreaID",json.dumps(i))
 
 
-
 def test():
     client = pymongo.MongoClient(host='127.0.0.1', port=27017)
     collection=client["test"]["test1"]
@@ -192,11 +191,6 @@ def test():
             print("数据插入成功！")
         except pymongo.errors.DuplicateKeyError:
             print("数据已存在，插入失败！")
-
-
-
-
-
 
 
 

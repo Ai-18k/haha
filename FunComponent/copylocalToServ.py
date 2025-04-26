@@ -1238,12 +1238,10 @@ def copydata():
             else:
                 local_conn.sadd("shanghai:filter:params", json.dumps(info))
 
-
 # local_T4_conn = redis.Redis(host='192.168.5.87', port=7933, db=0, password="fer@nhaweif576KUG",socket_connect_timeout=70)
 # for i in range(5):
 #     res=local_conn.lpop("sifaUser")
 #     local_T4_conn.lpush("test1Mobil",res)
-
 
 conn=pymongo.MongoClient(host='192.168.5.167', port=27017)
 def copydata():
@@ -1259,6 +1257,19 @@ def copydata():
         for item in cursor:
             print(item)
 
+def demo():
+    client = pymongo.MongoClient(host='192.168.5.167', port=27017)
+    client1 = pymongo.MongoClient(host='192.168.5.101', port=27017)
+    collections = client1["anhui"].list_collection_names()
+    print(collections)
+    for collection in collections:
+        col=client["anhui"][collection]
+        col1 = client1["anhui"][collection]
+        data=list(col.find())
+        for i in data:
+            del i["_id"]
+            print(i)
+            col1.insert_one(i)
 
 
 if __name__ == "__main__":

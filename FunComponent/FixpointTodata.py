@@ -19,7 +19,7 @@ class UploadServ:
 
     def __init__(self, key1, key2, num):
         # 初始化连接
-        self.serv_conn = Redis('139.9.70.234', 6379, 2, "anbo123", socket_connect_timeout=170)
+        self.serv_conn = Redis(host='127.0.0.1', port=10238, db=0, password="vi4*87taTZBel&DyWL)A",socket_connect_timeout=170)
         self.addr = json.loads(self.serv_conn.get(key1).decode('utf-8'))
         self.client = pymongo.MongoClient(host='192.168.5.167', port=27017)
         self.local_conn = Redis("192.168.5." + self.addr[0], self.addr[1], self.addr[2], self.addr[3], socket_connect_timeout=1170)
@@ -109,10 +109,8 @@ class UploadServ:
             if company_id in self.processed_ids:
                 logger.info(f"跳过重复公司: {company_id}")
                 return  # Skip processing if already processed
-
             # Mark as processed
             self.processed_ids.add(company_id)
-
             # Thread-local storage for data
             if not hasattr(self.thread_local, 'kechuang_item'):
                 self.thread_local.kechuang_item = []
@@ -120,7 +118,6 @@ class UploadServ:
                 self.thread_local.data_item = []
             if not hasattr(self.thread_local, 'data1_item'):
                 self.thread_local.data1_item = []
-
             self.thread_local.data1_item.append(item_info["nameLevels"])
             self.thread_local.kechuang_item.extend(item_info['labelLists'])
             self.thread_local.data_item.append({
@@ -187,26 +184,25 @@ class UploadServ:
     def local_mongo_to_mq(self):
         """从本地MongoDB获取数据并发送到MQ"""
         num = self.coll.estimated_document_count()
-        self.start= 30510
-        # self.start= 30300
+        self.start= int(self.serv_conn.get("tis:page").decode())
 
         with ThreadPoolExecutor(5) as f:
             futures = []
             for i in range(self.start, num // self.pageSize + 1):
             # for i in range(self.start, 2):
+                self.serv_conn.set("tis:page", i)
                 futures.append(f.submit(self.send_data_to_mq, i))
                 logger.info(f"第 {i} 页数据")
-                if len(futures) >= 100:
+                if len(futures) >= 50:
                     for future in futures:
                         future.result()
                     futures.clear()
-
             for future in futures:
                 future.result()
 
 
 if __name__ == '__main__':
-    key1 = "beijing"
+    key1 =  "shandong"
     key2 = "sorcomp"
     UploadServ(key1, key2, 100).local_mongo_to_mq()
 
