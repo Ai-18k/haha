@@ -91,6 +91,7 @@ class Demo:
             if filename == "click_img":
                 self.ocr_img(file_path, dir_path)
 
+
     def get_1(self):
         # try:
         headers = {
@@ -101,6 +102,7 @@ class Demo:
         uuid1 = uuid.uuid1()
         url = "https://gcaptcha4.geetest.com/load"
         self.session.cookies.set("captcha_v4_user",self.Reqest["cookie_dict"]["captcha_v4_user"])
+        logger.info(self.session.cookies)
         params = {
             "captcha_id": "af29b3003fc94f2ba29e865b31ee86ee",
             "challenge": uuid1,
@@ -185,7 +187,14 @@ class Demo:
             return split_numbers
         res1 = split_lot_number(lot, lotNumber)
         res2 = split_lot_number(lotRes, lotNumber)
-        return {res1[0]: {res1[1]: res2[0]}}
+        if len(res1) == 3:
+            return {res1[0]: {res1[1]: {res1[2]: res2[0]}}}
+        elif len(res1) == 2:
+            return {res1[0]: {res1[1]: res2[0]}}
+        elif len(res1) == 1:
+            return {res1[0]: res2[0]}
+        else:
+            raise Exception("is too short or is too long")
 
 
     def re_jscodeV1(self,params_list):
@@ -209,8 +218,8 @@ class Demo:
         matche_04 = re.findall(pattern, matche_03, re.S)[0]  # 启用多行模式
         str_code += "var code=" + matche_04 + ";return [this._lib,this.lib._abo]}"
         res = execjs.compile(str_code).call("code")
-        print(res)
         return {"head": head, "par_param": res[0], "keys": res[1], "content": response.text, "paramsList": params_list}
+
 
     def proxy_list(self):
         # 隧道域名:端口号
@@ -223,6 +232,7 @@ class Demo:
             "https": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel}
         }
         return proxies
+
 
     def get_2(self):
         headers = {
@@ -244,13 +254,13 @@ class Demo:
         }
         url = "https://gcaptcha4.geetest.com/verify"
         data = self.get_1()
-        print(data)
+        logger.info(data)
         par = self.re_jscodeV1(data)
         with open("mapToDict.js", encoding="utf-8") as file:
             ctx = file.read()
         result = execjs.compile(ctx).call("v", par["keys"])
         param = self.Composite_parameter(result["lot"], result["lotRes"], data["lot_number"])
-        print(param)
+        logger.info(param)
         jscode = open("w_decode.js", encoding="utf-8").read()
         w = execjs.compile(jscode).call("_fff", data, par["par_param"], param)
         params = {
@@ -263,6 +273,7 @@ class Demo:
             "pt": "1",
             "w": w["res"]
         }
+        logger.info(self.session.cookies)
         response = self.session.get(url,headers=headers,params=params)
         if response.status_code == 200:
             resp = json.loads(str(response.text).strip("(").strip(")"))
@@ -291,23 +302,24 @@ class Demo:
         logger.info(IfMatch)
         url = "https://www.tianyancha.com/sorry/verifyCaptcha4.json"
         headers = {
-            'Host': 'www.tianyancha.com',
-            'Cache-Control': 'max-age=0',
-            'sec-ch-ua-platform': '"Windows"',
-            'sec-ch-ua': self.Reqest["headers"]["sec-ch-ua"],
-            'If-Match': f"{IfMatch}",
-            'sec-ch-ua-mobile': '?0',
-            'X-Requested-With': 'XMLHttpRequest',
-            'User-Agent': self.Reqest["headers"]["User-Agent"],
-            'Accept': '*/*',
-            'DNT': '1',
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Origin': 'https://www.tianyancha.com',
-            'Sec-Fetch-Site': 'same-origin',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Dest': 'empty',
-            'Referer':self.Reqest["headers"]["Referer"],
-            'Accept-Language': 'zh-CN,zh;q=0.9',
+              "Host": "www.tianyancha.com",
+              "Pragma": "no-cache",
+              "Cache-Control": "no-cache",
+              "sec-ch-ua-platform": "\"Windows\"",
+              "sec-ch-ua": "\"Google Chrome\";v=\"131\", \"Chromium\";v=\"131\", \"Not_A Brand\";v=\"24\"",
+              "If-Match": f"\"{IfMatch}\"",
+              "sec-ch-ua-mobile": "?0",
+              "X-Requested-With": "XMLHttpRequest",
+              "User-Agent":self.Reqest["headers"]["User-Agent"],
+              "Accept": "*/*",
+              "DNT": "1",
+              "Content-Type": "application/json; charset=UTF-8",
+              "Origin": "https://www.tianyancha.com",
+              "Sec-Fetch-Site": "same-origin",
+              "Sec-Fetch-Mode": "cors",
+              "Sec-Fetch-Dest": "empty",
+              "Referer":self.Reqest["headers"]["Referer"],
+              "Accept-Language": "zh-CN,zh;q=0.9"
             }
         json_data = {
             "captcha_id": "af29b3003fc94f2ba29e865b31ee86ee",
@@ -317,9 +329,10 @@ class Demo:
             "captcha_output": par["captcha_output"],
         }
         data = json.dumps(json_data, separators=(',', ':'))
-        response = requests.post(url, cookies=self.Reqest["cookies"],headers=headers, data=data)
+        response =requests.post(url,headers=headers,cookies=self.Reqest["cookies"],data=data)
         if response.status_code == 200:
             if response.json()["state"] == "ok":
+                logger.success("验证成功，请继续！！！")
                 return True
             else:
                 logger.error(f"验证失败！响应:{response.json()}")

@@ -1,0 +1,16 @@
+{
+  "isSpe": {"isSpe": false,"city": {"taiwan": "台湾省","xianggang": "香港特别行政区"},"beijing": "北京市","tianjin": "天津市","chongqing": "重庆市"},
+  "Codedaddr": "http://192.168.5.181:10121/geetest4_icon/gradio_api/queue/",
+  "imgpath": "C:/Users/Administrator/Desktop/imgs/",
+    "serverAddr": ["234",6379,2,"anbo123",150],
+  "proxy": {
+    "tunnel": "g385.kdltps.com:15818",
+    "username": "t13509625111642",
+    "pwd": "bc66r4oi"
+  },
+  "isthread": {
+    "isthread": false,
+    "num": 3
+  },
+  "private": true
+}

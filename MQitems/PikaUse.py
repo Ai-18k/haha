@@ -78,73 +78,78 @@ class SendMQ:
         self.channe5.queue_declare(queue='qqbx.dc.property', durable=True)
         self.channe6.queue_declare(queue='qqbx.dc.licence', durable=True)
         self.channe7.queue_declare(queue='qqbx.dc.certificate', durable=True)
+
     def mongoToMQ(self,flg,item_info):
-        if flg == 0:
-            try:
-                # 公司详情
-                self.channel.basic_publish(exchange='',
-                        routing_key='qqbx.dc.company',
-                        body=json.dumps(item_info))
-                logger.success(f"company 公司数据 {item_info} 发送成功！！")
-            except Exception as e:
-                collection.insert_one(item_info)
-        elif flg==1:
-            try:
-                #关联表
-                self.channe2.basic_publish(exchange='',
-                        routing_key='qqbx.dc.industry',
-                        body=json.dumps(item_info))
-                logger.success(f"industry 资质数据 {item_info} 发送成功！！")
-            except Exception as e:
-                collection_1.insert_one(item_info)
-        elif flg==2:
-            try:
-                # 科创
-                self.channe3.basic_publish(exchange='',routing_key='qqbx.dc.qualification',body=json.dumps(item_info))
-                logger.success(f"qualification 科创数据 {item_info} 发送成功！！")
-            except Exception as e:
-                collection_2.insert_one(item_info)
-        elif flg==3:
-            try:
-                #司法
-                self.channe4.basic_publish(exchange='',routing_key='qqbx.dc.judicial',body=json.dumps(item_info))
-                logger.success(f"judicial 司法数据 {item_info} 发送成功！！")
-            except Exception as e:
-                logger.error(e)
-                collection_3.insert_one(item_info)
-        elif flg == 4:
-            try:
-                #flg =4  专利
-                logger.info(item_info)
-                self.channe5.basic_publish(exchange='',
-                        routing_key='qqbx.dc.property',
-                        body=json.dumps(item_info))
-                logger.success(f"property 专利数据 {item_info} 发送成功！！")
-            except Exception as e:
-                collection_4.insert_one(item_info)
-        elif flg == 5:
-            try:
-                #flg =5  许可证
-                logger.info(item_info)
-                self.channe6.basic_publish(exchange='',
-                        routing_key='qqbx.dc.licence',
-                        body=json.dumps(item_info))
-                logger.success(f"licence 许可证数据 {item_info} 发送成功！！")
-            except Exception as e:
-                collection_5.insert_one(item_info)
-        else :
-            try:
-                # 6  资质证书
-                logger.info(item_info)
-                self.channe7.basic_publish(exchange='',
-                        routing_key='qqbx.dc.certificate',
-                        body=json.dumps(item_info))
-                logger.success(f"certificate 资质证书 数据 {item_info} 发送成功！！")
-            except Exception as e:
-                collection_6.insert_one(item_info)
+        if item_info:
+            if flg == 0:
+                try:
+                    # 公司详情
+                    self.channel.basic_publish(exchange='',
+                            routing_key='qqbx.dc.company',
+                            body=json.dumps(item_info))
+                    logger.success(f"company 公司数据 {item_info} 发送成功！！")
+                except Exception as e:
+                    collection.insert_one(item_info)
+            elif flg==1:
+                try:
+                    #关联表
+                    self.channe2.basic_publish(exchange='',
+                            routing_key='qqbx.dc.industry',
+                            body=json.dumps(item_info))
+                    logger.success(f"industry 资质数据 {item_info} 发送成功！！")
+                except Exception as e:
+                    collection_1.insert_one(item_info)
+            elif flg==2:
+                try:
+                    # 科创
+                    self.channe3.basic_publish(exchange='',routing_key='qqbx.dc.qualification',body=json.dumps(item_info))
+                    logger.success(f"qualification 科创数据 {item_info} 发送成功！！")
+                except Exception as e:
+                    collection_2.insert_one(item_info)
+            elif flg==3:
+                try:
+                    #司法
+                    self.channe4.basic_publish(exchange='',routing_key='qqbx.dc.judicial',body=json.dumps(item_info))
+                    logger.success(f"judicial 司法数据 {item_info} 发送成功！！")
+                except Exception as e:
+                    logger.error(e)
+                    collection_3.insert_one(item_info)
+            elif flg == 4:
+                try:
+                    #flg =4  专利
+                    logger.info(item_info)
+                    self.channe5.basic_publish(exchange='',
+                            routing_key='qqbx.dc.property',
+                            body=json.dumps(item_info))
+                    logger.success(f"property 专利数据 {item_info} 发送成功！！")
+                except Exception as e:
+                    collection_4.insert_one(item_info)
+            elif flg == 5:
+                try:
+                    #flg =5  许可证
+                    logger.info(item_info)
+                    self.channe6.basic_publish(exchange='',
+                            routing_key='qqbx.dc.licence',
+                            body=json.dumps(item_info))
+                    logger.success(f"licence 许可证数据 {item_info} 发送成功！！")
+                except Exception as e:
+                    collection_5.insert_one(item_info)
+            else :
+                try:
+                    # 6  资质证书
+                    logger.info(item_info)
+                    self.channe7.basic_publish(exchange='',
+                            routing_key='qqbx.dc.certificate',
+                            body=json.dumps(item_info))
+                    logger.success(f"certificate 资质证书 数据 {item_info} 发送成功！！")
+                except Exception as e:
+                    collection_6.insert_one(item_info)
+        else:
+            logger.error("item_info为空")
 
         self.connection.close()
 
 
     def __exit__(self, exc_type, exc_val, exc_tb):
                 self.connection.close()
+

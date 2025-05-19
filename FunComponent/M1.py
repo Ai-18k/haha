@@ -1,6 +1,9 @@
 # _*_ coding:UTF-8 _*
+import json
 import sys
 import os
+
+from redis import Redis
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 print("Project root:", PROJECT_ROOT)
@@ -17,45 +20,57 @@ from MQitems.PikaUse import SendMQ
 from loguru import logger
 from queue import Queue
 
-# serv_client = MongoClient(host='139.9.70.234', port=12700, username="root", password="QuyHlxXhW2PSHTwT",authSource="admin")
-serv_client = MongoClient(host='192.168.5.167', port=27017)
+serv_conn = Redis(host='192.168.5.191', port=14117, db=0, password="fer@nhaweif576KUG",socket_connect_timeout=1170)
 
+serv_client = MongoClient(host='192.168.5.167', port=27017,retryWrites=True)
 
+with open('Vchongqing.json', 'r', encoding='utf-8') as file:
+    text =file.read()
+Vqtext=json.loads(text)
 # print(serv_client.list_database_names())
+
+
 
 def findDB(db):
     with ThreadPoolExecutor(4) as f:
         f_dbs = serv_client[db].list_collection_names()
         if "sorcomp" in f_dbs:
             sorcomps = serv_client[db]["sorcomp"]
-            currentPage =82
-            pageSize = 1000
+            currentPage = int(serv_conn.get("upkey:9E").decode("utf-8"))
+            pageSize = 100
             futures = []
             while True:
-                data = sorcomps.find({}, {"_id": False}).skip((currentPage) * pageSize).limit(pageSize)
-                if not data:
-                    break
+                data = sorcomps.find({}, {"_id": False}).skip(currentPage * pageSize).limit(pageSize)
+                data_found = False
                 _ = 0
                 for info in data:
                     item_info = getdata(info)
-                    if "city" and "areaCode" not in item_info:
-                        data1 = serv_client[db]["company_id"].find_one({"company": info["name"]})
-                        # print("----------------> ", data1)
-                        if not data1:
-                            data1 = dict()
-                            item_info["city"] = db
-                            item_info["areaCode"] = None
+                    if "areaCode" not in info:
+                        if info["name"] in Vqtext:
+                            data1 = Vqtext[info["name"]]
+                            item_info["city"] = data1["city"]
+                            item_info["areaCode"] = data1["areaCode"]
                         else:
-                            item_info["city"] = data1["city"] if "city" in data1 else None
-                            item_info["areaCode"] = data1["areaCode"] if "areaCode" in data1 else None
-                    logger.info(item_info)
+                            item_info["city"] = info["districtName"] if "districtName" in info else None
+                            item_info["areaCode"] = None
+                    else:
+                        item_info["areaCode"] = info["areaCode"]
+                        item_info["city"] = info["city"]
+                    # logger.info(item_info)
                     _ += 1
-                    logger.success("-------------------> 已上传 {} ！！".format(currentPage * 1000 + _))
+                    logger.success("-------------------> 已上传 {} ！！".format(currentPage * 100 + _))
+                    data_found = True
                     yield item_info
                     # break
-                currentPage += 1
+                if not data_found:
+                    print("没有更多数据了，查询结束")
+                    break
+                else:
+                    serv_conn.set("upkey:9E", currentPage)
+                    currentPage += 1  # 增加当前页数，准备查询下一页
+
                 # break
-            logger.error("【*】采集 {} 数据库的 第 {} 页  {} 数据！！".format(db, currentPage, currentPage * 1000 + _))
+            logger.error("【*】采集 {} 数据库的 第 {} 页  {} 数据！！".format(db, currentPage, currentPage * 100 + _))
 
 
 def filterkeys(keys):
@@ -79,11 +94,11 @@ def filterkeys(keys):
 
 # 去重
 def PolyWeightRemov():
-    cli = serv_client["fujian"]["2nf_add_company_id"]
-    # Aggregation pipeline
+    cli = serv_client["yunnan"]["fail_电信许可"]
     pipeline = [
         {
             '$group': {
+                # '_id': {'name': '$name'},  # Group by the 'company' field
                 '_id': {'company': '$company'},  # Group by the 'company' field
                 'duplicates': {'$addToSet': '$_id'},  # Collect all _id values into an array
                 'count': {'$sum': 1}  # Count occurrences of each group
@@ -102,27 +117,36 @@ def PolyWeightRemov():
             }
         }
     ]
-    # Execute the aggregation pipeline
     results = list(cli.aggregate(pipeline))
 
-    # Remove the duplicates
     for doc in results:
         for duplicate_id in doc['duplicates']:
             cli.delete_one({'_id': duplicate_id})
 
-    # Close the connection
     serv_client.close()
 
 
-def keysiter():
+# PolyWeightRemov()
+
+
+def search(company):
+    db=serv_client["beijing"]["sorcomp"]
+    res=db.find({"company":company})
+    print(res)
+
+# search("北京汇远成才商贸有限公司")
+
+def keysiter(KEY):
     Overkey = []
     data_item = list()
     data1_item = list()
     kechuang_item = list()
     databases = serv_client.list_database_names()
     for database in databases:
-        if database not in ["CCDate", "CCDate_id", 'CheckGaps', 'TYCDate', 'admin', 'config', 'filter', 'local','property', 'sfaj', "judicial","anhui"]:
-            for item_info in findDB(database):
+        # if database not in ["CCDate", "CCDate_id", 'CheckGaps', 'TYCDate', 'admin', 'config', 'filter', 'local','property', 'sfaj', "judicial","anhui"]:
+        if  database==KEY:
+            items=findDB(database)
+            for item_info in items:
                     logger.info(item_info)
                     if "_id" in item_info:
                             del item_info["_id"]
@@ -175,7 +199,6 @@ def keysiter():
         Overkey.append(database)
     logger.error(Overkey)
 
-# 49237   北京肆海建设有限公司
-# 50470   北京正诺原科技发展有限公司
 
-keysiter()
+
+# keysiter("zhejiang")

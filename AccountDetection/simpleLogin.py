@@ -16,6 +16,7 @@ import hashlib
 import io
 import json
 import os
+import random
 import re
 import time
 import uuid
@@ -29,14 +30,15 @@ from feapder.network.user_agent import get
 from loguru import logger
 from retrying import retry
 import ddddocr
-import random
-from geetest4_word import get_word_position
+
+from config import checkconfig
+from passVerify.geetest4_word import get_word_position
 
 def proxy_list():
     tunnel = "d152.kdltps.com:15818"
     # 用户名密码方式
     username = "t13206952228334"
-    password = "wtx4i2in:%d"%random.randint(1,5)
+    password = "wtx4i2in:%d"%random.randint(1, 5)
     proxies = {
         "http": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel},
         "https": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": tunnel}
@@ -44,8 +46,8 @@ def proxy_list():
     # resp = requests.get("https://myip.ipip.net", proxies=proxies)
     # if resp.status_code == 200:
     #     print(resp.text)
-    return proxies
-    # return None
+    # return proxies
+    return None
     # else:
     #     raise Exception("请求代理")
 
@@ -86,6 +88,7 @@ class CC1:
         else:
            raise Exception("链接失效")
 
+
 class CC2:
     def PostPic(self,pic_list):
         if len(pic_list) == 4:
@@ -119,12 +122,15 @@ class CC2:
                         return xy
 
 
-local_VQ_conn = redis.Redis(host='192.168.5.181', port=7933, db=0, password="fer@nhaweif576KUG",socket_connect_timeout=1170)
-
-
 class Login_module:
 
     def __init__(self,mobil):
+        self.config = checkconfig("bendi")
+        self.local_VQ_conn = redis.Redis("192.168.5." + self.config["uAddr"][0],
+                                         self.config["uAddr"][1],
+                                         self.config["uAddr"][2],
+                                         self.config["uAddr"][3],
+                                         socket_connect_timeout=1155)
         self.Reqest = {}
         self.mobil = mobil
         self.session = requests.session()
@@ -211,17 +217,10 @@ class Login_module:
                 base_list=[]
                 for index, img_url in enumerate(q_list):
                     tag = requests.get("https://static.geetest.com/" + img_url).content
-                    # self.download_img(tag, str(index), type, uuid1)
-                    # word_pic=ImageProcess.wordprocess(tag)
-                    # word_pic=base64.b64encode(tag).decode("utf-8")
-                    # base_list.append(word_pic)
                     base_list.append(tag)
                 imgs_url = "https://static.geetest.com/" + resp["data"]['imgs']
                 slide_bytes = requests.get(imgs_url).content
-                # base_list=[base64.b64encode(slide_bytes).decode("utf-8")]+base_list
-                # new_pic=ImageProcess.mergePic(slide_bytes,bytes_list)
-                # click_list = CC().PostPic(base_list)
-                click_list = get_word_position(slide_bytes,base_list)
+                click_list =get_word_position(slide_bytes,base_list)
                 click_smark = []
                 for _word in click_list:
                     click_smark.append([round(int(_word[0]) * 100 / 3), round(int(_word[1]) * 50)])
@@ -233,8 +232,6 @@ class Login_module:
                 print(">>>>>>>>>>>>>>>>>>>>>>>>滑块>>>>>>>>>>>>>>")
                 slide_url = "https://static.geetest.com/" + resp["data"]['slice']
                 bg_url = "https://static.geetest.com/" + resp["data"]['bg']
-                # print("slide_img:" + slide_url)
-                # print("bg_img:" + bg_url)
                 target_bytes = requests.get(slide_url).content
                 bg_bytes = requests.get(bg_url).content
                 dis = ocr.slide_match(target_bytes, bg_bytes, simple_target=True)["target"][0]
@@ -415,7 +412,7 @@ class Login_module:
             url = "https://gcaptcha4.geetest.com/verify"
             # par = self.re_js_code()
             par = self.get_1()
-            par["par_param"]={'BNgz': 'egLQ'}
+            par["par_param"]={'pMVM': 'AwII'}
             param = self.Composite_parameter(par["lot_number"])
             jscode = open("w_decode.js", encoding="utf-8",errors="ignore").read()
             data = execjs.compile(jscode).call("_fff",par,par["par_param"],param)
@@ -527,14 +524,14 @@ class Login_module:
                         return True
                     elif res["message"]=="账号存在风险，暂不能操作":
                         logger.error("{}:{}".format(self.mobil,response.json()["message"]))
-                        local_VQ_conn.sadd("ErrorUser",json.dumps(self.mobil))
+                        self.local_VQ_conn.sadd("ErrorUser",json.dumps(self.mobil))
                         with open("C:/Users/Administrator/Desktop/账号被封.txt", "a", encoding="utf-8") as f:
                             f.write(self.mobil["mobil"] + "密码" + self.mobil["pwd"] + "\n")
                         return False
                     elif "密码登录冻结，请使用验证码登录" in res["message"]:
                         print(res["message"])
                         logger.error("{}:{}".format(self.mobil,"密码登录冻结，请使用验证码登录"))
-                        local_VQ_conn.sadd("ErrorPwd", json.dumps(self.mobil))
+                        self.local_VQ_conn.sadd("ErrorPwd", json.dumps(self.mobil))
                     else:
                         logger.error(res)
                         return False
@@ -542,7 +539,7 @@ class Login_module:
                     logger.error(f"{self.mobil}:账号密码错误!!")
                     with open("C:/Users/Administrator/Desktop/账号密码错误.txt","a",encoding="utf-8")as f:
                             f.write(self.mobil["mobil"]+"密码"+self.mobil["pwd"]+"\n")
-                    local_VQ_conn.sadd("ErrorPwd", json.dumps(self.mobil))
+                    self.local_VQ_conn.sadd("ErrorPwd", json.dumps(self.mobil))
                     return False
             else:
                 logger.error(f"{self.mobil}：账号异常无法登陆!!")
@@ -589,6 +586,7 @@ class Login_module:
             return self.session,self.Reqest
         else:
             return False
+
 
 
 if __name__ == '__main__':

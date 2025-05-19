@@ -40460,7 +40460,6 @@ function decode(jscode) {
         res = muti_process_obdefusion(jscode, config)
         return res
     }catch(error) {
-
             function get_ob_config(){
                   return {
                     clear_ob_extra:true,
@@ -40485,7 +40484,7 @@ function decode(jscode) {
 
 function cc(jscode) {
     // process.argv.length > 2 ? File1 = process.argv[2] : File1 = '1.js'
-    process.argv.length > 2 ? File1 = process.argv[2] : File1 = 'E:\\pythonProject\\gsxt.gov.cn\\qichacha\\V4\\reviewBUG\\风控源代码\\1_1.js'
+    process.argv.length > 2 ? File1 = process.argv[2] : File1 = '1_1.js'
     jscode = fs.readFileSync(File1, {encoding: 'utf-8'})
     res=decode(jscode)
     const regex = /"([a-f0-9]{32})"/g;

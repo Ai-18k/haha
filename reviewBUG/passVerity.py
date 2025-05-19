@@ -60,8 +60,7 @@ class CC:
            raise Exception("链接失效")
 
 
-
-retry(wait_fixed=1000)
+@retry(wait_fixed=1000)
 def verify(content):
     url = "http://api.jfbym.com/api/YmServer/customApi"
     data = {
