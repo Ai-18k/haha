@@ -13,7 +13,6 @@ def connect_mongodb(host: str = '192.168.5.167', port: int = 27017) -> MongoClie
         print(f"连接失败: {str(e)}")
         raise
 
-
 def get_collection_counts(client, db_name: str, collections: List[str]) -> Dict[str, int]:
     """获取指定数据库中所有集合的文档数量"""
     db = client[db_name]

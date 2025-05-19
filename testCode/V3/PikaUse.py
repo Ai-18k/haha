@@ -46,22 +46,9 @@ def publish(self, body, block=True, timeout=None, properties=None):
     pass
 
 def mongoToMQ(flg,item_info):
-    # credentials = pika.PlainCredentials('user','user123')  # 用户名和密码
-    credentials = pika.PlainCredentials('admin','159680Mq.')  # 用户名和密码
-    # parameters = pika.ConnectionParameters(host='139.9.70.234',
-    #             # RabbitMQ服务器地址
-    #             port=5672,
-    #             # RabbitMQ服务器端口，默认是5672
-    #             virtual_host='/',
-    #             # 虚拟主机，默认是'/'
-    #             credentials=credentials,
-    #             # 用户名和密码
-    #             socket_timeout=10,
-    #             heartbeat=0,
-    #             retry_delay=10,
-    #             connection_attempts=10
-    # )
-    parameters = pika.ConnectionParameters(host='120.25.247.60',
+    credentials = pika.PlainCredentials('user','user123')  # 用户名和密码
+    # credentials = pika.PlainCredentials('admin','159680Mq.')  # 用户名和密码
+    parameters = pika.ConnectionParameters(host='139.9.70.234',
                 # RabbitMQ服务器地址
                 port=5672,
                 # RabbitMQ服务器端口，默认是5672
@@ -74,6 +61,19 @@ def mongoToMQ(flg,item_info):
                 retry_delay=10,
                 connection_attempts=10
     )
+    # parameters = pika.ConnectionParameters(host='120.25.247.60',
+    #             # RabbitMQ服务器地址
+    #             port=5672,
+    #             # RabbitMQ服务器端口，默认是5672
+    #             virtual_host='/',
+    #             # 虚拟主机，默认是'/'
+    #             credentials=credentials,
+    #             # 用户名和密码
+    #             socket_timeout=10,
+    #             heartbeat=0,
+    #             retry_delay=10,
+    #             connection_attempts=10
+    # )
     # 创建一个到RabbitMQ服务器的连接
     connection = pika.BlockingConnection(parameters)
     channe1 = connection.channel()

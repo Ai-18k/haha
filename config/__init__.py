@@ -1,28 +1,31 @@
 import json
+import os
+
 from loguru import logger
 from redis.client import Redis
-
-
-
 
 def filtermap(area):
     if area in ["jiangsu","guangxi","hunan","hubei","jiangxi","jilin"]:
         return "jsAddr"
     elif area in ["fujian","guizhou","anhui","beijing","qinghai"]:
         return "fjAddr"
-    elif area in ["gansu",]:
+    elif area in ["gansu","guangdong","hainan","hebei","heilongjiang","henan"]:
         return "gsAddr"
-    elif area == "chongqing":
+    elif area in ["chongqing","yunnan","xinjiang","zhejiang","taiwan"]:
         return "cqAddr"
-    elif area=="shandong":
+    elif area in ["shanxi", "neimenggu", "liaoning","shandong","xianggang"]:
+        return "sdAddr"
+    elif area in ["xizang","tianjin","sichuan","shanghai","ningxia","sanxi"]:
         return "sdAddr"
     else:
-        return None
+        return area
 
+# 使用绝对路径
+config_path = os.path.join(os.path.dirname(__file__),'config.json')
 
 def checkconfig(area):
     filterAddr = filtermap(area)
-    with open("../FunComponent/config.json", "r", encoding="utf-8") as file:
+    with open(config_path, "r", encoding="utf-8") as file:
         config = file.read()
     config = json.loads(config)
     serv_conn = Redis('139.9.70.%s' % config["serverAddr"][0],

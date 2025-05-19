@@ -163,15 +163,14 @@ class Gudong(Config):
                 print(e)
         else:
             try:
-                self.gd.with_options(write_concern=self.write_concern).insert_one(datas["data"])
-                self.local_conn.sadd(self.filter_key1, datas["data"]["company"])
+                # self.gd.with_options(write_concern=self.write_concern).insert_one(datas["data"])
+                # self.local_conn.sadd(self.filter_key1, datas["data"]["company"])
                 logger.success("【*{}】股东信息保存成功！！".format(datas["data"]['company']))
             except Exception as e:
                 print(e)
 
     def paramdata(self,content,info):
         datas = content["data"]["result"]
-        print(datas)
         shareholderInfo = []
         for data in datas:
             item = dict()
@@ -192,7 +191,7 @@ class Gudong(Config):
 
     def upsession(self):
         while True:
-            res = self.conn.lpop("searchCookie")
+            res = self.conn.lpop("testCookie")
             if res is None:
                 print(">>>>>>>>>>>>>>获取cookie信息..........")
                 time.sleep(0.5)
@@ -205,7 +204,7 @@ class Gudong(Config):
                 self.headers["X-AUTH-TOKEN"] = self.Request["token"]
                 break
 
-    def sinfo(self,info):
+    def hsif(self,info):
         url = "https://capi.tianyancha.com/cloud-company-background/companyV2/dim/historyHolder"
         params = {
             "_": str(int(time.time()*1000)),
@@ -222,7 +221,7 @@ class Gudong(Config):
         }
         data = json.dumps(data, separators=(',', ':'))
         response = self.session.post(url, headers=self.headers, params=params, data=data)
-        print("现在的股东数据展示---------》",response.json())
+        print("历史数据展示---------》",response.json())
         if response.json()["state"]=="ok":
             data,data1=self.paramdata(response.json(),info)
             return data,data1
@@ -231,7 +230,7 @@ class Gudong(Config):
             self.sinfo(info)
             return None,None
 
-    def hsif(self,info):
+    def sinfo(self,info):
         url = "https://capi.tianyancha.com/cloud-company-background/companyV2/dim/holder/latest/announcement"
         params = {
             "_": str(int(time.time()*1000)),
@@ -246,7 +245,7 @@ class Gudong(Config):
         }
         data = json.dumps(data, separators=(',', ':'))
         response = self.session.post(url, headers=self.headers, params=params, data=data)
-        print("历史数据展示---------》",response.json())
+        print("现在的股东数据展示---------》",response.json())
         if response.json()["state"] == "ok":
             data,data1=self.paramdata(response.json(),info)
             return data,data1
@@ -254,7 +253,6 @@ class Gudong(Config):
             self.upsession()
             self.hsif(info)
             return None,None
-
 
     def send_data(self,flg,item):
         print("记录打点:",len(self.gudong_item))
@@ -298,7 +296,6 @@ class Gudong(Config):
                     with open("无id.json","a",encoding="utf-8")as file:
                         file.write(json.dumps(item))
                     continue
-
         # last_id =ObjectId("67489ff6779e716dade3fdd6")
         last_id = None
         currentPage = 0
@@ -330,12 +327,13 @@ class Gudong(Config):
         item, item1 = self.sinfo(info)
         data, data1 = self.hsif(info)
         if item1 or data1:
-            self.saveDate({"type": 2, "data": {"shareholderInfo": item1, "shareholderInfoHistory": data1}})
+            self.saveDate({"type": 2, "data": {"company":info,"shareholderInfo": item1, "shareholderInfoHistory": data1}})
         if not data:
             data = []
         if not item:
             item = []
-        self.send_data(7, {"shareholderInfo": item, "shareholderInfoHistory": data})
+        if data or item:
+            self.send_data(7, {"shareholderInfo": item, "shareholderInfoHistory": data})
 
     def main(self):
         with ThreadPoolExecutor(4) as executor:
@@ -352,9 +350,11 @@ class Gudong(Config):
                 company=json.loads(company.decode("utf-8"))
                 print(company)
                 if not self.local_conn.sismember(self.filter_key1,company["company"]):
+                    # company={'company': '福建福耀科大资产运营有限公司', 'creditCode': '91350100MAEGWXGM3Q', 'id': 7508335262}
+                    # company={'company': '福州闽风谷科技有限公司', 'creditCode': '91350100MAEJ64UUX4', 'id': 7519856434}
                     futures.append(executor.submit(self.runspider,company))
                     # self.runspider(company)
-                    if len(futures) >= 20:
+                    if len(futures) >= 5:
                         for future in futures:
                             future.result()
             for future in futures:
@@ -362,21 +362,21 @@ class Gudong(Config):
 
 
 if __name__ == '__main__':
-    with ThreadPoolExecutor(4) as f:
-        area_list=[
-                "tianjin","heilongjiang","henan","hainan",
-            # "sichuan","yunnan",
-            #     "xizang","gansu","qinghai","ningxia","sanxi","anhui",
-            #     "jilin","liaoning","shanxi","beijing","guangxi","neimenggu",
-            #     "tianjin","hebei","xinjiang","guizhou","chongqing","hunan","jiangxi","guangdong",
-            #     "hubei","shandong","fujian","shanghai","jiangsu","zhejiang"
-            ]
-        futures=[]
-        for area in area_list:
-            futures.append(f.submit(Gudong(area).main))
-        for future in futures:
-            future.result()
-    # Gudong("qinghai").main()
+    # with ThreadPoolExecutor(4) as f:
+    #     area_list=[
+    #             "tianjin","heilongjiang","henan","hainan",
+    #         # "sichuan","yunnan",
+    #         #     "xizang","gansu","qinghai","ningxia","sanxi","anhui",
+    #         #     "jilin","liaoning","shanxi","beijing","guangxi","neimenggu",
+    #         #     "tianjin","hebei","xinjiang","guizhou","chongqing","hunan","jiangxi","guangdong",
+    #         #     "hubei","shandong","fujian","shanghai","jiangsu","zhejiang"
+    #         ]
+    #     futures=[]
+    #     for area in area_list:
+    #         futures.append(f.submit(Gudong(area).main))
+    #     for future in futures:
+    #         future.result()
+    Gudong("fujian").main()
 
 
 

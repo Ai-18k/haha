@@ -8,28 +8,28 @@ from pymongo import MongoClient
 config = checkconfig("bendi")
 
 # conn = redis.Redis(host='139.9.70.234', port=6379, db=2, password="anbo123",socket_connect_timeout=1170)
-conn = redis.Redis(host='192.168.5.175', port=18112, db=10, password="fer@nhaweif576KUG",socket_connect_timeout=1170)
-conn1 = redis.Redis(host='192.168.5.176', port=8490, db=2, password="#Tn=EP(q%{",socket_connect_timeout=1170)
+conn = redis.Redis(host='192.168.5.180', port=8490, db=8, password="redis2020redis",socket_connect_timeout=1170)
+# conn1 = redis.Redis(host='192.168.5.176', port=8490, db=2, password="#Tn=EP(q%{",socket_connect_timeout=1170)
 local_conn = redis.Redis(host='192.168.5.167', port=10824, db=0, password="e8Mzr}$%jsuCxKn4r#mm",socket_connect_timeout=1170)
 local_VQ_conn = redis.Redis(host='192.168.5.181', port=10281, db=0, password="*s,8<[VVS6h.nnWZ=cv{",socket_connect_timeout=11170)
-# conn1 =redis.Redis("192.168.5."+config["uAddr"][0],config["uAddr"][1],config["uAddr"][2],config["uAddr"][3],socket_connect_timeout=1155)
+conn1 =redis.Redis("192.168.5."+config["uAddr"][0],config["uAddr"][1],config["uAddr"][2],config["uAddr"][3],socket_connect_timeout=1155)
 
 
 
 def demo():
 
-	for _ in range(26):
+	for _ in range(30):
 		# res=local_VQ_conn.lpop("memeryUser")
-		# res=conn1.lpop("searchMobil")
-		res=conn1.lpop("LoginUser")
+		res=conn1.lpop("searchMobil")
+		# res=conn1.lpop("LoginUser")
 		# res=conn1.lpop("sifaUser")
 		# res=local_VQ_conn.lrange("memeryUser",0,-1)
 		# res=local_VQ_conn.lrange("searchMobil",0,-1)
 		# res=local_VQ_conn.lrange("sifaUser",0,-1)
 		print(json.loads(res))
 		# conn.lpush("searchMobil",res)
-		conn.lpush("LoginUser",res)
-		# conn.lpush("searchMobil",res)
+		# conn.lpush("LoginUser",res)
+		conn.lpush("testMobil",res)
 		# local_VQ_conn.lpush("totleUser", res)
 
 		# for i in res:

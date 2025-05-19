@@ -37,7 +37,7 @@ ocr2 = ddddocr.DdddOcr(det=True,show_ad=False)
 
 
 def checkconfig():
-    with open("../../setting/config.json","r",encoding="utf-8") as file:
+    with open("../../config/config.json", "r", encoding="utf-8") as file:
         config = file.read()
     config = json.loads(config)
     if 'localSAddr' not in config:
